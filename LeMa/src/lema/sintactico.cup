@@ -30,12 +30,10 @@ parser code {:
 :};
 
 terminal id, pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, par_ab, par_ce, ll_ab, ll_ce, mas, menos, prod, div, mod, transp, inv, incr, decr, pr_suma, pr_resta, pr_prod, pr_transp, pr_inv, ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, a_suma, a_resta, a_prod, a_div, sig_int, sig_pun, cor_ab, cor_ce, numero, real, cadena, pr_leer, pr_mostrar, punto_coma, coma, pr_retornar, pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso, pr_default, pr_principal, error_lex;
-/* non terminal Object inicio, operadorUnario, operadorBinario, operadorAsignacion, operador, operando, operandoEntero, tipoNumero, tipoVariable, expresion, indice, comentario, matriz, nVector, vector, nElemento, asigIdentSimple, asigIdentVect, asigIdentMat, asigSimple, asigVect, asigMat, asigAll, declaracion, declaracionCadena, lectura, escritura, asignacion, declaracionFuncion, declaracionFuncionCabecera, parametro, llamadaFuncion, argumento, condicionalSi, condicional, bloque, nSentencia, condicionalMientras, condicionalHacerMientras, condicionalPara, controlador, ini,act, sentSelector, nCaso, sentCaso, sentDefecto,sentencia; */
-
 non terminal PRUEBA;
 
 start with PRUEBA;
 
-PRUEBA ::= pr_entero id punto_coma  
-    | pr_mostrar par_ab cadena par_ce punto_coma
+PRUEBA::=
+   pr_mostrar par_ab cadena par_ce punto_coma
 ;
