@@ -31,8 +31,8 @@ public class parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\003\000\002\002\007\000\002\002\004\000\002\002" +
-    "\005" });
+    "\000\003\000\002\002\004\000\002\002\005\000\002\002" +
+    "\007" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -43,9 +43,9 @@ public class parser extends java_cup.runtime.lr_parser {
     "\000\013\000\006\007\005\062\006\001\002\000\004\002" +
     "\015\001\002\000\004\004\013\001\002\000\004\012\007" +
     "\001\002\000\004\060\010\001\002\000\004\013\011\001" +
-    "\002\000\004\063\012\001\002\000\004\002\001\001\002" +
-    "\000\004\063\014\001\002\000\004\002\uffff\001\002\000" +
-    "\004\002\000\001\002" });
+    "\002\000\004\063\012\001\002\000\004\002\uffff\001\002" +
+    "\000\004\063\014\001\002\000\004\002\000\001\002\000" +
+    "\004\002\001\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -85,7 +85,7 @@ public class parser extends java_cup.runtime.lr_parser {
   /** Indicates start state. */
   public int start_state() {return 0;}
   /** Indicates start production. */
-  public int start_production() {return 1;}
+  public int start_production() {return 0;}
 
   /** <code>EOF</code> Symbol index. */
   public int EOF_sym() {return 0;}
@@ -147,16 +147,7 @@ class CUP$parser$actions {
       switch (CUP$parser$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 0: // PRUEBA ::= pr_mostrar par_ab cadena par_ce punto_coma 
-            {
-              Object RESULT =null;
-
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("PRUEBA",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
-            }
-          return CUP$parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 1: // $START ::= PRUEBA EOF 
+          case 0: // $START ::= PRUEBA EOF 
             {
               Object RESULT =null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -170,11 +161,20 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // PRUEBA ::= pr_entero id punto_coma 
+          case 1: // PRUEBA ::= pr_entero id punto_coma 
             {
               Object RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PRUEBA",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 2: // PRUEBA ::= pr_mostrar par_ab cadena par_ce punto_coma 
+            {
+              Object RESULT =null;
+
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("PRUEBA",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 

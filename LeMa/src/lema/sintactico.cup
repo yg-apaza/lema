@@ -34,7 +34,8 @@ terminal id, pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, par_ab, par_ce, 
 
 non terminal PRUEBA;
 
-PRUEBA ::=
-    pr_mostrar par_ab cadena par_ce punto_coma
-    | pr_entero id punto_coma
+start with PRUEBA;
+
+PRUEBA ::= pr_entero id punto_coma  
+    | pr_mostrar par_ab cadena par_ce punto_coma
 ;

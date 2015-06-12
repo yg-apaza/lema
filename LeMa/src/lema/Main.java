@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 /* COMPILADOR */
 public class Main {
@@ -256,7 +258,15 @@ public class Main {
         System.out.println("ANALIZADOR SINTACTICO");
         System.out.println("------------------------------------------------------------");
         
-        
+        try {
+            parser p = new parser(new Lexico(new FileReader(file)));
+            Object result = p.parse();
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         System.out.println();
     }
