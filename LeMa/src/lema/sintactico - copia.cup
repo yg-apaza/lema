@@ -1,0 +1,258 @@
+package lema;
+import java_cup.runtime.*;
+
+%%
+
+parser code {:
+
+    public void report_error(String message, Object info) {
+   
+        StringBuilder m = new StringBuilder("Error");
+
+        if (info instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+
+            if (s.left >= 0) {                
+                m.append(" in line "+(s.left+1));   
+
+                if (s.right >= 0)                    
+                    m.append(", column "+(s.right+1));
+            }
+        }
+
+        m.append(" : "+message);
+
+        System.err.println(m);
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+
+terminal COMENT_AB, COMENT_CE, ID, PR_CONST, PR_VACIO, PR_ENTERO, PR_REAL, PR_CADENA, PAR_AB, PAR_CE, LL_AB, LL_CE, MAS, MENOS, PROD, DIV, MOD, TRANSP, INV, INCR, DECR, PR_SUMA, PR_RESTA, PR_PROD, PR_TRANSP, PR_INV, IDENT, DIF, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, Y, O, NEG, IGUAL, A_SUMA, A_RESTA, A_PROD, A_DIV, SIG_INT, SIG_PUN, COR_AB, COR_CE, NUMERO, REAL, CADENA, PR_LEER, PR_MOSTRAR, FINAL, COMA, PR_RETORNAR, PR_SI, PR_SINO, PR_MIENTRAS, PR_HACER, PR_PARA, PR_SELECTOR, PR_SALTAR, PR_CASO, PR_DEFAULT, PR_PRINCIPAL, ERROR;
+non terminal Object inicio, operadorUnario, operadorBinario, operadorAsignacion, operador, operando, operandoEntero, tipoNumero, tipoVariable, expresion, indice, comentario, matriz, nVector, vector, nElemento, asigIdentSimple, asigIdentVect, asigIdentMat, asigSimple, asigVect, asigMat, asigAll, declaracion, declaracionCadena, lectura, escritura, asignacion, declaracionFuncion, declaracionFuncionCabecera, parametro, llamadaFuncion, argumento, condicionalSi, condicional, bloque, nSentencia, condicionalMientras, condicionalHacerMientras, condicionalPara, controlador, ini,act, sentSelector, nCaso, sentCaso, sentDefecto,sentencia;
+
+inicio  ::= sentencia
+  ;
+ 
+/***---------------------------- SIMPLE ----------------------------***/
+
+/* OPERADORES*/
+operadorUnario ::= TRANSP
+	|INV
+	|INCR
+	|DECR
+	;
+operadorBinario ::= MAS
+	|MENOS
+	|PROD
+	|DIV
+	|MOD
+	|IDENT
+	|DIF
+	|MENOR
+	|MAYOR
+	|MENOR_IGUAL
+	|MAYOR_IGUAL
+	|Y
+	|O
+	;
+operadorAsignacion ::= IGUAL
+	|A_SUMA
+	|A_RESTA
+	|A_PROD
+	|A_DIV
+	;
+operador ::= operadorUnario
+	|operadorBinario
+	;
+	
+/* OPERANDO */
+operando ::=  operandoEntero
+	|REAL
+	;
+operandoEntero ::=  ID
+	|NUMERO
+	|expresion
+	|llamadaFuncion
+	;	
+/* TIPOS */	
+tipoNumero ::= PR_ENTERO
+	|PR_REAL
+	;
+
+tipoVariable ::= tipoNumero
+	|PR_CADENA 
+	;
+
+expresion ::= operando operadorBinario operando
+	|operando operadorUnario
+	|NEG operando
+	;
+/* INDICE */
+indice ::= COR_AB  operandoEntero COR_CE
+	;
+
+/* COMENTARIO*/
+comentario ::=  COMENT_AB CADENA COMENT_CE
+	;
+/***----------------------------DECLARACION------------------------------***/
+
+/* ELEMENTOS Y FILAS */
+matriz ::= LL_AB nVector LL_CE
+	;
+nVector ::= vector COMA nVector
+	| vector
+	;
+vector ::= LL_AB nElemento LL_CE
+	;
+nElemento ::= expresion COMA nElemento
+	|expresion
+	;
+	
+/* ASIGNACION DE IDENTIFICADOR */
+asigIdentSimple::= ID IGUAL expresion
+	|ID
+	;
+asigIdentVect ::= ID indice IGUAL vector
+	|ID indice
+	;
+asigIdentMat ::= ID indice indice IGUAL matriz
+	|ID indice indice
+	;	
+/* ASIGNACION DE IDENTIFICADOR VARIOS */
+asigSimple ::= asigIdentSimple COMA asigSimple
+	| asigIdentSimple
+	;
+asigVect ::= asigIdentVect COMA asigVect
+	| asigIdentVect
+	;
+asigMat ::= asigIdentMat COMA asigMat
+	| asigIdentMat
+	;
+
+asigAll ::= asigSimple
+	|asigVect
+	|asigMat
+	;
+/* DECLARACION */
+declaracion ::= tipoNumero asigAll FINAL
+	| PR_CONST tipoNumero asigSimple FINAL /* DECLARACION DE CONSTANTES */
+	| declaracionCadena
+	;
+/* DECLARACION DE CADENA */
+declaracionCadena ::= PR_CADENA ID IGUAL CADENA FINAL
+	|PR_CADENA ID FINAL
+	;
+
+
+/***---------------------------------------------------------------------***/
+
+
+/***----------------------------INSTRUCCIONES------------------------------***/
+/* INTRUCCIONES DE ENTRADA */
+lectura ::= PR_LEER PAR_AB ID PAR_CE FINAL
+	|PR_LEER PAR_AB PAR_CE FINAL
+	;
+
+/* INTRUCCIONES DE SALIDA */
+escritura ::= PR_MOSTRAR PAR_AB expresion PAR_CE FINAL
+	|PR_MOSTRAR PAR_AB CADENA PAR_CE FINAL
+	|PR_MOSTRAR PAR_AB PAR_CE FINAL
+	;
+
+/* SENTENCIAS DE ASIGNACION */
+asignacion ::= ID operadorAsignacion expresion FINAL
+	;
+
+/*SENTECIA DE DECLARACION DE FUNCIONES */
+declaracionFuncion ::= declaracionFuncionCabecera bloque
+	;
+declaracionFuncionCabecera ::= tipoVariable ID PAR_AB parametro PAR_CE FINAL
+	|tipoVariable ID PAR_AB PAR_CE FINAL
+	;
+parametro ::= tipoVariable COMA parametro
+	|tipoVariable
+	;
+
+/* SENTENCIA DE LLAMADA A UNA FUNCION */
+llamadaFuncion ::= ID PAR_AB PAR_CE FINAL
+	|ID PAR_AB argumento PAR_CE FINAL
+	;
+argumento ::= ID COMA argumento
+	|ID 
+	;
+
+/* SENTECIA CONDICIONAL SI */
+condicionalSi ::= PR_SI condicional bloque
+	|PR_SI condicional bloque PR_SINO bloque
+	;
+condicional ::= PAR_AB expresion PAR_CE
+	;
+bloque ::= sentencia
+	|LL_AB nSentencia LL_CE
+	;
+nSentencia ::= sentencia nSentencia
+	|sentencia
+	;
+
+/* SENTECIA CONDICIONAL MIENTRAS */
+condicionalMientras ::= PR_MIENTRAS condicional bloque
+	;
+
+/* SENTECIA CONDICIONAL HACER MIENTRAS */
+condicionalHacerMientras ::= PR_HACER bloque PR_MIENTRAS condicional FINAL
+	;
+
+/* SENTECIA CONDICIONAL PARA */
+condicionalPara ::= PR_PARA controlador bloque
+	;
+controlador ::= PAR_AB ini FINAL condicional FINAL act PAR_CE
+	|PAR_AB ini FINAL condicional FINAL PAR_CE
+	|PAR_AB ini FINAL FINAL act PAR_CE
+	|PAR_AB FINAL condicional FINAL act PAR_CE
+	|PAR_AB FINAL FINAL act PAR_CE
+	|PAR_AB FINAL condicional FINAL PAR_CE
+	|PAR_AB ini FINAL FINAL PAR_CE
+	|PAR_AB FINAL FINAL PAR_CE
+	;
+
+ini ::= PR_ENTERO ID IGUAL NUMERO
+	|PR_ENTERO ID IGUAL ID
+	|ID IGUAL NUMERO
+	|ID IGUAL ID
+	;
+act ::= ID DECR
+	|ID INCR
+	;
+
+/* SENTECIA DE SELECCION */
+sentSelector ::= PR_SELECTOR condicional LL_AB nCaso sentDefecto LL_CE
+	|PR_SELECTOR condicional LL_AB nCaso LL_CE
+	;
+nCaso ::= sentCaso nCaso
+	| sentCaso
+	;
+sentCaso ::= PR_CASO NUMERO SIG_PUN nSentencia PR_SALTAR FINAL
+	|PR_CASO NUMERO SIG_PUN nSentencia 
+	|PR_CASO NUMERO SIG_PUN 
+	;
+sentDefecto ::= PR_DEFAULT SIG_PUN nSentencia PR_SALTAR FINAL
+	|PR_DEFAULT SIG_PUN PR_SALTAR FINAL
+	;
+
+/***___***/
+sentencia ::= expresion FINAL
+	|declaracion
+	|llamadaFuncion	 
+	|lectura
+	|escritura
+	|asignacion
+	|condicionalSi
+	|condicionalMientras
+	|condicionalHacerMientras
+	|condicionalPara
+	|sentSelector
+	;
