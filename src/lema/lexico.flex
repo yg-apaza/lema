@@ -27,8 +27,9 @@ WHITE = [ \t\r\n]
 
 %%
 
-/* IGNORAR */
+/* IGNORAR ESPACIOS EN BLANCO Y SALTOS DE LÍNEA */
 {WHITE}                         { /* Ignorar */                         }
+/* IGNORAR COMENTARIOS */
 "/*"(.| {WHITE})*"*/"           { /* Ignorar */                         }
 
 /* CONSTANTES */
