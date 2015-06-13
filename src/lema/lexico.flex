@@ -12,9 +12,7 @@ import java_cup.runtime.*;
     private Symbol symbol(int type) {
         return new Symbol(type, yyline, yycolumn);
     }
-    
-    /* Also creates a new java_cup.runtime.Symbol with information
-       about the current token, but this object has a value. */
+
     private Symbol symbol(int type, Object value) {
         return new Symbol(type, yyline, yycolumn, value);
     }
