@@ -37,7 +37,7 @@ start with PROGRAMA;
 PROGRAMA  ::=     DEFINICIONVARIABLE PROGRAMAPRINCIPAL
                 | DEFINICIONPROTOTIPO PROGRAMAPRINCIPAL DEFINICIONFUNCION 
                 | DEFINICIONVARIABLE DEFINICIONPROTOTIPO PROGRAMAPRINCIPAL DEFINICIONFUNCION 
-                | pr_principal par_ab par_ce BLOQUE 
+                | pr_principal par_ab par_ce pr_cadena 
 ;
 /*
 SENTENCIA  ::= EXPRESION punto_coma 
