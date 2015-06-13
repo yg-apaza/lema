@@ -19,6 +19,7 @@ import java_cup.runtime.*;
 %}
 
 L = [a-zA-Z_]
+H = [A-F]
 D = [0-9]
 WHITE = [ \t\r\n]
 
@@ -77,8 +78,8 @@ WHITE = [ \t\r\n]
 
 "0"{D}+ {return symbol(sym.octa_e, yytext());}
 "0"{D}+"."{D}+ { return symbol(sym.octa_r, yytext());}
-"0x"({D}|{L})+ {return symbol(sym.hexa_e, yytext());}
-"0x"({D}|{L})+"."({D}|{L})+ { return symbol(sym.hexa_r, yytext());}
+"0x"({D}|{H})+ {return symbol(sym.hexa_e, yytext());}
+"0x"({D}|{H})+"."({D}|{H})+ { return symbol(sym.hexa_r, yytext());}
 
 {D}+ {  return symbol(sym.numero, yytext());}
 {D}+"."{D}+ { return symbol(sym.real, yytext());}

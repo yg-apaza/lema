@@ -39,7 +39,7 @@ PROGRAMA  ::=     DEFINICIONVARIABLE PROGRAMAPRINCIPAL
                 | DEFINICIONVARIABLE DEFINICIONPROTOTIPO PROGRAMAPRINCIPAL DEFINICIONFUNCION 
                 | pr_principal par_ab par_ce BLOQUE 
 ;
-
+/*
 SENTENCIA  ::= EXPRESION punto_coma 
 ;
 ACT  ::= id decr 
@@ -562,3 +562,4 @@ OPERANDO1  ::= mas
 ;
 OPERANDO1  ::= menos 
 ;
+*/

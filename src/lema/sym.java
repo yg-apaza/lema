@@ -11,70 +11,71 @@ public class sym {
   public static final int transp = 17;
   public static final int pr_const = 3;
   public static final int dif = 27;
-  public static final int pr_sino = 57;
+  public static final int pr_sino = 58;
   public static final int ll_ab = 10;
   public static final int mod = 16;
   public static final int a_suma = 36;
-  public static final int cor_ce = 43;
+  public static final int cor_ce = 44;
   public static final int pr_resta = 22;
   public static final int pr_suma = 21;
-  public static final int pr_selector = 61;
-  public static final int coma = 54;
+  public static final int pr_selector = 62;
+  public static final int coma = 55;
   public static final int igual = 35;
   public static final int neg = 34;
   public static final int pr_inv = 25;
-  public static final int real = 45;
+  public static final int real = 46;
   public static final int a_resta = 37;
   public static final int a_div = 39;
   public static final int par_ab = 8;
-  public static final int octa_r = 47;
+  public static final int octa_r = 48;
   public static final int ll_ce = 11;
   public static final int pr_real = 6;
-  public static final int numero = 44;
-  public static final int pr_mientras = 58;
+  public static final int numero = 45;
+  public static final int pr_mientras = 59;
   public static final int pr_entero = 5;
   public static final int menos = 13;
   public static final int menor = 28;
   public static final int EOF = 0;
-  public static final int punto_coma = 53;
+  public static final int punto_coma = 54;
   public static final int ident = 26;
   public static final int prod = 14;
   public static final int mayor_igual = 31;
-  public static final int pr_si = 56;
-  public static final int octa_e = 46;
+  public static final int pr_si = 57;
+  public static final int octa_e = 47;
   public static final int mas = 12;
-  public static final int pr_default = 64;
+  public static final int pr_default = 65;
   public static final int error = 1;
+  public static final int a_mod = 40;
   public static final int mayor = 29;
   public static final int a_prod = 38;
-  public static final int pr_leer = 51;
-  public static final int error_lex = 66;
+  public static final int pr_leer = 52;
+  public static final int error_lex = 67;
   public static final int pr_prod = 23;
-  public static final int pr_para = 60;
+  public static final int pr_para = 61;
   public static final int menor_igual = 30;
   public static final int par_ce = 9;
   public static final int id = 2;
   public static final int inv = 18;
   public static final int pr_vacio = 4;
   public static final int y = 32;
-  public static final int pr_saltar = 62;
-  public static final int pr_principal = 65;
-  public static final int pr_caso = 63;
-  public static final int pr_hacer = 59;
-  public static final int cor_ab = 42;
+  public static final int pr_saltar = 63;
+  public static final int pr_principal = 66;
+  public static final int pr_caso = 64;
+  public static final int pr_hacer = 60;
+  public static final int cor_ab = 43;
   public static final int o = 33;
   public static final int pr_cadena = 7;
   public static final int decr = 20;
-  public static final int hexa_r = 49;
+  public static final int hexa_r = 50;
   public static final int incr = 19;
-  public static final int pr_mostrar = 52;
+  public static final int pr_mostrar = 53;
   public static final int div = 15;
-  public static final int pr_retornar = 55;
+  public static final int pr_retornar = 56;
   public static final int pr_transp = 24;
-  public static final int sig_pun = 41;
-  public static final int cadena = 50;
-  public static final int hexa_e = 48;
-  public static final int sig_int = 40;
+  public static final int sig_pun = 42;
+  public static final int cadena = 51;
+  public static final int hexa_e = 49;
+  public static final int sig_int = 41;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -116,6 +117,7 @@ public class sym {
   "a_resta",
   "a_prod",
   "a_div",
+  "a_mod",
   "sig_int",
   "sig_pun",
   "cor_ab",
