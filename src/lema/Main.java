@@ -58,12 +58,8 @@ public class Main {
         {
             switch(token.sym)
             {
-                case sym.error_lex:
+                case sym.error:
                     resultado = resultado + "LINEA: " + (token.left + 1) + ", Columna: " + (token.right + 1) + " -> Error, token '" + token.value + "' no reconocido.\n";
-                    break;
-
-                case sym.id:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador "+ token.value  + "\n";
                     break;
                 case sym.pr_const:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Constante\n";
@@ -176,6 +172,9 @@ public class Main {
                 case sym.a_div:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Operador con asignación división\n";
                     break;
+                case sym.a_mod:
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Operador con asignación módulo\n";
+                    break;
                 case sym.sig_int:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Operador ?\n";
                     break;
@@ -188,12 +187,6 @@ public class Main {
                 case sym.cor_ce:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Corchete cerrado\n";
                     break;
-                case sym.numero:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número entero " + token.value + "\n";
-                    break;     
-                case sym.real:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número real " + token.value + "\n";
-                    break;
                 case sym.octa_e:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número octal entero " + token.value + "\n";
                     break;
@@ -205,6 +198,12 @@ public class Main {
                     break;
                 case sym.hexa_r:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número hexadecimal real " + token.value + "\n";
+                    break;
+                case sym.numero:
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número entero " + token.value + "\n";
+                    break;     
+                case sym.real:
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número real " + token.value + "\n";
                     break;
                 case sym.cadena:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Cadena de caracteres " + token.value + "\n";
@@ -254,7 +253,13 @@ public class Main {
                 case sym.pr_principal:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Funcion principal\n";
                     break;
+                case sym.id:
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + token.value + "\n";
+                    break;
+                case sym.err:
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Error: '" + token.value + "' Token no reconocido\n";
             }
+            
             token = lexico.next_token();
         }
         

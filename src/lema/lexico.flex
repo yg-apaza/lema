@@ -139,3 +139,5 @@ WHITE = [ \t\r\n]
 
 /* IDENTIFICADOR */
 {L}+({L}|{D})*                  { return symbol(sym.id, yytext());      }
+
+.                               { return symbol(sym.err, yytext());     }
