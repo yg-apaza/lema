@@ -140,4 +140,5 @@ WHITE = [ \t\r\n]
 /* IDENTIFICADOR */
 {L}+({L}|{D})*                  { return symbol(sym.id, yytext());      }
 
+/* ERROR LÉXICO */
 .                               { return symbol(sym.err, yytext());     }
