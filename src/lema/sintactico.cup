@@ -19,8 +19,8 @@ parser code {:
         }
 
         m.append(" : "+message);
-
-        System.err.println(m);
+        System.out.flush();
+        System.out.println(m);
     }
 
     public void report_fatal_error(String message, Object info) {
@@ -29,47 +29,438 @@ parser code {:
     }
 :};
 
-terminal pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, par_ab, par_ce, ll_ab, ll_ce, mas, menos, prod, div, mod, transp, inv, incr, decr, pr_suma, pr_resta, pr_prod, pr_transp, pr_inv, ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, a_suma, a_resta, a_prod, a_div, a_mod, sig_int, sig_pun, cor_ab, cor_ce, octa_e, octa_r, hexa_e, hexa_r, numero, real, cadena, pr_leer, pr_mostrar, punto_coma, coma, pr_retornar, pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso, pr_default, pr_principal, id, err;
 
-non terminal PROGRAMA, SENTENCIA, ACT, ARGUMENTO, BLOQUE, CONDICIONAL, CONTROLADOR, INDICE, INI, MATRIZ, NELEMENTO, NVECTOR, OPERADORASIGNACION, OPERADORBINARIO, OPERADORUNARIO, OPERANDOENTERO, TIPONUMERO, VECTOR, OPERADORPALABRABINARIO, OPERANDO, TIPOVARIABLE, EXPRESION, ASIGIDENTSIMPLE , ASIGIDENTVECT, ASIGIDENTMAT, ASIGSIMPLE, ASIGVECT, ASIGMAT, DECLARACION, DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, DECLARACIONFUNCIONPROTOTIPO, TIPOVARIABLEFUNCION, PARAMETROPROTOTIPO, PARAMETRO, ARG, NSENTENCIA, NCASO, SENTCASO, PARAMETROBINARIO, PARAMETROUNARIO, DEFINICIONVARIABLE, DEFINICIONPROTOTIPO, PROGRAMAPRINCIPAL, DEFINICIONFUNCION , ASIGALL, OPERANDO1, OPERADORPALABRAUNARIO;
+/* DECLARACION DE TERMINALES */
+
+terminal pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
+par_ab, par_ce, cor_ab, cor_ce, ll_ab, ll_ce, 
+mas, menos, prod, div, mod, transp, inv, incr, decr, 
+ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, 
+pr_suma, pr_resta, pr_prod, pr_transp, pr_inv, 
+a_suma, a_resta, a_prod, a_div, a_mod, 
+sig_int, sig_pun, 
+octa_e, octa_r, hexa_e, hexa_r, numero, real, cadena, 
+pr_leer, pr_mostrar, 
+pr_principal,
+pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso, pr_default, pr_retornar,
+punto_coma, coma,
+id, err, premas, premenos ;
+
+
+
+
+/* DECLARACION DE NO TERMINALES */
+
+non terminal PROGRAMA, 
+PROGRAMAPRINCIPAL,
+
+EXPRESION, EXPGEN,
+SENTENCIA, NSENTENCIA,
+
+DECLARACION, DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, 
+DEFINICIONVARIABLECAB, DECLARACIONCON,
+DEFINICIONVARIABLE,  DEFINICIONFUNCION,
+DECSIMPLE, DECVECT, DECMAT, 
+DECENTERO, DECREAL, DECALL,
+DECCON, DECCONALL,
+DECCAD, DECCADALL,
+
+PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO, PARAMETROPROTOTIPO,
+ARGUMENTO,
+
+ASIGNACION, LLAMADAFUNCION, 
+CONDICIONALHACERMIENTRAS, CONDICIONALMIENTRAS, CONDICIONALPARA, CONDICIONALSI, 
+SENTSELECTOR, SENTDEFECTO,
+NCASO, SENTCASO, 
+
+ESCRITURA, LECTURA, 
+
+BLOQUE,
+MATRIZ, NELEMENTO, NVECTOR, VECTOR,
+INDICE, INI, ACT,
+CONDICIONAL, CONTROLADOR, 
+
+OPERADORBINARIO, OPERADORUNARIO, OPERADORUNARIO2, OPERANDOENTERO, OPERADORASIGNACION, OPERADORPALABRAUNARIO, OPERADORPALABRABINARIO,
+OPERADORFUNCION, OPERADORCOND, 
+OPERANDO, 
+
+TIPOVARIABLE, TIPONUMERO, TIPOVARIABLEFUNCION;
+
+
+
+
+/* PRECEDENCIA */
+
+precedence left y, o;
+precedence left ident, dif, menor, mayor, menor_igual, mayor_igual;
+precedence left mas, menos;
+precedence left mod;
+precedence left prod, div;
+precedence left transp, inv;
+precedence right incr, decr, neg;
+precedence right premas, premenos;
+
+precedence nonassoc pr_const; 
+precedence nonassoc pr_vacio; 
+precedence nonassoc pr_entero; 
+precedence nonassoc pr_real; 
+precedence nonassoc pr_cadena; 
+ 
+precedence nonassoc par_ab; 
+precedence nonassoc par_ce; 
+precedence nonassoc cor_ab; 
+precedence nonassoc cor_ce;
+precedence nonassoc ll_ab; 
+precedence nonassoc ll_ce; 
+ 
+precedence nonassoc pr_suma; 
+precedence nonassoc pr_resta; 
+precedence nonassoc pr_prod; 
+precedence nonassoc pr_transp; 
+precedence nonassoc pr_inv; 
+ 
+precedence nonassoc igual; 
+precedence nonassoc a_suma; 
+precedence nonassoc a_resta; 
+precedence nonassoc a_prod; 
+precedence nonassoc a_div; 
+precedence nonassoc a_mod; 
+precedence nonassoc sig_int; 
+precedence nonassoc sig_pun; 
+ 
+precedence nonassoc octa_e; 
+precedence nonassoc octa_r; 
+precedence nonassoc hexa_e; 
+precedence nonassoc hexa_r; 
+precedence nonassoc numero; 
+precedence nonassoc real; 
+precedence nonassoc cadena; 
+precedence nonassoc pr_leer; 
+precedence nonassoc pr_mostrar; 
+precedence nonassoc punto_coma; 
+precedence nonassoc coma; 
+precedence nonassoc pr_retornar; 
+precedence nonassoc pr_si; 
+precedence nonassoc pr_sino; 
+precedence nonassoc pr_mientras; 
+precedence nonassoc pr_hacer; 
+precedence nonassoc pr_para; 
+precedence nonassoc pr_selector; 
+precedence nonassoc pr_saltar; 
+precedence nonassoc pr_caso; 
+precedence nonassoc pr_default; 
+precedence nonassoc pr_principal; 
+precedence nonassoc id; 
+precedence nonassoc err; 
+ 
 start with PROGRAMA;
 
-PROGRAMA  ::=     DEFINICIONVARIABLE PROGRAMAPRINCIPAL
-                | DEFINICIONPROTOTIPO PROGRAMAPRINCIPAL DEFINICIONFUNCION 
-                | DEFINICIONVARIABLE DEFINICIONPROTOTIPO PROGRAMAPRINCIPAL DEFINICIONFUNCION 
-                | pr_principal par_ab par_ce par_ce 
+
+PROGRAMA  ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL 
 ;
-/*
-SENTENCIA  ::= EXPRESION punto_coma 
+PROGRAMA  ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL DEFINICIONFUNCION 
 ;
+PROGRAMA  ::= PROGRAMAPRINCIPAL
+;
+
+PROGRAMAPRINCIPAL  ::= pr_vacio pr_principal par_ab par_ce BLOQUE 
+;
+
+
+DEFINICIONVARIABLECAB  ::= DECLARACION  
+;
+DEFINICIONVARIABLECAB  ::= DECLARACIONCON 
+;
+DEFINICIONVARIABLECAB  ::= DECLARACION DEFINICIONVARIABLECAB 
+;
+DEFINICIONVARIABLECAB  ::= DECLARACIONCON DEFINICIONVARIABLECAB 
+;
+
+DEFINICIONFUNCION  ::= DECLARACIONFUNCION DEFINICIONFUNCION  
+;
+DEFINICIONFUNCION  ::= DECLARACIONFUNCION 
+;
+
+
+
+DECLARACION  ::= pr_entero DECENTERO 
+;
+DECLARACION  ::= pr_real DECREAL 					
+;
+DECLARACION  ::= pr_cadena DECCADALL punto_coma 
+;
+
+
+DECLARACIONCON  ::= pr_const pr_entero DECCONALL punto_coma 
+;
+DECLARACIONCON  ::= pr_const pr_real DECCONALL punto_coma 
+;
+DECLARACIONCON  ::= pr_const pr_entero id igual octa_e punto_coma 
+;
+DECLARACIONCON  ::= pr_const pr_entero id igual hexa_e punto_coma 
+;
+DECLARACIONCON  ::= pr_const pr_real id igual octa_r punto_coma 
+;
+DECLARACIONCON  ::= pr_const pr_real id igual hexa_r punto_coma 
+;
+
+DECLARACIONFUNCION  ::= DECLARACIONFUNCIONCABECERA BLOQUE 
+;
+
+
+
+
+DECENTERO ::= id igual octa_e punto_coma
+;
+DECENTERO ::= id igual hexa_e punto_coma
+;
+DECENTERO ::=  DECALL punto_coma
+; 
+DECENTERO ::= id par_ab PARAMETROPROTOTIPO par_ce punto_coma
+;
+DECENTERO ::= id par_ab par_ce punto_coma 						
+;
+
+DECREAL ::= id igual octa_r punto_coma
+;
+DECREAL ::= id igual hexa_r punto_coma
+;
+DECREAL ::= DECALL punto_coma
+;
+DECREAL ::= id par_ab PARAMETROPROTOTIPO par_ce punto_coma 		
+;
+DECREAL ::= id par_ab par_ce punto_coma 						
+;
+
+
+
+DECALL  ::= DECSIMPLE 
+;
+DECALL  ::= DECVECT
+;
+DECALL  ::= DECMAT
+;
+DECALL  ::= DECSIMPLE coma DECALL 
+;
+DECALL  ::= DECVECT coma DECALL 
+;
+DECALL  ::= DECMAT coma DECALL 
+;
+
+
+
+DECSIMPLE  ::= id igual EXPGEN 
+;
+DECSIMPLE  ::= id 
+;
+
+DECVECT  ::= id INDICE igual EXPGEN 
+;
+DECVECT  ::= id INDICE igual VECTOR 
+;
+DECVECT  ::= id INDICE 
+;
+
+DECMAT  ::= id INDICE INDICE igual EXPGEN 
+;
+DECMAT  ::= id INDICE INDICE igual MATRIZ 
+;
+DECMAT  ::= id INDICE INDICE 
+;
+
+
+DECCAD  ::= id igual cadena 
+;
+DECCAD  ::= id 
+;
+
+DECCADALL	::= DECCAD
+;
+DECCADALL	::= DECCAD coma DECCADALL
+;
+
+
+
+DECCONALL  ::= DECCON 
+;
+DECCONALL  ::= DECCON coma DECCONALL 
+;
+
+
+DECCON	::= id igual EXPGEN 
+;
+DECCON	::= id INDICE igual EXPGEN 
+;
+DECCON	::= id INDICE igual VECTOR 
+;
+DECCON	::= id INDICE INDICE igual EXPGEN  
+;
+DECCON	::= id INDICE INDICE igual MATRIZ  
+;
+
+
+
+
+BLOQUE  ::= ll_ab NSENTENCIA ll_ce 
+;
+BLOQUE  ::= ll_ab DEFINICIONVARIABLE NSENTENCIA ll_ce 
+;
+BLOQUE  ::= ll_ab DEFINICIONVARIABLE ll_ce 
+;
+BLOQUE  ::= SENTENCIA 
+;
+BLOQUE  ::= ll_ab ll_ce 
+;
+
+NSENTENCIA  ::= SENTENCIA NSENTENCIA   
+;
+NSENTENCIA  ::= SENTENCIA   
+;
+
+SENTENCIA  ::= ASIGNACION 					
+;
+SENTENCIA  ::= CONDICIONALHACERMIENTRAS 	
+;
+SENTENCIA  ::= CONDICIONALMIENTRAS 			
+;
+SENTENCIA  ::= CONDICIONALPARA 				
+;
+SENTENCIA  ::= CONDICIONALSI 				
+;
+SENTENCIA  ::= SENTSELECTOR 				
+;
+SENTENCIA  ::= LLAMADAFUNCION punto_coma 	
+;
+SENTENCIA  ::= ESCRITURA 					
+;
+SENTENCIA  ::= LECTURA 						
+;
+SENTENCIA  ::= ACT punto_coma 				
+;
+SENTENCIA  ::= pr_retornar EXPGEN punto_coma
+;
+SENTENCIA  ::= pr_retornar punto_coma	
+;
+
+
+
 ACT  ::= id decr 
 ;
 ACT  ::= id incr 
 ;
-ARGUMENTO  ::= ARG coma ARGUMENTO 
+
+
+EXPGEN ::= OPERANDO 
 ;
-BLOQUE  ::= ll_ab NSENTENCIA ll_ce 
+EXPGEN ::= EXPRESION 
+;
+
+
+
+EXPRESION  ::= OPERANDO OPERADORBINARIO OPERANDO 
+;
+EXPRESION  ::= OPERANDO OPERADORUNARIO 
+;
+EXPRESION  ::= ACT
+;
+EXPRESION  ::= OPERADORUNARIO2 OPERANDO 
+;
+EXPRESION  ::= OPERADORFUNCION 
+;
+EXPRESION  ::= OPERADORCOND
+;
+EXPRESION  ::= OPERADORUNARIO2 EXPRESION 
+;
+EXPRESION  ::= EXPRESION OPERADORUNARIO 
+;
+EXPRESION  ::= EXPRESION OPERADORBINARIO EXPRESION 
+;
+EXPRESION  ::= EXPRESION OPERADORBINARIO OPERANDO 
+;
+EXPRESION  ::= OPERANDO OPERADORBINARIO EXPRESION 
+;
+EXPRESION  ::= par_ab EXPRESION par_ce 
+;
+EXPRESION  ::= par_ab OPERANDO par_ce 
+;
+
+
+OPERADORUNARIO2 ::= neg
+;
+OPERADORUNARIO2 ::= mas %prec premas
+;
+OPERADORUNARIO2 ::= menos %prec premenos
+;
+
+ARGUMENTO  ::= EXPGEN 
+;
+ARGUMENTO  ::= EXPGEN coma ARGUMENTO 
+;
+
+
+
+ASIGNACION  ::= id igual cadena punto_coma 
+;
+
+ASIGNACION  ::= id OPERADORASIGNACION EXPGEN punto_coma 
+;
+
+ASIGNACION  ::= id INDICE OPERADORASIGNACION EXPGEN punto_coma 
+;
+
+ASIGNACION  ::= id INDICE INDICE OPERADORASIGNACION EXPGEN punto_coma 
+;
+
+
+
+
+CONDICIONAL  ::= par_ab OPERANDO par_ce 
 ;
 CONDICIONAL  ::= par_ab EXPRESION par_ce 
 ;
-CONTROLADOR  ::= par_ab INI punto_coma CONDICIONAL punto_coma ACT par_ce 
+
+
+CONDICIONALHACERMIENTRAS  ::= pr_hacer BLOQUE pr_mientras CONDICIONAL punto_coma 
 ;
-CONTROLADOR  ::= par_ab INI punto_coma CONDICIONAL punto_coma par_ce 
+
+CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL BLOQUE 
+;
+
+CONDICIONALPARA  ::= pr_para CONTROLADOR BLOQUE 
+;
+
+CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE 
+;
+CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE pr_sino BLOQUE 
+;
+
+CONTROLADOR  ::= par_ab INI punto_coma EXPRESION punto_coma ACT par_ce 
+;
+CONTROLADOR  ::= par_ab INI punto_coma EXPRESION punto_coma par_ce 
 ;
 CONTROLADOR  ::= par_ab INI punto_coma punto_coma ACT par_ce 
 ;
 CONTROLADOR  ::= par_ab INI punto_coma punto_coma par_ce 
 ;
-CONTROLADOR  ::= par_ab punto_coma CONDICIONAL punto_coma ACT par_ce 
+CONTROLADOR  ::= par_ab punto_coma EXPRESION punto_coma ACT par_ce 
 ;
-CONTROLADOR  ::= par_ab punto_coma CONDICIONAL punto_coma par_ce 
+CONTROLADOR  ::= par_ab punto_coma EXPRESION punto_coma par_ce 
 ;
 CONTROLADOR  ::= par_ab punto_coma punto_coma ACT par_ce 
 ;
 CONTROLADOR  ::= par_ab punto_coma punto_coma par_ce 
 ;
-INDICE  ::= cor_ab OPERANDOENTERO cor_ce 
+
+ESCRITURA  ::= pr_mostrar par_ab EXPGEN par_ce punto_coma 
 ;
+ESCRITURA  ::= pr_mostrar par_ab cadena par_ce punto_coma 
+;
+ESCRITURA  ::= pr_mostrar par_ab par_ce punto_coma 
+;
+
+INDICE  ::= cor_ab EXPGEN cor_ce 
+;
+
 INI  ::= id igual id 
 ;
 INI  ::= id igual numero 
@@ -78,12 +469,124 @@ INI  ::= pr_entero id igual id
 ;
 INI  ::= pr_entero id igual numero 
 ;
+
+LECTURA  ::= pr_leer par_ab id par_ce punto_coma 
+;
+
+
+
 MATRIZ  ::= ll_ab NVECTOR ll_ce 
 ;
-NELEMENTO  ::= EXPRESION coma NELEMENTO 
+
+NVECTOR  ::= VECTOR 
 ;
 NVECTOR  ::= VECTOR coma NVECTOR 
 ;
+
+VECTOR  ::= ll_ab NELEMENTO ll_ce 
+;
+
+NELEMENTO  ::= EXPGEN 
+;
+NELEMENTO  ::= EXPGEN coma NELEMENTO 
+;
+
+
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce 		
+;
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce
+;
+
+TIPOVARIABLEFUNCION  ::= TIPOVARIABLE 
+;
+TIPOVARIABLEFUNCION  ::= pr_vacio 
+;
+
+DEFINICIONVARIABLE  ::= DECLARACION DEFINICIONVARIABLE 
+;
+DEFINICIONVARIABLE  ::= DECLARACION 
+;
+
+
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO coma PARAMETROPROTOTIPO 
+;
+PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE INDICE coma PARAMETROPROTOTIPO 
+;
+PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE coma PARAMETROPROTOTIPO 
+;
+PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE INDICE 
+;
+PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE 
+;
+PARAMETROPROTOTIPO  ::= TIPONUMERO 
+;
+
+PARAMETRO  ::= TIPONUMERO id coma PARAMETRO 
+;
+PARAMETRO  ::= TIPONUMERO id INDICE coma PARAMETRO 
+;
+PARAMETRO  ::= TIPONUMERO id INDICE INDICE coma PARAMETRO 
+;
+PARAMETRO  ::= TIPONUMERO id INDICE INDICE 
+;
+PARAMETRO  ::= TIPONUMERO id INDICE 
+;
+PARAMETRO  ::= TIPONUMERO id 
+;
+
+PARAMETROBINARIO  ::= par_ab EXPGEN coma EXPGEN par_ce 
+;
+PARAMETROUNARIO  ::= par_ab EXPGEN par_ce  
+;
+
+
+
+SENTSELECTOR  ::= pr_selector CONDICIONAL ll_ab NCASO SENTDEFECTO ll_ce 
+;
+SENTSELECTOR  ::= pr_selector CONDICIONAL ll_ab NCASO ll_ce 
+;
+
+NCASO  ::= SENTCASO NCASO 
+;
+NCASO  ::= SENTCASO 
+;
+
+SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA pr_saltar punto_coma 
+;
+SENTCASO  ::= pr_caso numero sig_pun pr_saltar punto_coma 
+;
+SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA 
+;
+SENTCASO  ::= pr_caso numero sig_pun 
+;
+
+
+
+SENTDEFECTO  ::= pr_default sig_pun NSENTENCIA pr_saltar punto_coma  
+;
+SENTDEFECTO  ::= pr_default sig_pun pr_saltar punto_coma 
+;
+
+
+
+LLAMADAFUNCION  ::= id par_ab par_ce 
+;
+LLAMADAFUNCION  ::= id par_ab ARGUMENTO par_ce 
+;
+
+
+
+OPERADORFUNCION  ::= OPERADORPALABRABINARIO PARAMETROBINARIO  
+;
+OPERADORFUNCION  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
+;
+
+
+OPERADORCOND  ::= CONDICIONAL sig_int EXPGEN sig_pun EXPGEN 
+;
+
+
 OPERADORASIGNACION  ::= a_div 
 ;
 OPERADORASIGNACION  ::= a_prod 
@@ -94,54 +597,52 @@ OPERADORASIGNACION  ::= a_suma
 ;
 OPERADORASIGNACION  ::= igual 
 ;
-OPERADORBINARIO  ::= dif
+OPERADORASIGNACION  ::= a_mod 
 ;
-OPERADORBINARIO  ::= div
+
+OPERADORBINARIO  ::= dif 
 ;
-OPERADORBINARIO  ::= ident
+OPERADORBINARIO  ::= div 
 ;
-OPERADORBINARIO  ::= mas
+OPERADORBINARIO  ::= ident 
 ;
-OPERADORBINARIO  ::= mayor
+OPERADORBINARIO  ::= mas 
 ;
-OPERADORBINARIO  ::= mayor_igual
+OPERADORBINARIO  ::= mayor 
 ;
-OPERADORBINARIO  ::= menor
+OPERADORBINARIO  ::= mayor_igual 
 ;
-OPERADORBINARIO  ::= menor_igual
+OPERADORBINARIO  ::= menor 
 ;
-OPERADORBINARIO  ::= menos
+OPERADORBINARIO  ::= menor_igual 
 ;
-OPERADORBINARIO  ::= mod
+OPERADORBINARIO  ::= menos 
 ;
-OPERADORBINARIO  ::= o
+OPERADORBINARIO  ::= mod 
 ;
-OPERADORBINARIO  ::= prod
+OPERADORBINARIO  ::= o 
 ;
-OPERADORBINARIO  ::= y
+OPERADORBINARIO  ::= prod 
 ;
-OPERADORUNARIO  ::= decr 
+OPERADORBINARIO  ::= y 
 ;
-OPERADORUNARIO  ::= incr 
-;
+
 OPERADORUNARIO  ::= inv 
 ;
 OPERADORUNARIO  ::= transp 
+;
+
+OPERANDOENTERO  ::= LLAMADAFUNCION 
+;
+OPERANDOENTERO  ::= id INDICE INDICE   
+;
+OPERANDOENTERO  ::= id INDICE 
 ;
 OPERANDOENTERO  ::= id 
 ;
 OPERANDOENTERO  ::= numero 
 ;
-TIPONUMERO  ::= pr_entero 
-;
-TIPONUMERO  ::= pr_real 
-;
-VECTOR  ::= ll_ab NELEMENTO ll_ce 
-;
-OPERADORUNARIO  ::= mas 
-;
-OPERADORUNARIO  ::= menos 
-;
+
 OPERADORPALABRABINARIO  ::= pr_suma 
 ;
 OPERADORPALABRABINARIO  ::= pr_resta 
@@ -152,414 +653,30 @@ OPERADORPALABRAUNARIO  ::= pr_transp
 ;
 OPERADORPALABRAUNARIO  ::= pr_inv 
 ;
-OPERADORASIGNACION  ::= a_mod 
+
+
+
+OPERANDO  ::= OPERANDOENTERO 
 ;
 OPERANDO  ::= real 
 ;
 OPERANDO  ::= octa_e 
 ;
-OPERANDO  ::= hexa_e 
+OPERANDO  ::= octa_r 
+;
+OPERANDO  ::= hexa_e
+;
+OPERANDO  ::= hexa_r 
+;
+
+
+
+TIPONUMERO  ::= pr_entero 
+;
+TIPONUMERO  ::= pr_real 
+;
+
+TIPOVARIABLE  ::= TIPONUMERO 
 ;
 TIPOVARIABLE  ::= pr_cadena 
 ;
-EXPRESION  ::= OPERANDO OPERADORBINARIO OPERANDO 
-;
-EXPRESION  ::= OPERANDO OPERADORUNARIO 
-;
-EXPRESION  ::= neg OPERANDO 
-;
-ASIGIDENTSIMPLE  ::= id igual EXPRESION 
-;
-ASIGIDENTSIMPLE  ::= id 
-;
-ASIGIDENTVECT  ::= id INDICE igual VECTOR 
-;
-ASIGIDENTVECT  ::= id INDICE 
-;
-ASIGIDENTMAT  ::= id INDICE INDICE igual MATRIZ 
-;
-ASIGIDENTMAT  ::= id INDICE INDICE 
-;
-ASIGSIMPLE  ::= ASIGIDENTSIMPLE coma ASIGSIMPLE 
-;
-ASIGVECT  ::= ASIGIDENTVECT coma ASIGVECT 
-;
-ASIGMAT  ::= ASIGIDENTMAT coma ASIGMAT 
-;
-DECLARACION  ::= TIPONUMERO ASIGALL punto_coma 
-;
-DECLARACION  ::= pr_const TIPONUMERO ASIGSIMPLE punto_coma 
-;
-DECLARACIONFUNCION  ::= DECLARACIONFUNCIONCABECERA BLOQUE 
-;
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce 
-;
-DECLARACIONFUNCIONPROTOTIPO  ::= TIPOVARIABLEFUNCION id par_ab PARAMETROPROTOTIPO par_ce punto_coma 
-;
-DECLARACIONFUNCIONPROTOTIPO  ::= TIPOVARIABLEFUNCION id par_ab par_ce punto_coma 
-;
-TIPOVARIABLEFUNCION  ::= pr_vacio 
-;
-PARAMETROPROTOTIPO  ::= TIPOVARIABLE coma PARAMETROPROTOTIPO 
-;
-PARAMETRO  ::= TIPOVARIABLE id coma PARAMETRO 
-;
-PARAMETRO  ::= TIPOVARIABLE id 
-;
-ARG  ::= id 
-;
-BLOQUE  ::= ll_ab DEFINICIONVARIABLE NSENTENCIA ll_ce 
-;
-NSENTENCIA  ::= SENTENCIA NSENTENCIA 
-;
-NCASO  ::= SENTCASO NCASO 
-;
-SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA pr_saltar punto_coma 
-;
-SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA 
-;
-SENTCASO  ::= pr_caso numero sig_pun 
-;
-PARAMETROBINARIO  ::= par_ab ARG coma ARG par_ce 
-;
-PARAMETROUNARIO  ::= par_ab ARG par_ce 
-;
-DEFINICIONVARIABLE  ::= DECLARACION DEFINICIONVARIABLE 
-;
-DEFINICIONPROTOTIPO  ::= DECLARACIONFUNCIONPROTOTIPO DEFINICIONPROTOTIPO 
-;
-PROGRAMAPRINCIPAL  ::= pr_principal par_ab par_ce BLOQUE 
-;
-DEFINICIONFUNCION  ::= DECLARACIONFUNCION DEFINICIONFUNCION 
-;
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce 
-;
-BLOQUE  ::= ll_ab ll_ce 
-;
-SENTENCIA  ::= id OPERADORASIGNACION EXPRESION punto_coma 
-;
-SENTENCIA  ::= pr_hacer BLOQUE pr_mientras CONDICIONAL punto_coma 
-;
-SENTENCIA  ::= pr_mientras CONDICIONAL BLOQUE 
-;
-SENTENCIA  ::= pr_para CONTROLADOR BLOQUE 
-;
-SENTENCIA  ::= pr_si CONDICIONAL BLOQUE 
-;
-SENTENCIA  ::= pr_si CONDICIONAL BLOQUE pr_sino BLOQUE 
-;
-SENTENCIA  ::= id igual CONDICIONAL sig_int EXPRESION sig_pun EXPRESION punto_coma 
-;
-SENTENCIA  ::= pr_mostrar par_ab EXPRESION par_ce punto_coma 
-;
-SENTENCIA  ::= pr_mostrar par_ab cadena par_ce punto_coma 
-;
-SENTENCIA  ::= pr_mostrar par_ab par_ce punto_coma 
-;
-SENTENCIA  ::= pr_leer par_ab id par_ce punto_coma 
-;
-SENTENCIA  ::= pr_leer par_ab par_ce punto_coma 
-;
-SENTENCIA  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-SENTENCIA  ::= id par_ab par_ce punto_coma 
-;
-SENTENCIA  ::= pr_selector CONDICIONAL ll_ab NCASO ll_ce 
-;
-ARGUMENTO  ::= id 
-;
-NELEMENTO  ::= OPERANDO OPERADORBINARIO OPERANDO 
-;
-NELEMENTO  ::= OPERANDO OPERADORUNARIO 
-;
-NELEMENTO  ::= neg OPERANDO 
-;
-NVECTOR  ::= ll_ab NELEMENTO ll_ce 
-;
-OPERANDOENTERO  ::= OPERANDO OPERADORBINARIO OPERANDO 
-;
-OPERANDOENTERO  ::= OPERANDO OPERADORUNARIO 
-;
-OPERANDOENTERO  ::= neg OPERANDO 
-;
-OPERANDOENTERO  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-OPERANDOENTERO  ::= id par_ab par_ce punto_coma 
-;
-OPERANDO  ::= id 
-;
-OPERANDO  ::= numero 
-;
-OPERANDO  ::= neg OPERANDO 
-;
-OPERANDO  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-OPERANDO  ::= id par_ab par_ce punto_coma 
-;
-TIPOVARIABLE  ::= pr_entero 
-;
-TIPOVARIABLE  ::= pr_real 
-;
-EXPRESION  ::= OPERADORPALABRABINARIO PARAMETROBINARIO 
-;
-EXPRESION  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
-;
-EXPRESION  ::= real 
-;
-EXPRESION  ::= octa_e 
-;
-EXPRESION  ::= hexa_e 
-;
-EXPRESION  ::= id 
-;
-EXPRESION  ::= numero 
-;
-EXPRESION  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-EXPRESION  ::= id par_ab par_ce punto_coma 
-;
-ASIGSIMPLE  ::= id igual EXPRESION 
-;
-ASIGSIMPLE  ::= id 
-;
-ASIGVECT  ::= id INDICE igual VECTOR 
-;
-ASIGVECT  ::= id INDICE 
-;
-ASIGMAT  ::= id INDICE INDICE igual MATRIZ 
-;
-ASIGMAT  ::= id INDICE INDICE 
-;
-ASIGALL  ::= ASIGIDENTSIMPLE coma ASIGSIMPLE 
-;
-ASIGALL  ::= id igual EXPRESION 
-;
-ASIGALL  ::= id 
-;
-ASIGALL  ::= ASIGIDENTVECT coma ASIGVECT 
-;
-ASIGALL  ::= id INDICE igual VECTOR 
-;
-ASIGALL  ::= id INDICE 
-;
-ASIGALL  ::= ASIGIDENTMAT coma ASIGMAT 
-;
-ASIGALL  ::= id INDICE INDICE igual MATRIZ 
-;
-ASIGALL  ::= id INDICE INDICE 
-;
-DECLARACION  ::= pr_cadena id igual cadena punto_coma 
-;
-DECLARACION  ::= pr_cadena id punto_coma 
-;
-TIPOVARIABLEFUNCION  ::= pr_cadena 
-;
-TIPOVARIABLEFUNCION  ::= pr_entero 
-;
-TIPOVARIABLEFUNCION  ::= pr_real 
-;
-PARAMETROPROTOTIPO  ::= pr_cadena 
-;
-PARAMETROPROTOTIPO  ::= pr_entero 
-;
-PARAMETROPROTOTIPO  ::= pr_real 
-;
-BLOQUE  ::= EXPRESION punto_coma 
-;
-BLOQUE  ::= id OPERADORASIGNACION EXPRESION punto_coma 
-;
-BLOQUE  ::= pr_hacer BLOQUE pr_mientras CONDICIONAL punto_coma 
-;
-BLOQUE  ::= pr_mientras CONDICIONAL BLOQUE 
-;
-BLOQUE  ::= pr_para CONTROLADOR BLOQUE 
-;
-BLOQUE  ::= pr_si CONDICIONAL BLOQUE 
-;
-BLOQUE  ::= pr_si CONDICIONAL BLOQUE pr_sino BLOQUE 
-;
-BLOQUE  ::= id igual CONDICIONAL sig_int EXPRESION sig_pun EXPRESION punto_coma 
-;
-BLOQUE  ::= pr_mostrar par_ab EXPRESION par_ce punto_coma 
-;
-BLOQUE  ::= pr_mostrar par_ab cadena par_ce punto_coma 
-;
-BLOQUE  ::= pr_mostrar par_ab par_ce punto_coma 
-;
-BLOQUE  ::= pr_leer par_ab id par_ce punto_coma 
-;
-BLOQUE  ::= pr_leer par_ab par_ce punto_coma 
-;
-BLOQUE  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-BLOQUE  ::= id par_ab par_ce punto_coma 
-;
-BLOQUE  ::= pr_selector CONDICIONAL ll_ab NCASO ll_ce 
-;
-NSENTENCIA  ::= EXPRESION punto_coma 
-;
-NSENTENCIA  ::= id OPERADORASIGNACION EXPRESION punto_coma 
-;
-NSENTENCIA  ::= pr_hacer BLOQUE pr_mientras CONDICIONAL punto_coma 
-;
-NSENTENCIA  ::= pr_mientras CONDICIONAL BLOQUE 
-;
-NSENTENCIA  ::= pr_para CONTROLADOR BLOQUE 
-;
-NSENTENCIA  ::= pr_si CONDICIONAL BLOQUE 
-;
-NSENTENCIA  ::= pr_si CONDICIONAL BLOQUE pr_sino BLOQUE 
-;
-NSENTENCIA  ::= id igual CONDICIONAL sig_int EXPRESION sig_pun EXPRESION punto_coma 
-;
-NSENTENCIA  ::= pr_mostrar par_ab EXPRESION par_ce punto_coma 
-;
-NSENTENCIA  ::= pr_mostrar par_ab cadena par_ce punto_coma 
-;
-NSENTENCIA  ::= pr_mostrar par_ab par_ce punto_coma 
-;
-NSENTENCIA  ::= pr_leer par_ab id par_ce punto_coma 
-;
-NSENTENCIA  ::= pr_leer par_ab par_ce punto_coma 
-;
-NSENTENCIA  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-NSENTENCIA  ::= id par_ab par_ce punto_coma 
-;
-NSENTENCIA  ::= pr_selector CONDICIONAL ll_ab NCASO ll_ce 
-;
-ARG  ::= OPERANDO OPERADORBINARIO OPERANDO 
-;
-ARG  ::= OPERANDO OPERADORUNARIO 
-;
-ARG  ::= neg OPERANDO 
-;
-ARG  ::= OPERADORPALABRABINARIO PARAMETROBINARIO 
-;
-ARG  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
-;
-ARG  ::= real 
-;
-ARG  ::= octa_e 
-;
-ARG  ::= hexa_e 
-;
-ARG  ::= numero 
-;
-ARG  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-ARG  ::= id par_ab par_ce punto_coma 
-;
-NCASO  ::= pr_caso numero sig_pun NSENTENCIA pr_saltar punto_coma 
-;
-NCASO  ::= pr_caso numero sig_pun NSENTENCIA 
-;
-NCASO  ::= pr_caso numero sig_pun 
-;
-DEFINICIONVARIABLE  ::= TIPONUMERO ASIGALL punto_coma 
-;
-DEFINICIONVARIABLE  ::= pr_const TIPONUMERO ASIGSIMPLE punto_coma 
-;
-DEFINICIONVARIABLE  ::= pr_cadena id igual cadena punto_coma 
-;
-DEFINICIONVARIABLE  ::= pr_cadena id punto_coma 
-;
-DEFINICIONPROTOTIPO  ::= TIPOVARIABLEFUNCION id par_ab PARAMETROPROTOTIPO par_ce punto_coma 
-;
-DEFINICIONPROTOTIPO  ::= TIPOVARIABLEFUNCION id par_ab par_ce punto_coma 
-;
-DEFINICIONFUNCION  ::= DECLARACIONFUNCIONCABECERA BLOQUE 
-;
-ARGUMENTO  ::= OPERANDO OPERADORBINARIO OPERANDO 
-;
-ARGUMENTO  ::= OPERANDO OPERADORUNARIO 
-;
-ARGUMENTO  ::= neg OPERANDO 
-;
-ARGUMENTO  ::= OPERADORPALABRABINARIO PARAMETROBINARIO 
-;
-ARGUMENTO  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
-;
-ARGUMENTO  ::= real 
-;
-ARGUMENTO  ::= octa_e 
-;
-ARGUMENTO  ::= hexa_e 
-;
-ARGUMENTO  ::= numero 
-;
-ARGUMENTO  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-ARGUMENTO  ::= id par_ab par_ce punto_coma 
-;
-NELEMENTO  ::= OPERADORPALABRABINARIO PARAMETROBINARIO 
-;
-NELEMENTO  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
-;
-NELEMENTO  ::= real 
-;
-NELEMENTO  ::= octa_e 
-;
-NELEMENTO  ::= hexa_e 
-;
-NELEMENTO  ::= id 
-;
-NELEMENTO  ::= numero 
-;
-NELEMENTO  ::= id par_ab ARGUMENTO par_ce punto_coma 
-;
-NELEMENTO  ::= id par_ab par_ce punto_coma 
-;
-OPERANDOENTERO  ::= OPERADORPALABRABINARIO PARAMETROBINARIO 
-;
-OPERANDOENTERO  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
-;
-OPERANDOENTERO  ::= real 
-;
-OPERANDOENTERO  ::= octa_e 
-;
-OPERANDOENTERO  ::= hexa_e 
-;
-OPERANDO  ::= OPERADORPALABRABINARIO PARAMETROBINARIO 
-;
-OPERANDO  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO 
-;
-OPERANDO  ::= OPERADORPALABRABINARIO PARAMETROBINARIO OPERANDO1 
-;
-OPERANDO  ::= id par_ab ARGUMENTO par_ce punto_coma OPERANDO1 
-;
-OPERANDO1  ::= OPERADORUNARIO OPERANDO1 
-;
-OPERANDO  ::= numero OPERANDO1 
-;
-OPERANDO  ::= hexa_e OPERANDO1 
-;
-OPERANDO  ::= real OPERANDO1 
-;
-OPERANDO  ::= octa_e OPERANDO1 
-;
-OPERANDO  ::= id OPERANDO1 
-;
-OPERANDO1  ::= OPERADORBINARIO OPERANDO 
-;
-OPERANDO1  ::= OPERADORBINARIO OPERANDO OPERANDO1 
-;
-OPERANDO  ::= neg OPERANDO OPERANDO1 
-;
-OPERANDO  ::= id par_ab par_ce punto_coma OPERANDO1 
-;
-OPERANDO  ::= OPERADORPALABRAUNARIO PARAMETROUNARIO OPERANDO1 
-;
-OPERANDO1  ::= decr 
-;
-OPERANDO1  ::= incr 
-;
-OPERANDO1  ::= inv 
-;
-OPERANDO1  ::= transp 
-;
-OPERANDO1  ::= mas 
-;
-OPERANDO1  ::= menos 
-;
-*/

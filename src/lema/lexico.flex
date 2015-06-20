@@ -31,14 +31,14 @@ WHITE = [ \t\r\n]
 {WHITE}                         { /* Ignorar */                         }
 
 /* IGNORAR COMENTARIOS */
-"/*"(.| {WHITE})*"*/"           { /* Ignorar */                         }
+"/*"([^*]|\*+[^/*])*"*"+"/"    { /* Ignorar */                         }
 
 /* CONSTANTES */
-"const"                         { return symbol(sym.pr_const);          }
+"const"                         { return symbol(sym.pr_const, yytext());}
 
 /* TIPOS DE DATOS BASICOS */
-"vacio"                         { return symbol(sym.pr_vacio);          }
-"entero"                        { return symbol(sym.pr_entero);         }
+"vacio"                         { return symbol(sym.pr_vacio, yytext()); }
+"entero"                        { return symbol(sym.pr_entero, yytext());}
 "real"                          { return symbol(sym.pr_real);           }
 "cadena"                        { return symbol(sym.pr_cadena);         }
 
@@ -106,36 +106,36 @@ WHITE = [ \t\r\n]
 {D}+"."{D}+                     { return symbol(sym.real, yytext());    }
 
 /* CADENAS */
-\".*\"                          { return symbol(sym.cadena, yytext());  }
+\"[^\"]*\"                          { return symbol(sym.cadena, yytext());  }
 
 /* INSTRUCCIONES DE ENTRADA Y SALIDA */
-"leer"                          { return symbol(sym.pr_leer);           }
-"mostrar"                       { return symbol(sym.pr_mostrar);        }
+"leer"                          { return symbol(sym.pr_leer, yytext());           }
+"mostrar"                       { return symbol(sym.pr_mostrar, yytext());        }
 
 /* SEPARADORES */
-";"                             { return symbol(sym.punto_coma);        }
-","                             { return symbol(sym.coma);              }
+";"                             { return symbol(sym.punto_coma, yytext());        }
+","                             { return symbol(sym.coma, yytext());              }
 
 /* FUNCIONES */
-"retornar"                      { return symbol(sym.pr_retornar);       }
+"retornar"                      { return symbol(sym.pr_retornar, yytext());       }
 
 /* SENTENCIAS CONDICIONALES */
-"si"                            { return symbol(sym.pr_si);             }
-"sino"                          { return symbol(sym.pr_sino);           }
+"si"                            { return symbol(sym.pr_si, yytext());             }
+"sino"                          { return symbol(sym.pr_sino, yytext());           }
 
 /* SENTENCIAS DE REPETICIÓN */
-"mientras"                      { return symbol(sym.pr_mientras);       }
-"hacer"                         { return symbol(sym.pr_hacer);          }
-"para"                          { return symbol(sym.pr_para);           }
+"mientras"                      { return symbol(sym.pr_mientras, yytext());       }
+"hacer"                         { return symbol(sym.pr_hacer, yytext());          }
+"para"                          { return symbol(sym.pr_para, yytext());     }
 
 /* SENTENCIAS DE SELECCIÓN MÚLTIPLE */
-"selector"                      { return symbol(sym.pr_selector);       }
-"saltar"                        { return symbol(sym.pr_saltar);         }
-"caso"                          { return symbol(sym.pr_caso);           }
-"pordefecto"                    { return symbol(sym.pr_default);        }
+"selector"                      { return symbol(sym.pr_selector, yytext()); }
+"saltar"                        { return symbol(sym.pr_saltar, yytext());         }
+"caso"                          { return symbol(sym.pr_caso, yytext());           }
+"pordefecto"                    { return symbol(sym.pr_default, yytext());        }
 
 /* MENÚ PRINCIPAL */
-"principal"                     { return symbol(sym.pr_principal);      }
+"principal"                     { return symbol(sym.pr_principal, yytext());      }
 
 /* IDENTIFICADOR */
 {L}+({L}|{D})*                  { return symbol(sym.id, yytext());      }
