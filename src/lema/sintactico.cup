@@ -32,7 +32,7 @@ parser code {:
 
 /* DECLARACION DE TERMINALES */
 
-terminal pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
+terminal Nodopr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
 par_ab, par_ce, cor_ab, cor_ce, ll_ab, ll_ce, 
 mas, menos, prod, div, mod, transp, inv, incr, decr, 
 ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, 
