@@ -19,8 +19,8 @@ parser code {:
         }
 
         m.append(" : "+message);
-        System.out.flush();
-        System.out.println(m);
+
+        System.err.println(m);
     }
 
     public void report_fatal_error(String message, Object info) {
@@ -65,7 +65,7 @@ DECENTERO, DECREAL, DECALL,
 DECCON, DECCONALL,
 DECCAD, DECCADALL,
 
-PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO, PARAMETROPROTOTIPO,
+PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO,
 ARGUMENTO,
 
 ASIGNACION, LLAMADAFUNCION, 
@@ -135,6 +135,7 @@ precedence nonassoc hexa_r;
 precedence nonassoc numero; 
 precedence nonassoc real; 
 precedence nonassoc cadena; 
+
 precedence nonassoc pr_leer; 
 precedence nonassoc pr_mostrar; 
 precedence nonassoc punto_coma; 
@@ -160,6 +161,8 @@ PROGRAMA  ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL
 ;
 PROGRAMA  ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL DEFINICIONFUNCION 
 ;
+PROGRAMA  ::= PROGRAMAPRINCIPAL DEFINICIONFUNCION 
+;
 PROGRAMA  ::= PROGRAMAPRINCIPAL
 ;
 
@@ -183,12 +186,14 @@ DEFINICIONFUNCION  ::= DECLARACIONFUNCION
 
 
 
-DECLARACION  ::= pr_entero DECENTERO 
+DECLARACION  ::= pr_entero DECENTERO  				{:System.out.println("Declaracion entero");:}
 ;
-DECLARACION  ::= pr_real DECREAL 					
+DECLARACION  ::= pr_real DECREAL 					{:System.out.println("Declaracion real");:}
 ;
-DECLARACION  ::= pr_cadena DECCADALL punto_coma 
+DECLARACION  ::= pr_cadena DECCADALL punto_coma  	{:System.out.println("Declaracion cadena");:}
 ;
+
+
 
 
 DECLARACIONCON  ::= pr_const pr_entero DECCONALL punto_coma 
@@ -216,10 +221,7 @@ DECENTERO ::= id igual hexa_e punto_coma
 ;
 DECENTERO ::=  DECALL punto_coma
 ; 
-DECENTERO ::= id par_ab PARAMETROPROTOTIPO par_ce punto_coma
-;
-DECENTERO ::= id par_ab par_ce punto_coma 						
-;
+
 
 DECREAL ::= id igual octa_r punto_coma
 ;
@@ -227,10 +229,7 @@ DECREAL ::= id igual hexa_r punto_coma
 ;
 DECREAL ::= DECALL punto_coma
 ;
-DECREAL ::= id par_ab PARAMETROPROTOTIPO par_ce punto_coma 		
-;
-DECREAL ::= id par_ab par_ce punto_coma 						
-;
+
 
 
 
@@ -307,8 +306,6 @@ BLOQUE  ::= ll_ab DEFINICIONVARIABLE NSENTENCIA ll_ce
 ;
 BLOQUE  ::= ll_ab DEFINICIONVARIABLE ll_ce 
 ;
-BLOQUE  ::= SENTENCIA 
-;
 BLOQUE  ::= ll_ab ll_ce 
 ;
 
@@ -317,29 +314,29 @@ NSENTENCIA  ::= SENTENCIA NSENTENCIA
 NSENTENCIA  ::= SENTENCIA   
 ;
 
-SENTENCIA  ::= ASIGNACION 					
+SENTENCIA  ::= ASIGNACION 					{:System.out.println("Asignacion");:} 
 ;
-SENTENCIA  ::= CONDICIONALHACERMIENTRAS 	
+SENTENCIA  ::= CONDICIONALHACERMIENTRAS 	{:System.out.println("Hacer mientras");:} 
 ;
-SENTENCIA  ::= CONDICIONALMIENTRAS 			
+SENTENCIA  ::= CONDICIONALMIENTRAS 			{:System.out.println("Mientras");:} 
 ;
-SENTENCIA  ::= CONDICIONALPARA 				
+SENTENCIA  ::= CONDICIONALPARA 				{:System.out.println("Para");:} 
 ;
-SENTENCIA  ::= CONDICIONALSI 				
+SENTENCIA  ::= CONDICIONALSI 				{:System.out.println("Si");:} 
 ;
-SENTENCIA  ::= SENTSELECTOR 				
+SENTENCIA  ::= SENTSELECTOR 				{:System.out.println("Selector");:} 
 ;
-SENTENCIA  ::= LLAMADAFUNCION punto_coma 	
+SENTENCIA  ::= LLAMADAFUNCION punto_coma 	{:System.out.println("Llamada a funcion");:} 
 ;
-SENTENCIA  ::= ESCRITURA 					
+SENTENCIA  ::= ESCRITURA 					{:System.out.println("Escritura");:} 
 ;
-SENTENCIA  ::= LECTURA 						
+SENTENCIA  ::= LECTURA 						{:System.out.println("Lectura");:} 
 ;
-SENTENCIA  ::= ACT punto_coma 				
+SENTENCIA  ::= ACT punto_coma 				{:System.out.println("Actualizacion");:} 
 ;
-SENTENCIA  ::= pr_retornar EXPGEN punto_coma
+SENTENCIA  ::= pr_retornar EXPGEN punto_coma{:System.out.println("Retornar valor");:} 
 ;
-SENTENCIA  ::= pr_retornar punto_coma	
+SENTENCIA  ::= pr_retornar punto_coma		{:System.out.println("Retornar vacio");:} 
 ;
 
 
@@ -347,6 +344,8 @@ SENTENCIA  ::= pr_retornar punto_coma
 ACT  ::= id decr 
 ;
 ACT  ::= id incr 
+;
+ACT  ::= id OPERADORASIGNACION EXPGEN
 ;
 
 
@@ -422,34 +421,39 @@ CONDICIONAL  ::= par_ab EXPRESION par_ce
 
 CONDICIONALHACERMIENTRAS  ::= pr_hacer BLOQUE pr_mientras CONDICIONAL punto_coma 
 ;
+CONDICIONALHACERMIENTRAS  ::= pr_hacer SENTENCIA pr_mientras CONDICIONAL punto_coma 
+;
 
 CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL BLOQUE 
 ;
+CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL SENTENCIA 
+;
+
 
 CONDICIONALPARA  ::= pr_para CONTROLADOR BLOQUE 
 ;
+CONDICIONALPARA  ::= pr_para CONTROLADOR SENTENCIA 
+;
+
 
 CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE 
 ;
 CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE pr_sino BLOQUE 
 ;
+CONDICIONALSI  ::= pr_si CONDICIONAL SENTENCIA 
+;
+CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE pr_sino SENTENCIA 
+;
+CONDICIONALSI  ::= pr_si CONDICIONAL SENTENCIA pr_sino BLOQUE 
+;
+CONDICIONALSI  ::= pr_si CONDICIONAL SENTENCIA pr_sino SENTENCIA 
+;
 
-CONTROLADOR  ::= par_ab INI punto_coma EXPRESION punto_coma ACT par_ce 
+
+
+CONTROLADOR  ::= par_ab INI punto_coma EXPGEN punto_coma ACT par_ce 
 ;
-CONTROLADOR  ::= par_ab INI punto_coma EXPRESION punto_coma par_ce 
-;
-CONTROLADOR  ::= par_ab INI punto_coma punto_coma ACT par_ce 
-;
-CONTROLADOR  ::= par_ab INI punto_coma punto_coma par_ce 
-;
-CONTROLADOR  ::= par_ab punto_coma EXPRESION punto_coma ACT par_ce 
-;
-CONTROLADOR  ::= par_ab punto_coma EXPRESION punto_coma par_ce 
-;
-CONTROLADOR  ::= par_ab punto_coma punto_coma ACT par_ce 
-;
-CONTROLADOR  ::= par_ab punto_coma punto_coma par_ce 
-;
+
 
 ESCRITURA  ::= pr_mostrar par_ab EXPGEN par_ce punto_coma 
 ;
@@ -461,14 +465,12 @@ ESCRITURA  ::= pr_mostrar par_ab par_ce punto_coma
 INDICE  ::= cor_ab EXPGEN cor_ce 
 ;
 
-INI  ::= id igual id 
+
+INI  ::= id igual EXPGEN 
 ;
-INI  ::= id igual numero 
+INI  ::= pr_entero id igual EXPGEN 
 ;
-INI  ::= pr_entero id igual id 
-;
-INI  ::= pr_entero id igual numero 
-;
+
 
 LECTURA  ::= pr_leer par_ab id par_ce punto_coma 
 ;
@@ -492,9 +494,9 @@ NELEMENTO  ::= EXPGEN coma NELEMENTO
 ;
 
 
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce 		
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce 		{:System.out.println("Funcion cabecera con parametro");:}
 ;
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce 				{:System.out.println("Funcion cabecera");:}
 ;
 
 TIPOVARIABLEFUNCION  ::= TIPOVARIABLE 
@@ -508,19 +510,6 @@ DEFINICIONVARIABLE  ::= DECLARACION
 ;
 
 
-
-PARAMETROPROTOTIPO  ::= TIPONUMERO coma PARAMETROPROTOTIPO 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE INDICE coma PARAMETROPROTOTIPO 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE coma PARAMETROPROTOTIPO 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE INDICE 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO 
-;
 
 PARAMETRO  ::= TIPONUMERO id coma PARAMETRO 
 ;
