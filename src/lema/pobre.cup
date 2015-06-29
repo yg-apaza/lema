@@ -47,18 +47,26 @@ pr_principal,
 pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso, pr_default, pr_retornar,
 punto_coma, coma,
 id, err, premas, premenos ;
-non terminal Nodo pobre;
+
+non terminal Nodo pobre, maspobre;
 
 start with pobre;
 
-pobre ::=  pr_suma:s pr_resta:r par_ab:p
+pobre ::= pr_suma:s maspobre:m
 {:
 ArrayList<Nodo> hijos = new ArrayList<Nodo>();
 hijos.add(s);
-hijos.add(r);
-hijos.add(p);
-RESULT = new Nodo(sym.pr_suma, "", hijos,false);
+hijos.add(m);
+RESULT = new Nodo(1, "", hijos,false);
 raiz = RESULT;
-System.out.println(raiz.hijos.get(2).codigo + "adasdad");
+System.out.println(raiz.hijos.get(1).hijos.get(0).codigo + "adasdad");
+:}
+;
+
+maspobre ::= pr_resta:r
+{:
+ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+hijos.add(r);
+RESULT = new Nodo(2, "", hijos, false);
 :}
 ;
