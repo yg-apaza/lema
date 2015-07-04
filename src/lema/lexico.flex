@@ -126,10 +126,10 @@ WHITE = [ \t\r\n]
 /* SENTENCIAS DE REPETICIÓN */
 "mientras"                      { return symbol(sym.pr_mientras);       }
 "hacer"                         { return symbol(sym.pr_hacer);          }
-"para"                          { return symbol(sym.pr_para);     }
+"para"                          { return symbol(sym.pr_para);           }
 
 /* SENTENCIAS DE SELECCIÓN MÚLTIPLE */
-"selector"                      { return symbol(sym.pr_selector); }
+"selector"                      { return symbol(sym.pr_selector);       }
 "saltar"                        { return symbol(sym.pr_saltar);         }
 "caso"                          { return symbol(sym.pr_caso);           }
 "pordefecto"                    { return symbol(sym.pr_default);        }
@@ -139,3 +139,6 @@ WHITE = [ \t\r\n]
 
 /* IDENTIFICADOR */
 {L}+({L}|{D})*                  { return symbol(sym.id,         (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );       }
+
+/* ERROR */
+.                               { return symbol(sym.err, yytext());     }

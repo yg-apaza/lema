@@ -50,7 +50,8 @@ pr_leer, pr_mostrar,
 pr_principal,
 pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso, pr_default, pr_retornar,
 punto_coma, coma,
-id, premas, premenos ;
+id, premas, premenos,
+err;
 
 
 

@@ -69,6 +69,7 @@ public class sym {
   public static final int decr = 21;
   public static final int hexa_r = 47;
   public static final int incr = 20;
+  public static final int err = 69;
   public static final int pr_mostrar = 52;
   public static final int div = 16;
   public static final int pr_retornar = 63;
@@ -146,7 +147,8 @@ public class sym {
   "coma",
   "id",
   "premas",
-  "premenos"
+  "premenos",
+  "err"
   };
 }
 

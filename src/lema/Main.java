@@ -60,9 +60,6 @@ public class Main
         {
             switch(token.sym)
             {
-                case sym.EOF:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + ", Columna: " + (token.right + 1) + " -> Error, token '" + token.value + "' no reconocido.\n";
-                    break;
                 case sym.pr_const:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Constante\n";
                     break;
@@ -190,25 +187,25 @@ public class Main
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Corchete cerrado\n";
                     break;
                 case sym.octa_e:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número octal entero " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número octal entero " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
                 case sym.octa_r:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número octal real " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número octal real " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
                 case sym.hexa_e:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número hexadecimal entero " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número hexadecimal entero " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
                 case sym.hexa_r:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número hexadecimal real " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número hexadecimal real " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
                 case sym.numero:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número entero " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número entero " + ((Nodo)(token.value)).getValor() + "\n";
                     break;     
                 case sym.real:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número real " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Número real " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
                 case sym.cadena:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Cadena de caracteres " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Cadena de caracteres " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
                 case sym.pr_leer:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Palabra reservada leer\n";
@@ -258,14 +255,14 @@ public class Main
                 case sym.id:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
+                case sym.err:
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token '"+ token.value + "' no reconocido\n";
             }
-            
-            token = lexico.next_token();
+                token = lexico.next_token();
         }
         
         System.out.println(resultado);
         System.out.flush();
-        
         System.out.println();
         System.out.flush();
     }
