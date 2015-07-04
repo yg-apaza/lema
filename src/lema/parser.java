@@ -6,7 +6,6 @@
 package lema;
 
 import java_cup.runtime.*;
-import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20150326 (SVN rev 63) generated parser.
@@ -1038,12 +1037,12 @@ class CUP$parser$actions {
       switch (CUP$parser$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 0: // $START ::= pobre EOF 
+          case 0: // $START ::= PROGRAMA EOF 
             {
               Object RESULT =null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int start_valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		Nodo start_val = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		Object start_val = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		RESULT = start_val;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1052,38 +1051,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 1: // pobre ::= pr_suma maspobre 
+          case 1: // PROGRAMA ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL 
             {
-              Nodo RESULT =null;
-		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
-		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		Nodo s = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		int mleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int mright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Nodo m = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-hijos.add(s);
-hijos.add(m);
-RESULT = new Nodo(1, "", hijos,false);
-raiz = RESULT;
-System.out.println(raiz.hijos.get(1).hijos.get(0).codigo + "adasdad");
+              Object RESULT =null;
 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("pobre",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("PROGRAMA",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // maspobre ::= pr_resta 
+          case 2: // PROGRAMA ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL DEFINICIONFUNCION 
             {
-              Nodo RESULT =null;
-		int rleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int rright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Nodo r = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-hijos.add(r);
-RESULT = new Nodo(2, "", hijos, false);
+              Object RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PROGRAMA",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1300,7 +1279,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 26: // DECLARACION ::= pr_entero DECENTERO 
             {
               Object RESULT =null;
-		System.out.println("Declaracion entero");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECLARACION",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1309,7 +1288,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 27: // DECLARACION ::= pr_real DECREAL 
             {
               Object RESULT =null;
-		System.out.println("Declaracion real");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECLARACION",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1318,7 +1297,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 28: // DECLARACION ::= pr_cadena DECCADALL punto_coma 
             {
               Object RESULT =null;
-		System.out.println("Declaracion cadena");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECLARACION",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1723,7 +1702,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 73: // SENTENCIA ::= ASIGNACION 
             {
               Object RESULT =null;
-		System.out.println("Asignacion");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1732,7 +1711,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 74: // SENTENCIA ::= CONDICIONALHACERMIENTRAS 
             {
               Object RESULT =null;
-		System.out.println("Hacer mientras");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1741,7 +1720,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 75: // SENTENCIA ::= CONDICIONALMIENTRAS 
             {
               Object RESULT =null;
-		System.out.println("Mientras");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1750,7 +1729,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 76: // SENTENCIA ::= CONDICIONALPARA 
             {
               Object RESULT =null;
-		System.out.println("Para");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1759,7 +1738,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 77: // SENTENCIA ::= CONDICIONALSI 
             {
               Object RESULT =null;
-		System.out.println("Si");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1768,7 +1747,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 78: // SENTENCIA ::= SENTSELECTOR 
             {
               Object RESULT =null;
-		System.out.println("Selector");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1777,7 +1756,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 79: // SENTENCIA ::= LLAMADAFUNCION punto_coma 
             {
               Object RESULT =null;
-		System.out.println("Llamada a funcion");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1786,7 +1765,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 80: // SENTENCIA ::= ESCRITURA 
             {
               Object RESULT =null;
-		System.out.println("Escritura");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1795,7 +1774,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 81: // SENTENCIA ::= LECTURA 
             {
               Object RESULT =null;
-		System.out.println("Lectura");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1804,7 +1783,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 82: // SENTENCIA ::= ACT punto_coma 
             {
               Object RESULT =null;
-		System.out.println("Actualizacion");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1813,7 +1792,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 83: // SENTENCIA ::= pr_retornar EXPGEN punto_coma 
             {
               Object RESULT =null;
-		System.out.println("Retornar valor");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1822,7 +1801,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 84: // SENTENCIA ::= pr_retornar punto_coma 
             {
               Object RESULT =null;
-		System.out.println("Retornar vacio");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTENCIA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2317,7 +2296,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 139: // DECLARACIONFUNCIONCABECERA ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce 
             {
               Object RESULT =null;
-		System.out.println("Funcion cabecera con parametro");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECLARACIONFUNCIONCABECERA",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2326,7 +2305,7 @@ RESULT = new Nodo(2, "", hijos, false);
           case 140: // DECLARACIONFUNCIONCABECERA ::= TIPOVARIABLEFUNCION id par_ab par_ce 
             {
               Object RESULT =null;
-		System.out.println("Funcion cabecera");
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECLARACIONFUNCIONCABECERA",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

@@ -31,19 +31,19 @@ WHITE = [ \t\r\n]
 {WHITE}                         { /* Ignorar */                         }
 
 /* IGNORAR COMENTARIOS */
-"/*"([^*]|\*+[^/*])*"*"+"/"    { /* Ignorar */                         }
+"/*"([^*]|\*+[^/*])*"*"+"/"    { /* Ignorar */                          }
 
 /* CONSTANTES */
-"const"                         { return symbol(sym.pr_const,  (new Nodo(sym.pr_const, yytext(), yyline, yycolumn, null, true)));}
+"const"                         { return symbol(sym.pr_const,   (new Nodo(sym.pr_const, yytext(), yyline, yycolumn, null, true)));  }
 
 /* TIPOS DE DATOS BASICOS */
-"vacio"                         { return symbol(sym.pr_vacio, (new Nodo(sym.pr_vacio, yytext(), yyline, yycolumn, null, true))); }
-"entero"                        { return symbol(sym.pr_entero, (new Nodo(sym.pr_entero, yytext(), yyline, yycolumn, null, true)));}
-"real"                          { return symbol(sym.pr_real, (new Nodo(sym.pr_real, yytext(), yyline, yycolumn, null, true)));           }
-"cadena"                        { return symbol(sym.pr_cadena, (new Nodo(sym.pr_cadena, yytext(), yyline, yycolumn, null, true)));         }
+"vacio"                         { return symbol(sym.pr_vacio,   (new Nodo(sym.pr_vacio, yytext(), yyline, yycolumn, null, true)));  }
+"entero"                        { return symbol(sym.pr_entero,  (new Nodo(sym.pr_entero, yytext(), yyline, yycolumn, null, true))); }
+"real"                          { return symbol(sym.pr_real,    (new Nodo(sym.pr_real, yytext(), yyline, yycolumn, null, true)));   }
+"cadena"                        { return symbol(sym.pr_cadena,  (new Nodo(sym.pr_cadena, yytext(), yyline, yycolumn, null, true))); }
 
 /* OPERADORES DE AGRUPACIÓN */
-"("                             { return symbol(sym.par_ab, (new Nodo(sym.par_ab, "+", null, true)));            }
+"("                             { return symbol(sym.par_ab);            }
 ")"                             { return symbol(sym.par_ce);            }
 "{"                             { return symbol(sym.ll_ab);             }
 "}"                             { return symbol(sym.ll_ce);             }
@@ -58,8 +58,8 @@ WHITE = [ \t\r\n]
 "^"                             { return symbol(sym.inv);               }
 "++"                            { return symbol(sym.incr);              }
 "--"                            { return symbol(sym.decr);              }
-"suma"                          { return symbol(sym.pr_suma, (new Nodo(sym.pr_suma, "+", null, true)));           }
-"resta"                         { return symbol(sym.pr_resta, (new Nodo(sym.pr_resta, "-", null, true)));          }
+"suma"                          { return symbol(sym.pr_suma);           }
+"resta"                         { return symbol(sym.pr_resta);          }
 "producto"                      { return symbol(sym.pr_prod);           }
 "transpuesta"                   { return symbol(sym.pr_transp);         }
 "inversa"                       { return symbol(sym.pr_inv);            }
@@ -94,19 +94,19 @@ WHITE = [ \t\r\n]
 "]"                             { return symbol(sym.cor_ce);            }
 
 /* NÚMERO OCTAL ENTERO Y REAL */
-"0"{D}+                         { return symbol(sym.octa_e,  (new Nodo(sym.octa_e, yytext(), yyline, yycolumn, null, true)));  }
-"0"{D}+"."{D}+                  { return symbol(sym.octa_r, (new Nodo(sym.octa_r, yytext(), yyline, yycolumn, null, true)));  }
+"0"{D}+                         { return symbol(sym.octa_e,     (new Nodo(sym.octa_e, yytext(), yyline, yycolumn, null, true)));    }
+"0"{D}+"."{D}+                  { return symbol(sym.octa_r,     (new Nodo(sym.octa_r, yytext(), yyline, yycolumn, null, true)));    }
 
 /* NÚMERO HEXADECIMAL ENTERO Y REAL */
-"0x"({D}|{H})+                  { return symbol(sym.hexa_e, (new Nodo(sym.hexa_e, yytext(), yyline, yycolumn, null, true)));  }
-"0x"({D}|{H})+"."({D}|{H})+     { return symbol(sym.hexa_r, (new Nodo(sym.hexa_r, yytext(), yyline, yycolumn, null, true)));}
+"0x"({D}|{H})+                  { return symbol(sym.hexa_e,     (new Nodo(sym.hexa_e, yytext(), yyline, yycolumn, null, true)));    }
+"0x"({D}|{H})+"."({D}|{H})+     { return symbol(sym.hexa_r,     (new Nodo(sym.hexa_r, yytext(), yyline, yycolumn, null, true)));}
 
 /* NÚMERO SIMPLE ENTERO Y REAL*/
-{D}+                            { return symbol(sym.numero, (new Nodo(sym.numero, yytext(), yyline, yycolumn, null, true)));  }
-{D}+"."{D}+                     { return symbol(sym.real,  (new Nodo(sym.real, yytext(), yyline, yycolumn, null, true)));    }
+{D}+                            { return symbol(sym.numero,     (new Nodo(sym.numero, yytext(), yyline, yycolumn, null, true)));    }
+{D}+"."{D}+                     { return symbol(sym.real,       (new Nodo(sym.real, yytext(), yyline, yycolumn, null, true)));      }
 
 /* CADENAS */
-\"[^\"]*\"                          { return symbol(sym.cadena,  (new Nodo(sym.cadena, yytext(), yyline, yycolumn, null, true)));  }
+\"[^\"]*\"                      { return symbol(sym.cadena,     (new Nodo(sym.cadena, yytext(), yyline, yycolumn, null, true)));    }
 
 /* INSTRUCCIONES DE ENTRADA Y SALIDA */
 "leer"                          { return symbol(sym.pr_leer);           }
@@ -138,4 +138,4 @@ WHITE = [ \t\r\n]
 "principal"                     { return symbol(sym.pr_principal);      }
 
 /* IDENTIFICADOR */
-{L}+({L}|{D})*                  { return symbol(sym.id, (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );      }
+{L}+({L}|{D})*                  { return symbol(sym.id,         (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );       }

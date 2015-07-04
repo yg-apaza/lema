@@ -8,9 +8,11 @@ import java.io.Reader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
-/* COMPILADOR */
-public class Main {
 
+/* COMPILADOR */
+
+public class Main
+{
     public static void main(String[] args) throws IOException
     {
         if(args.length == 0)
@@ -254,7 +256,7 @@ public class Main {
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Funcion principal\n";
                     break;
                 case sym.id:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + token.value + "\n";
+                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
             }
             
@@ -273,13 +275,18 @@ public class Main {
         System.out.println("ANALIZADOR SINTACTICO");
         System.out.println("------------------------------------------------------------");
         
-        try {
+        try
+        {
             parser p = new parser(new Lexico(new FileReader(file)));
             Object result = p.parse();
             
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex)
+        {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         

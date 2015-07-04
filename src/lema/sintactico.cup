@@ -38,7 +38,7 @@ parser code
 
 /* DECLARACION DE TERMINALES */
 
-terminal Nodopr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
+terminal pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
 par_ab, par_ce, cor_ab, cor_ce, ll_ab, ll_ce, 
 mas, menos, prod, div, mod, transp, inv, incr, decr, 
 ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, 
@@ -72,7 +72,7 @@ DECCON, DECCONALL,
 DECCAD, DECCADALL,
 DEFINICIONPROTOTIPO,
 
-PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO,
+PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO, PARAMETROPROTOTIPO,
 ARGUMENTO,
 
 ASIGNACION, LLAMADAFUNCION, 
@@ -229,11 +229,11 @@ DEFINICIONFUNCION  ::= DECLARACIONFUNCION
 
 
 
-DECLARACION  ::= pr_entero DECENTERO  				{:System.out.println("Declaracion entero");:}
+DECLARACION  ::= pr_entero DECENTERO
 ;
-DECLARACION  ::= pr_real DECREAL 					{:System.out.println("Declaracion real");:}
+DECLARACION  ::= pr_real DECREAL
 ;
-DECLARACION  ::= pr_cadena DECCADALL punto_coma  	{:System.out.println("Declaracion cadena");:}
+DECLARACION  ::= pr_cadena DECCADALL punto_coma
 ;
 
 
@@ -357,29 +357,29 @@ NSENTENCIA  ::= SENTENCIA NSENTENCIA
 NSENTENCIA  ::= SENTENCIA   
 ;
 
-SENTENCIA  ::= ASIGNACION 					{:System.out.println("Asignacion");:} 
+SENTENCIA  ::= ASIGNACION
 ;
-SENTENCIA  ::= CONDICIONALHACERMIENTRAS 	{:System.out.println("Hacer mientras");:} 
+SENTENCIA  ::= CONDICIONALHACERMIENTRAS
 ;
-SENTENCIA  ::= CONDICIONALMIENTRAS 			{:System.out.println("Mientras");:} 
+SENTENCIA  ::= CONDICIONALMIENTRAS
 ;
-SENTENCIA  ::= CONDICIONALPARA 				{:System.out.println("Para");:} 
+SENTENCIA  ::= CONDICIONALPARA
 ;
-SENTENCIA  ::= CONDICIONALSI 				{:System.out.println("Si");:} 
+SENTENCIA  ::= CONDICIONALSI
 ;
-SENTENCIA  ::= SENTSELECTOR 				{:System.out.println("Selector");:} 
+SENTENCIA  ::= SENTSELECTOR
 ;
-SENTENCIA  ::= LLAMADAFUNCION punto_coma 	{:System.out.println("Llamada a funcion");:} 
+SENTENCIA  ::= LLAMADAFUNCION punto_coma
 ;
-SENTENCIA  ::= ESCRITURA 					{:System.out.println("Escritura");:} 
+SENTENCIA  ::= ESCRITURA
 ;
-SENTENCIA  ::= LECTURA 						{:System.out.println("Lectura");:} 
+SENTENCIA  ::= LECTURA
 ;
-SENTENCIA  ::= ACT punto_coma 				{:System.out.println("Actualizacion");:} 
+SENTENCIA  ::= ACT punto_coma
 ;
-SENTENCIA  ::= pr_retornar EXPGEN punto_coma{:System.out.println("Retornar valor");:} 
+SENTENCIA  ::= pr_retornar EXPGEN punto_coma
 ;
-SENTENCIA  ::= pr_retornar punto_coma		{:System.out.println("Retornar vacio");:} 
+SENTENCIA  ::= pr_retornar punto_coma
 ;
 
 
@@ -535,9 +535,9 @@ NELEMENTO  ::= EXPGEN coma NELEMENTO
 ;
 
 
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce 		{:System.out.println("Funcion cabecera con parametro");:}
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce
 ;
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce 				{:System.out.println("Funcion cabecera");:}
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce
 ;
 
 TIPOVARIABLEFUNCION  ::= TIPONUMERO 
