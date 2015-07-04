@@ -874,6 +874,10 @@ class Lexico implements java_cup.runtime.Scanner {
           { return symbol(sym.o);
           }
         case 79: break;
+        case 46: 
+          { return symbol(sym.pr_suma, (new Nodo(sym.pr_suma, "+", null, true)));
+          }
+        case 79: break;
         case 35: 
           { return symbol(sym.menor_igual);
           }
@@ -964,6 +968,10 @@ class Lexico implements java_cup.runtime.Scanner {
         case 101: break;
         case 10: 
           { return symbol(sym.mas);
+          }
+        case 107: break;
+        case 7: 
+          { return symbol(sym.par_ab, (new Nodo(sym.par_ab, "+", null, true)));
           }
         case 102: break;
         case 13: 

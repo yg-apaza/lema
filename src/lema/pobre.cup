@@ -1,0 +1,72 @@
+package lema;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+
+parser code {:
+    Nodo raiz;
+    public void report_error(String message, Object info) {
+   
+        StringBuilder m = new StringBuilder("Error");
+
+        if (info instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+
+            if (s.left >= 0) {                
+                m.append(" in line "+(s.left+1));   
+
+                if (s.right >= 0)                    
+                    m.append(", column "+(s.right+1));
+            }
+        }
+
+        m.append(" : "+message);
+
+        System.err.println(m);
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+
+
+/* DECLARACION DE TERMINALES */
+
+
+terminal Nodo pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
+par_ab, par_ce, cor_ab, cor_ce, ll_ab, ll_ce, 
+mas, menos, prod, div, mod, transp, inv, incr, decr, 
+ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, 
+pr_suma, pr_resta, pr_prod, pr_transp, pr_inv, 
+a_suma, a_resta, a_prod, a_div, a_mod, 
+sig_int, sig_pun, 
+octa_e, octa_r, hexa_e, hexa_r, numero, real, cadena, 
+pr_leer, pr_mostrar, 
+pr_principal,
+pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso, pr_default, pr_retornar,
+punto_coma, coma,
+id, err, premas, premenos ;
+
+non terminal Nodo pobre, maspobre;
+
+start with pobre;
+
+pobre ::= pr_suma:s maspobre:m
+{:
+ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+hijos.add(s);
+hijos.add(m);
+RESULT = new Nodo(1, "", hijos,false);
+raiz = RESULT;
+System.out.println(raiz.hijos.get(1).hijos.get(0).codigo + "adasdad");
+:}
+;
+
+maspobre ::= pr_resta:r
+{:
+ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+hijos.add(r);
+RESULT = new Nodo(2, "", hijos, false);
+:}
+;

@@ -43,7 +43,7 @@ WHITE = [ \t\r\n]
 "cadena"                        { return symbol(sym.pr_cadena, (new Nodo(sym.pr_cadena, yytext(), yyline, yycolumn, null, true)));         }
 
 /* OPERADORES DE AGRUPACIÓN */
-"("                             { return symbol(sym.par_ab);            }
+"("                             { return symbol(sym.par_ab, (new Nodo(sym.par_ab, "+", null, true)));            }
 ")"                             { return symbol(sym.par_ce);            }
 "{"                             { return symbol(sym.ll_ab);             }
 "}"                             { return symbol(sym.ll_ce);             }
@@ -58,8 +58,8 @@ WHITE = [ \t\r\n]
 "^"                             { return symbol(sym.inv);               }
 "++"                            { return symbol(sym.incr);              }
 "--"                            { return symbol(sym.decr);              }
-"suma"                          { return symbol(sym.pr_suma);           }
-"resta"                         { return symbol(sym.pr_resta);          }
+"suma"                          { return symbol(sym.pr_suma, (new Nodo(sym.pr_suma, "+", null, true)));           }
+"resta"                         { return symbol(sym.pr_resta, (new Nodo(sym.pr_resta, "-", null, true)));          }
 "producto"                      { return symbol(sym.pr_prod);           }
 "transpuesta"                   { return symbol(sym.pr_transp);         }
 "inversa"                       { return symbol(sym.pr_inv);            }
