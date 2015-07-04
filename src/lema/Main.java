@@ -58,7 +58,7 @@ public class Main {
         {
             switch(token.sym)
             {
-                case sym.error:
+                case sym.EOF:
                     resultado = resultado + "LINEA: " + (token.left + 1) + ", Columna: " + (token.right + 1) + " -> Error, token '" + token.value + "' no reconocido.\n";
                     break;
                 case sym.pr_const:
@@ -256,8 +256,6 @@ public class Main {
                 case sym.id:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + token.value + "\n";
                     break;
-                case sym.err:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Error: '" + token.value + "' Token no reconocido\n";
             }
             
             token = lexico.next_token();

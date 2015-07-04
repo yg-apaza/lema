@@ -6,22 +6,29 @@ public class Nodo
 {
     public int codigo;
     public String valor;
+    public int linea;
+    public int columna;
     public ArrayList <Nodo> hijos;
     public boolean terminal; /*true = terminal, false = no terminal*/
-
-
+    
     public Nodo()
     {
         this.codigo = -1;
-        this.valor = null;
+        this.valor = "NULL";
+        this.linea = -1;
+        this.columna = -1;
+        this.hijos = null;
+        this.terminal = true;
     }
 
-    public Nodo(int codigo, String valor, ArrayList <Nodo> hijos , boolean terminal)
-    {    
+    public Nodo(int codigo, String valor, int linea, int columna, ArrayList<Nodo> hijos, boolean terminal)
+    {
         this.codigo = codigo;
         this.valor = valor;
+        this.linea = linea;
+        this.columna = columna;
         this.hijos = hijos;
-        this.terminal = terminal;    
+        this.terminal = terminal;
     }
 
     public int getCodigo()
@@ -42,6 +49,26 @@ public class Nodo
     public void setValor(String valor)
     {
         this.valor = valor;
+    }
+
+    public int getLinea()
+    {
+        return linea;
+    }
+
+    public void setLinea(int linea)
+    {
+        this.linea = linea;
+    }
+
+    public int getColumna()
+    {
+        return columna;
+    }
+
+    public void setColumna(int columna)
+    {
+        this.columna = columna;
     }
 
     public ArrayList<Nodo> getHijos()

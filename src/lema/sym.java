@@ -48,11 +48,11 @@ public class sym {
   public static final int a_mod = 41;
   public static final int mayor = 25;
   public static final int a_prod = 39;
-  public static final int premas = 68;
+  public static final int premas = 67;
   public static final int pr_leer = 51;
   public static final int pr_prod = 34;
   public static final int pr_para = 58;
-  public static final int premenos = 69;
+  public static final int premenos = 68;
   public static final int menor_igual = 26;
   public static final int id = 66;
   public static final int par_ce = 8;
@@ -69,7 +69,6 @@ public class sym {
   public static final int decr = 21;
   public static final int hexa_r = 47;
   public static final int incr = 20;
-  public static final int err = 67;
   public static final int pr_mostrar = 52;
   public static final int div = 16;
   public static final int pr_retornar = 63;
@@ -146,7 +145,6 @@ public class sym {
   "punto_coma",
   "coma",
   "id",
-  "err",
   "premas",
   "premenos"
   };

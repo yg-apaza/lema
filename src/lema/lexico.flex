@@ -34,13 +34,13 @@ WHITE = [ \t\r\n]
 "/*"([^*]|\*+[^/*])*"*"+"/"    { /* Ignorar */                         }
 
 /* CONSTANTES */
-"const"                         { return symbol(sym.pr_const, yytext());}
+"const"                         { return symbol(sym.pr_const,  (new Nodo(sym.pr_const, yytext(), yyline, yycolumn, null, true)));}
 
 /* TIPOS DE DATOS BASICOS */
-"vacio"                         { return symbol(sym.pr_vacio, yytext()); }
-"entero"                        { return symbol(sym.pr_entero, yytext());}
-"real"                          { return symbol(sym.pr_real);           }
-"cadena"                        { return symbol(sym.pr_cadena);         }
+"vacio"                         { return symbol(sym.pr_vacio, (new Nodo(sym.pr_vacio, yytext(), yyline, yycolumn, null, true))); }
+"entero"                        { return symbol(sym.pr_entero, (new Nodo(sym.pr_entero, yytext(), yyline, yycolumn, null, true)));}
+"real"                          { return symbol(sym.pr_real, (new Nodo(sym.pr_real, yytext(), yyline, yycolumn, null, true)));           }
+"cadena"                        { return symbol(sym.pr_cadena, (new Nodo(sym.pr_cadena, yytext(), yyline, yycolumn, null, true)));         }
 
 /* OPERADORES DE AGRUPACIÓN */
 "("                             { return symbol(sym.par_ab);            }
@@ -94,51 +94,48 @@ WHITE = [ \t\r\n]
 "]"                             { return symbol(sym.cor_ce);            }
 
 /* NÚMERO OCTAL ENTERO Y REAL */
-"0"{D}+                         { return symbol(sym.octa_e, yytext());  }
-"0"{D}+"."{D}+                  { return symbol(sym.octa_r, yytext());  }
+"0"{D}+                         { return symbol(sym.octa_e,  (new Nodo(sym.octa_e, yytext(), yyline, yycolumn, null, true)));  }
+"0"{D}+"."{D}+                  { return symbol(sym.octa_r, (new Nodo(sym.octa_r, yytext(), yyline, yycolumn, null, true)));  }
 
 /* NÚMERO HEXADECIMAL ENTERO Y REAL */
-"0x"({D}|{H})+                  { return symbol(sym.hexa_e, yytext());  }
-"0x"({D}|{H})+"."({D}|{H})+     { return symbol(sym.hexa_r, yytext());  }
+"0x"({D}|{H})+                  { return symbol(sym.hexa_e, (new Nodo(sym.hexa_e, yytext(), yyline, yycolumn, null, true)));  }
+"0x"({D}|{H})+"."({D}|{H})+     { return symbol(sym.hexa_r, (new Nodo(sym.hexa_r, yytext(), yyline, yycolumn, null, true)));}
 
 /* NÚMERO SIMPLE ENTERO Y REAL*/
-{D}+                            { return symbol(sym.numero, yytext());  }
-{D}+"."{D}+                     { return symbol(sym.real, yytext());    }
+{D}+                            { return symbol(sym.numero, (new Nodo(sym.numero, yytext(), yyline, yycolumn, null, true)));  }
+{D}+"."{D}+                     { return symbol(sym.real,  (new Nodo(sym.real, yytext(), yyline, yycolumn, null, true)));    }
 
 /* CADENAS */
-\"[^\"]*\"                          { return symbol(sym.cadena, yytext());  }
+\"[^\"]*\"                          { return symbol(sym.cadena,  (new Nodo(sym.cadena, yytext(), yyline, yycolumn, null, true)));  }
 
 /* INSTRUCCIONES DE ENTRADA Y SALIDA */
-"leer"                          { return symbol(sym.pr_leer, yytext());           }
-"mostrar"                       { return symbol(sym.pr_mostrar, yytext());        }
+"leer"                          { return symbol(sym.pr_leer);           }
+"mostrar"                       { return symbol(sym.pr_mostrar);        }
 
 /* SEPARADORES */
-";"                             { return symbol(sym.punto_coma, yytext());        }
-","                             { return symbol(sym.coma, yytext());              }
+";"                             { return symbol(sym.punto_coma);        }
+","                             { return symbol(sym.coma);              }
 
 /* FUNCIONES */
-"retornar"                      { return symbol(sym.pr_retornar, yytext());       }
+"retornar"                      { return symbol(sym.pr_retornar);       }
 
 /* SENTENCIAS CONDICIONALES */
-"si"                            { return symbol(sym.pr_si, yytext());             }
-"sino"                          { return symbol(sym.pr_sino, yytext());           }
+"si"                            { return symbol(sym.pr_si);             }
+"sino"                          { return symbol(sym.pr_sino);           }
 
 /* SENTENCIAS DE REPETICIÓN */
-"mientras"                      { return symbol(sym.pr_mientras, yytext());       }
-"hacer"                         { return symbol(sym.pr_hacer, yytext());          }
-"para"                          { return symbol(sym.pr_para, yytext());     }
+"mientras"                      { return symbol(sym.pr_mientras);       }
+"hacer"                         { return symbol(sym.pr_hacer);          }
+"para"                          { return symbol(sym.pr_para);     }
 
 /* SENTENCIAS DE SELECCIÓN MÚLTIPLE */
-"selector"                      { return symbol(sym.pr_selector, yytext()); }
-"saltar"                        { return symbol(sym.pr_saltar, yytext());         }
-"caso"                          { return symbol(sym.pr_caso, yytext());           }
-"pordefecto"                    { return symbol(sym.pr_default, yytext());        }
+"selector"                      { return symbol(sym.pr_selector); }
+"saltar"                        { return symbol(sym.pr_saltar);         }
+"caso"                          { return symbol(sym.pr_caso);           }
+"pordefecto"                    { return symbol(sym.pr_default);        }
 
 /* MENÚ PRINCIPAL */
-"principal"                     { return symbol(sym.pr_principal, yytext());      }
+"principal"                     { return symbol(sym.pr_principal);      }
 
 /* IDENTIFICADOR */
-{L}+({L}|{D})*                  { return symbol(sym.id, yytext());      }
-
-/* ERROR LÉXICO */
-.                               { return symbol(sym.err, yytext());     }
+{L}+({L}|{D})*                  { return symbol(sym.id, (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );      }

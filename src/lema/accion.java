@@ -13,7 +13,8 @@ public class accion
     public static final int declaracionCons = 5;
     
     public static final int declaracionProt = 6;
-    public static final int parametroProt = 7;
+    public static final int parametroPro = 7;
+    public static final int parametroProDes = 54;
     
     public static final int tipoNumero = 8;
     public static final int tipoVector = 9;
@@ -26,7 +27,7 @@ public class accion
     public static final int declaracionSimIni = 14;
     public static final int declaracionVecIni = 15;
     public static final int declaracionMatIni = 16;
-    
+      
     public static final int asignacionSim = 17;
     public static final int asignacionVec = 18;
     public static final int asignacionMat = 19;
@@ -68,6 +69,16 @@ public class accion
     public static final int operacionCond = 46;
     
     public static final int argumento = 47;
+    public static final int fila = 48;
+    public static final int columna = 49;
+    
+    public static final int funcion = 50;
+    public static final int parametroFun = 51;
+    public static final int parametroFunDes = 52;
+    public static final int declaracion = 53;
+    public static final int casos = 55;
+    public static final int caso = 56;
+    public static final int pordefecto = 57;
     
     public static final String[] acciones = new String[]
     {
@@ -119,6 +130,17 @@ public class accion
         "NEGATIVIDAD",
         "POSITIVIDAD",
         "OPERACION CONDICIONAL",
-        "ARGUMENTO"
+        "ARGUMENTO",
+        "FILA",
+        "COLUMNA",
+        "FUNCION",
+        "PARAMETRO FUNCION",
+        "DESCRIPCION PARAMETRO FUNCION",
+        "DECLARACION",
+        "DESCRIPCION PARAMETRO PROTOTIPO",
+        "CASOS",
+        "CASO",
+        "POR DEFECTO",
     };
 }
+
