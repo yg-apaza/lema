@@ -258,7 +258,8 @@ public class Main
                 case sym.err:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token '"+ token.value + "' no reconocido\n";
             }
-                token = lexico.next_token();
+            
+            token = lexico.next_token();
         }
         
         System.out.println(resultado);
