@@ -1,3 +1,8 @@
+const entero a = 3;
+entero a = 3;
+entero a = 3;
+const entero a = 3;
+vacio fun(entero, entero);
 principal()
 {
 }

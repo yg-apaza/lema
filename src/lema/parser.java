@@ -6,6 +6,7 @@
 package lema;
 
 import java.util.ArrayList;
+import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20150326 (SVN rev 63) generated parser.
   */
@@ -1183,7 +1184,7 @@ class CUP$parser$actions {
           case 9: // DEFINICIONVARIABLECAB ::= DECLARACION DEFINICIONVARIABLECAB 
             {
               Nodo RESULT =null;
-
+		System.out.println("declaracion");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICIONVARIABLECAB",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1192,7 +1193,7 @@ class CUP$parser$actions {
           case 10: // DEFINICIONVARIABLECAB ::= DECLARACIONCON DEFINICIONVARIABLECAB 
             {
               Nodo RESULT =null;
-
+		System.out.println("constante");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICIONVARIABLECAB",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1201,7 +1202,7 @@ class CUP$parser$actions {
           case 11: // DEFINICIONVARIABLECAB ::= DEFINICIONPROTOTIPO DEFINICIONVARIABLECAB 
             {
               Nodo RESULT =null;
-
+		System.out.println("prot");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICIONVARIABLECAB",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
