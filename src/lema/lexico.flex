@@ -21,7 +21,8 @@ import java_cup.runtime.*;
 %}
 
 L = [a-zA-Z_]
-H = [A-F]
+H = [0-9A-F]
+O = [0-8]
 D = [0-9]
 WHITE = [ \t\r\n]
 
@@ -94,12 +95,12 @@ WHITE = [ \t\r\n]
 "]"                             { return symbol(sym.cor_ce);            }
 
 /* NÚMERO OCTAL ENTERO Y REAL */
-"0"{D}+                         { return symbol(sym.octa_e,     (new Nodo(sym.octa_e, yytext(), yyline, yycolumn, null, true)));    }
-"0"{D}+"."{D}+                  { return symbol(sym.octa_r,     (new Nodo(sym.octa_r, yytext(), yyline, yycolumn, null, true)));    }
+"0"{O}+                         { return symbol(sym.octa_e,     (new Nodo(sym.octa_e, yytext(), yyline, yycolumn, null, true)));    }
+"0"{O}+"."{O}+                  { return symbol(sym.octa_r,     (new Nodo(sym.octa_r, yytext(), yyline, yycolumn, null, true)));    }
 
 /* NÚMERO HEXADECIMAL ENTERO Y REAL */
-"0x"({D}|{H})+                  { return symbol(sym.hexa_e,     (new Nodo(sym.hexa_e, yytext(), yyline, yycolumn, null, true)));    }
-"0x"({D}|{H})+"."({D}|{H})+     { return symbol(sym.hexa_r,     (new Nodo(sym.hexa_r, yytext(), yyline, yycolumn, null, true)));}
+"0x"{H}+                        { return symbol(sym.hexa_e,     (new Nodo(sym.hexa_e, yytext(), yyline, yycolumn, null, true)));    }
+"0x"{H}+"."{H}+                 { return symbol(sym.hexa_r,     (new Nodo(sym.hexa_r, yytext(), yyline, yycolumn, null, true)));}
 
 /* NÚMERO SIMPLE ENTERO Y REAL*/
 {D}+                            { return symbol(sym.numero,     (new Nodo(sym.numero, yytext(), yyline, yycolumn, null, true)));    }

@@ -69,11 +69,10 @@ PROGRAMAPRINCIPAL,
 EXPRESION, EXPGEN,
 SENTENCIA, NSENTENCIA,
 
-DECLARACION, DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, 
-DEFINICIONVARIABLECAB, DECLARACIONCON,
+DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, 
 DEFINICIONFUNCION,
 DECSIMPLE, DECVECT, DECMAT, 
-DECENTERO, DECREAL, DECALL,
+DECREAL, DECALL,
 DECCON, DECCONALL,
 DECCAD, DECCADALL,
 DEFINICIONPROTOTIPO,
@@ -96,7 +95,7 @@ OPERADORFUNCION, OPERADORCOND,
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
 
-non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE;
+non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO;
 
 
 /* PRECEDENCIA */
@@ -168,8 +167,9 @@ start with PROGRAMA;
 
 PROGRAMA  ::= DEFINICIONVARIABLECAB:dvc PROGRAMAPRINCIPAL:pp
 {:
+    Nodo cab = new Nodo(accion.cabecera, accion.acciones[accion.cabecera], 1, 1, dvc, false);
     ArrayList<Nodo> hijos = new ArrayList <Nodo>();
-    hijos.add(dvc);
+    hijos.add(cab);
     hijos.add(pp);
     RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
     raiz = RESULT;
@@ -177,8 +177,9 @@ PROGRAMA  ::= DEFINICIONVARIABLECAB:dvc PROGRAMAPRINCIPAL:pp
 
 PROGRAMA  ::= DEFINICIONVARIABLECAB:dvc PROGRAMAPRINCIPAL:pp DEFINICIONFUNCION:df
 {:
+    Nodo cab = new Nodo(accion.cabecera, accion.acciones[accion.cabecera], 1, 1, dvc, false);
     ArrayList<Nodo> hijos = new ArrayList <Nodo>();
-    hijos.add(dvc);
+    hijos.add(cab);
     hijos.add(pp);
     hijos.add(df);
     RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
@@ -210,20 +211,29 @@ PROGRAMAPRINCIPAL  ::= pr_principal par_ab par_ce BLOQUE:b
 
 DEFINICIONVARIABLECAB  ::= DECLARACION:d
 {:
-    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
-    RESULT = new Nodo(accion.programaPrincipal, accion.acciones[accion.programaPrincipal], 1, 1, b, false);
-:}
-;
+    RESULT = d;
+:};
 
-DEFINICIONVARIABLECAB  ::= DECLARACIONCON
-;
+DEFINICIONVARIABLECAB  ::= DECLARACIONCON:c
+{:
+    RESULT = c;
+:};
+
 DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO
 ;
 
-DEFINICIONVARIABLECAB  ::= DECLARACION DEFINICIONVARIABLECAB
-;
-DEFINICIONVARIABLECAB  ::= DECLARACIONCON DEFINICIONVARIABLECAB
-;
+DEFINICIONVARIABLECAB  ::= DECLARACION:d DEFINICIONVARIABLECAB:r
+{:
+    d.addAll(r);
+    RESULT = d;
+:};
+
+DEFINICIONVARIABLECAB  ::= DECLARACIONCON:c DEFINICIONVARIABLECAB:r
+{:
+    c.addAll(r);
+    RESULT = c;
+:};
+
 DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO DEFINICIONVARIABLECAB
 ;
 
@@ -261,8 +271,11 @@ DEFINICIONFUNCION  ::= DECLARACIONFUNCION
 
 
 
-DECLARACION  ::= pr_entero DECENTERO
-;
+DECLARACION  ::= pr_entero DECENTERO:e
+{:
+    RESULT = e;
+:};
+
 DECLARACION  ::= pr_real DECREAL
 ;
 DECLARACION  ::= pr_cadena DECCADALL punto_coma
@@ -290,12 +303,24 @@ DECLARACIONFUNCION  ::= DECLARACIONFUNCIONCABECERA BLOQUE
 
 
 
-DECENTERO ::= id igual octa_e punto_coma
-;
+DECENTERO ::= id:i igual octa_e:v punto_coma
+{:
+    /* Declaracion con Inicializacion de un entero octal */
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(new Nodo(sym.pr_entero, "entero", 1, 1, null, true));
+    hijos.add(i);
+    hijos.add(v);
+    Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
+    
+    ArrayList<Nodo> dec = new ArrayList<Nodo>();
+    dec.add(padre);
+    RESULT = dec;
+:};
+
 DECENTERO ::= id igual hexa_e punto_coma
 ;
 DECENTERO ::=  DECALL punto_coma
-; 
+;
 
 
 DECREAL ::= id igual octa_r punto_coma

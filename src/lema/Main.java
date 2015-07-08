@@ -5,15 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 
 public class Main
 {
-    /* \fn void main()
-        \brief asdasdasd
-    */
     public static void main(String[] args) throws IOException
     {
         if(args.length == 0)
