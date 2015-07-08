@@ -1,13 +1,14 @@
 package lema;
+
 import java_cup.runtime.*;
+import java.util.ArrayList;
 
 parser code
 {:
     public Nodo raiz;
 
     public void report_error(String message, Object info)
-    {
-   
+    {   
         StringBuilder m = new StringBuilder("Error");
 
         if (info instanceof java_cup.runtime.Symbol)
@@ -33,12 +34,17 @@ parser code
         report_error(message, info);
         System.exit(1);
     }
+
+    public Nodo getAST()
+    {
+        return raiz;
+    }
 :};
 
 
 /* DECLARACION DE TERMINALES */
 
-terminal pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
+terminal Nodo pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
 par_ab, par_ce, cor_ab, cor_ce, ll_ab, ll_ce, 
 mas, menos, prod, div, mod, transp, inv, incr, decr, 
 ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, 
@@ -58,7 +64,7 @@ err;
 
 /* DECLARACION DE NO TERMINALES */
 
-non terminal PROGRAMA, 
+non terminal Nodo PROGRAMA, 
 PROGRAMAPRINCIPAL,
 
 EXPRESION, EXPGEN,
@@ -66,7 +72,7 @@ SENTENCIA, NSENTENCIA,
 
 DECLARACION, DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, 
 DEFINICIONVARIABLECAB, DECLARACIONCON,
-DEFINICIONVARIABLE,  DEFINICIONFUNCION,
+DEFINICIONFUNCION,
 DECSIMPLE, DECVECT, DECMAT, 
 DECENTERO, DECREAL, DECALL,
 DECCON, DECCONALL,
@@ -82,8 +88,6 @@ SENTSELECTOR, SENTDEFECTO,
 NCASO, SENTCASO, 
 
 ESCRITURA, LECTURA, 
-
-BLOQUE,
 MATRIZ, NELEMENTO, NVECTOR, VECTOR,
 INDICE, INI, ACT,
 CONDICIONAL, CONTROLADOR, 
@@ -93,7 +97,7 @@ OPERADORFUNCION, OPERADORCOND,
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
 
-
+non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE;
 
 
 /* PRECEDENCIA */
@@ -163,38 +167,61 @@ precedence nonassoc id;
 start with PROGRAMA;
 
 
-PROGRAMA  ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL 
+PROGRAMA  ::= DEFINICIONVARIABLECAB:dvc PROGRAMAPRINCIPAL:pp
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    hijos.add(dvc);
+    hijos.add(pp);
+    RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
+    raiz = RESULT;
+:};
+
+PROGRAMA  ::= DEFINICIONVARIABLECAB:dvc PROGRAMAPRINCIPAL:pp DEFINICIONFUNCION:df
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    hijos.add(dvc);
+    hijos.add(pp);
+    hijos.add(df);
+    RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
+    raiz = RESULT;
+:};
+
+PROGRAMA  ::= PROGRAMAPRINCIPAL:pp DEFINICIONFUNCION:df
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    hijos.add(pp);
+    hijos.add(df);
+    RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
+    raiz = RESULT;
+:};
+
+PROGRAMA ::= PROGRAMAPRINCIPAL:pp
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    hijos.add(pp);
+    RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
+    raiz = RESULT;
+:};
+
+PROGRAMAPRINCIPAL  ::= pr_principal par_ab par_ce BLOQUE:b
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    RESULT = new Nodo(accion.programaPrincipal, accion.acciones[accion.programaPrincipal], 1, 1, b, false);
+:};
+
+DEFINICIONVARIABLECAB  ::= DECLARACION
 ;
-PROGRAMA  ::= DEFINICIONVARIABLECAB PROGRAMAPRINCIPAL DEFINICIONFUNCION 
+DEFINICIONVARIABLECAB  ::= DECLARACIONCON
 ;
-PROGRAMA  ::= PROGRAMAPRINCIPAL DEFINICIONFUNCION 
-;
-PROGRAMA  ::= PROGRAMAPRINCIPAL
+DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO
 ;
 
-
-
-
-
-
-PROGRAMAPRINCIPAL  ::= pr_principal par_ab par_ce BLOQUE 
-;
-
-
-DEFINICIONVARIABLECAB  ::= DECLARACION  
-;
-DEFINICIONVARIABLECAB  ::= DECLARACIONCON 
-;
-DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO 
-;
-
-DEFINICIONVARIABLECAB  ::= DECLARACION DEFINICIONVARIABLECAB 
+DEFINICIONVARIABLECAB  ::= DECLARACION DEFINICIONVARIABLECAB
 ;
 DEFINICIONVARIABLECAB  ::= DECLARACIONCON DEFINICIONVARIABLECAB 
 ;
 DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO DEFINICIONVARIABLECAB 
 ;
-
 
 DEFINICIONPROTOTIPO	::= pr_entero id par_ab PARAMETROPROTOTIPO par_ce punto_coma
 ;
@@ -342,16 +369,30 @@ DECCON	::= id INDICE INDICE igual MATRIZ
 ;
 
 
+BLOQUE  ::= ll_ab NSENTENCIA ll_ce
+{:
+    /* NO SE  AGREGA AL ARBOL SEMANTICO */
+:};
 
-
-BLOQUE  ::= ll_ab NSENTENCIA ll_ce 
-;
 BLOQUE  ::= ll_ab DEFINICIONVARIABLE NSENTENCIA ll_ce 
-;
-BLOQUE  ::= ll_ab DEFINICIONVARIABLE ll_ce 
-;
+{:
+    /* NO SE  AGREGA AL ARBOL SEMANTICO */
+:};
+
+BLOQUE  ::= ll_ab DEFINICIONVARIABLE:dv ll_ce 
+{:
+    RESULT = dv;
+:};
+
 BLOQUE  ::= ll_ab ll_ce 
-;
+{:
+    Nodo declaracionVar = new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()),false);
+    Nodo bloque = new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, (new ArrayList<Nodo>()), false);
+    ArrayList<Nodo> hijosProgPrin = new ArrayList<Nodo>();
+    hijosProgPrin.add(declaracionVar);
+    hijosProgPrin.add(bloque);
+    RESULT = hijosProgPrin;
+:};
 
 NSENTENCIA  ::= SENTENCIA NSENTENCIA   
 ;
@@ -548,8 +589,10 @@ TIPOVARIABLEFUNCION  ::= pr_vacio
 
 DEFINICIONVARIABLE  ::= DECLARACION DEFINICIONVARIABLE 
 ;
-DEFINICIONVARIABLE  ::= DECLARACION 
-;
+DEFINICIONVARIABLE  ::= DECLARACION
+{:
+
+:};
 
 
 

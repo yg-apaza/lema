@@ -9,10 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 
-/* COMPILADOR */
-
 public class Main
 {
+    /* \fn void main()
+        \brief asdasdasd
+    */
     public static void main(String[] args) throws IOException
     {
         if(args.length == 0)
@@ -293,8 +294,24 @@ public class Main
    
     public static void ASemantico(String file)
     {
-        System.out.println("ANALIZADOR SEMÁNTICO");
+        System.out.println("ANALIZADOR SEMANTICO");
         System.out.println("------------------------------------------------------------");
+        
+        try
+        {
+            parser p = new parser(new Lexico(new FileReader(file)));
+            Object result = p.parse();
+            p.getAST().print();
+        }
+        catch (FileNotFoundException ex)
+        {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         System.out.println();
     }
    
