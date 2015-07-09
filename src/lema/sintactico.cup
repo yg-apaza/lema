@@ -5,6 +5,8 @@ import java.util.ArrayList;
 parser code
 {:
     public Nodo raiz;
+    
+    Nodo entero = new Nodo(sym.pr_entero, "entero", 1, 1, null, true);
 
     public void report_error(String message, Object info)
     {   
@@ -72,7 +74,7 @@ SENTENCIA, NSENTENCIA,
 DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, 
 DEFINICIONFUNCION,
 DECSIMPLE, DECVECT, DECMAT, 
-DECREAL, DECALL,
+DECREAL,
 DECCON, DECCONALL,
 DECCAD, DECCADALL,
 DEFINICIONPROTOTIPO,
@@ -95,8 +97,7 @@ OPERADORFUNCION, OPERADORCOND,
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
 
-non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO;
-
+non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO, DECALL;
 
 /* PRECEDENCIA */
 
@@ -307,21 +308,39 @@ DECENTERO ::= id:i igual octa_e:v punto_coma
 {:
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(new Nodo(sym.pr_entero, "entero", 1, 1, null, true));
+    hijos.add(entero);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
     
     ArrayList<Nodo> dec = new ArrayList<Nodo>();
     dec.add(padre);
+
     RESULT = dec;
 :};
 
-DECENTERO ::= id igual hexa_e punto_coma
-;
-DECENTERO ::=  DECALL punto_coma
-;
+DECENTERO ::= id:i igual hexa_e:v punto_coma
+{:
+    /* Declaracion con Inicializacion de un entero octal */
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(entero);
+    hijos.add(i);
+    hijos.add(v);
+    Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
+    
+    ArrayList<Nodo> dec = new ArrayList<Nodo>();
+    dec.add(padre);
 
+    RESULT = dec;
+:};
+
+DECENTERO ::=  DECALL:da punto_coma
+{:
+    for(int i = 0; i < da.size(); i++)
+        da.get(i).getHijos().add(0, entero);
+
+    RESULT = da;
+:};
 
 DECREAL ::= id igual octa_r punto_coma
 ;
@@ -333,25 +352,59 @@ DECREAL ::= DECALL punto_coma
 
 
 
-DECALL  ::= DECSIMPLE 
-;
-DECALL  ::= DECVECT
-;
-DECALL  ::= DECMAT
-;
-DECALL  ::= DECSIMPLE coma DECALL 
-;
-DECALL  ::= DECVECT coma DECALL 
-;
-DECALL  ::= DECMAT coma DECALL 
-;
+DECALL  ::= DECSIMPLE:ds
+{:
+    ArrayList<Nodo> da = new ArrayList<Nodo>();
+    da.add(ds);
+    RESULT = da;
+:};
+
+DECALL  ::= DECVECT:dv
+{:
+    ArrayList<Nodo> da = new ArrayList<Nodo>();
+    da.add(dv);
+    RESULT = da;:};
+
+DECALL  ::= DECMAT:dm
+{:
+    ArrayList<Nodo> da = new ArrayList<Nodo>();
+    da.add(dm);
+    RESULT = da;
+:};
+
+DECALL  ::= DECSIMPLE:ds coma DECALL:da
+{:
+    da.add(0, ds);
+    RESULT = da;
+:};
+
+DECALL  ::= DECVECT:dv coma DECALL:da
+{:
+    da.add(0, dv);
+    RESULT = da;
+:};
+
+DECALL  ::= DECMAT:dm coma DECALL:da
+{:
+    da.add(0, dm);
+    RESULT = da;
+:};
 
 
+DECSIMPLE  ::= id:i igual EXPGEN:v
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(v);
+    RESULT = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
+:};
 
-DECSIMPLE  ::= id igual EXPGEN 
-;
-DECSIMPLE  ::= id 
-;
+DECSIMPLE  ::= id:i
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    RESULT = new Nodo(accion.declaracionSim, accion.acciones[accion.declaracionSim], 1, 1, hijos, false);
+:};
 
 DECVECT  ::= id INDICE igual EXPGEN 
 ;
@@ -463,10 +516,15 @@ ACT  ::= id OPERADORASIGNACION EXPGEN
 ;
 
 
-EXPGEN ::= OPERANDO 
-;
-EXPGEN ::= EXPRESION 
-;
+EXPGEN ::= OPERANDO:o
+{:
+    RESULT = o;
+:};
+
+EXPGEN ::= EXPRESION:e
+{:
+    RESULT = e;
+:};
 
 
 
@@ -759,19 +817,35 @@ OPERADORPALABRAUNARIO  ::= pr_inv
 
 
 
-OPERANDO  ::= OPERANDOENTERO 
-;
-OPERANDO  ::= real 
-;
-OPERANDO  ::= octa_e 
-;
-OPERANDO  ::= octa_r 
-;
-OPERANDO  ::= hexa_e
-;
-OPERANDO  ::= hexa_r 
-;
+OPERANDO  ::= OPERANDOENTERO:oe
+{:
+    RESULT = oe;
+:};
 
+OPERANDO  ::= real:r
+{:
+    RESULT = r;
+:};
+
+OPERANDO  ::= octa_e:o
+{:
+    RESULT = o;
+:};
+
+OPERANDO  ::= octa_r:o
+{:
+    RESULT = o;
+:};
+
+OPERANDO  ::= hexa_e:h
+{:
+    RESULT = h;
+:};
+
+OPERANDO  ::= hexa_r:h
+{:
+    RESULT = h;
+:};
 
 
 TIPONUMERO  ::= pr_entero 

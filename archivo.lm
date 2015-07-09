@@ -1,4 +1,4 @@
-entero sdad = 0811;
+entero a = 08, b;
 
 
 principal()

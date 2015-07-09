@@ -4,31 +4,31 @@ import java.util.ArrayList;
 
 public class Nodo
 {
-    public int codigo;
-    public String valor;
-    public int linea;
-    public int columna;
-    public ArrayList <Nodo> hijos;
-    public boolean terminal; /*true = terminal, false = no terminal*/
+    private int              codigo;
+    private String           valor;
+    private int              linea;
+    private int              columna;
+    private ArrayList <Nodo> hijos;
+    private boolean          terminal; /*true = terminal, false = no terminal*/
     
     public Nodo()
     {
-        this.codigo = -1;
-        this.valor = "NULL";
-        this.linea = -1;
-        this.columna = -1;
-        this.hijos = null;
-        this.terminal = true;
+        this.codigo     = -1;
+        this.valor      = "NULL";
+        this.linea      = -1;
+        this.columna    = -1;
+        this.hijos      = null;
+        this.terminal   = true;
     }
 
     public Nodo(int codigo, String valor, int linea, int columna, ArrayList<Nodo> hijos, boolean terminal)
     {
-        this.codigo = codigo;
-        this.valor = valor;
-        this.linea = linea;
-        this.columna = columna;
-        this.hijos = hijos;
-        this.terminal = terminal;
+        this.codigo     = codigo;
+        this.valor      = valor;
+        this.linea      = linea;
+        this.columna    = columna;
+        this.hijos      = hijos;
+        this.terminal   = terminal;
     }
 
     public int getCodigo()
@@ -110,16 +110,18 @@ public class Nodo
             ancho = ancho + largo;
             largo = largo + ancho;
              
-            for(int i = 0;i < nodo.getHijos().size();i++){                                        
+            for(int i = 0;i < nodo.getHijos().size();i++)                                        
                 imprimir(nodo.getHijos().get(i),ancho,largo);
-            } 
         }
-        else{
+        else
+        {
             int bandera = 0;
-            for(int j = 0;j < largo ;j++){
+            for(int j = 0;j < largo ;j++)
+            {
                 if(bandera == 1)
                     System.out.print("-");                    
-                else if(ancho == j){
+                else if(ancho == j)
+                {
                     System.out.print("|");
                     bandera = 1;
                 }

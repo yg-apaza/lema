@@ -14,6 +14,30 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
+        /*
+        ArrayList<ArrayList<Integer>> a = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> a1 = new ArrayList<Integer>();
+        a1.add(1);
+        a1.add(2);
+        a1.add(3);
+        a.add(a1);
+        
+        ArrayList<ArrayList<Integer>> b = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> b1 = new ArrayList<Integer>();
+        b1.add(4);
+        b1.add(5);
+        b.add(b1);
+        
+        a.addAll(b);
+        
+        for(int i = 0; i < a.size(); i++)
+        {
+            for(int j = 0; j < a.get(i).size(); j++)
+                System.out.print(a.get(i).get(j) + " ");
+            System.out.println();
+        }
+        */
+        
         if(args.length == 0)
         {
             System.out.println("Debe ingresar un archivo");
@@ -41,6 +65,7 @@ public class Main
                 }
             }
         }
+        
     }
     
     public static void ALexico(String file) throws FileNotFoundException, IOException
