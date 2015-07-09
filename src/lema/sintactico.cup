@@ -91,7 +91,7 @@ MATRIZ, NELEMENTO, NVECTOR, VECTOR,
 INDICE, INI, ACT,
 CONDICIONAL, CONTROLADOR, 
 
-OPERADORBINARIO, OPERADORUNARIO, OPERADORUNARIO2, OPERANDOENTERO, OPERADORASIGNACION, OPERADORPALABRAUNARIO, OPERADORPALABRABINARIO,
+OPERANDOENTERO, OPERADORASIGNACION, OPERADORPALABRAUNARIO, OPERADORPALABRABINARIO,
 OPERADORFUNCION, OPERADORCOND, 
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
@@ -511,116 +511,179 @@ ACT  ::= id OPERADORASIGNACION EXPGEN
 ;
 
 
-EXPGEN ::= OPERANDO:o
+EXPGEN ::= OPERANDO:o 
 {:
     RESULT = o;
 :};
 
-EXPGEN ::= EXPRESION:e
+EXPGEN ::= EXPRESION:e 
 {:
     RESULT = e;
 :};
 
 
 
-EXPRESION  ::= OPERANDO:o1 OPERADORBINARIO:op OPERANDO:o2
+EXPRESION  ::= EXPGEN:e1 dif EXPGEN:e2 
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.diferente, accion.acciones[accion.diferente], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 ident EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.identico, accion.acciones[accion.identico], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 mas EXPGEN:e2  
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 menos EXPGEN:e2 
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 prod EXPGEN:e2 
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 div EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 mayor EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.mayor, accion.acciones[accion.mayor], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 mayor_igual EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.mayor_igual, accion.acciones[accion.mayor_igual], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 menor EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.menor, accion.acciones[accion.menor], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 menor_igual EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.menor_igual, accion.acciones[accion.menor_igual], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 mod EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 o EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.disyuncion, accion.acciones[accion.disyuncion], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 y EXPGEN:e2
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    RESULT = new Nodo(accion.conjuncion, accion.acciones[accion.conjuncion], 1, 1, operandos, false);
+:};
+
+
+EXPRESION  ::= EXPGEN:e1 inv
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    RESULT = new Nodo(accion.inversa, accion.acciones[accion.inversa], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= EXPGEN:e1 transp
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    RESULT = new Nodo(accion.transpuesta, accion.acciones[accion.transpuesta], 1, 1, operandos, false);
+:};
+
+
+EXPRESION  ::= neg OPERANDO:o1
 {:
     ArrayList<Nodo> operandos = new ArrayList<Nodo>();
     operandos.add(o1);
-    operandos.add(o2);
-    switch(op.getCodigo())
-    {
-        case sym.dif:
-            RESULT = new Nodo(accion.diferente, accion.acciones[accion.diferente], 1, 1, operandos,false);
-            break;
-
-        case sym.div:
-            RESULT = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, operandos,false);
-            break;
-
-        case sym.ident:
-            RESULT = new Nodo(accion.identico, accion.acciones[accion.identico], 1, 1, operandos,false);
-            break;
-
-        case sym.mas:
-            RESULT = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor:
-            RESULT = new Nodo(accion.mayor, accion.acciones[accion.mayor], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor_igual:
-            RESULT = new Nodo(accion.mayor_igual, accion.acciones[accion.mayor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menor:
-            RESULT = new Nodo(accion.menor, accion.acciones[accion.menor], 1, 1, operandos,false);
-            break;
-
-        case sym.menor_igual:
-            RESULT = new Nodo(accion.menor_igual, accion.acciones[accion.menor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menos:
-            RESULT = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, operandos,false);
-            break;
-
-        case sym.mod:
-            RESULT = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, operandos,false);
-            break;
-
-        case sym.o:
-            RESULT = new Nodo(accion.disyuncion, accion.acciones[accion.disyuncion], 1, 1, operandos,false);
-            break;
-
-        case sym.prod:
-            RESULT = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, operandos,false);
-            break;
-
-        case sym.y:
-            RESULT = new Nodo(accion.conjuncion, accion.acciones[accion.conjuncion], 1, 1, operandos,false);
-            break;
-    }
+    RESULT = new Nodo(accion.negacion, accion.acciones[accion.negacion], 1, 1, operandos, false);
 :};
 
-EXPRESION  ::= OPERANDO:o1 OPERADORUNARIO:op
+EXPRESION  ::= neg par_ab EXPRESION:e1 par_ce
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    RESULT = new Nodo(accion.negacion, accion.acciones[accion.negacion], 1, 1, operandos, false);
+:};
+
+EXPRESION  ::= mas OPERANDO:o1
 {:
     ArrayList<Nodo> operandos = new ArrayList<Nodo>();
     operandos.add(o1);
+    RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], 1, 1, operandos, false);
+:} %prec premas;
 
-    switch(op.getCodigo())
-    {
-        case sym.inv:
-            RESULT = new Nodo(accion.inversa, accion.acciones[accion.inversa], 1, 1, operandos,false);
-            break;
+EXPRESION  ::= mas par_ab EXPRESION:e1 par_ce
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], 1, 1, operandos, false);
+:} %prec premas;
 
-        case sym.transp:
-            RESULT = new Nodo(accion.transpuesta, accion.acciones[accion.transpuesta], 1, 1, operandos,false);
-            break;
-    }
-:};
-
-EXPRESION  ::= OPERADORUNARIO2:op OPERANDO:o1
+EXPRESION  ::= menos OPERANDO:o1
 {:
     ArrayList<Nodo> operandos = new ArrayList<Nodo>();
     operandos.add(o1);
+    RESULT = new Nodo(accion.negatividad, accion.acciones[accion.negatividad], 1, 1, operandos, false);
+:} %prec premenos;
 
-    switch(op.getCodigo())
-    {
-        case sym.neg:
-            RESULT = new Nodo(accion.negacion, accion.acciones[accion.negacion], 1, 1, operandos,false);
-            break;
-
-        case sym.mas:
-            RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], 1, 1, operandos,false);
-            break;
-
-        case sym.menos:
-            RESULT = new Nodo(accion.negatividad, accion.acciones[accion.negatividad], 1, 1, operandos,false);
-            break;
-    }
-:};
+EXPRESION  ::= menos par_ab EXPRESION:e1 par_ce
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    RESULT = new Nodo(accion.negatividad, accion.acciones[accion.negatividad], 1, 1, operandos, false);
+:} %prec premenos;
 
 EXPRESION  ::= OPERADORFUNCION:of
 {:
@@ -630,225 +693,6 @@ EXPRESION  ::= OPERADORFUNCION:of
 EXPRESION  ::= OPERADORCOND
 ;
 
-EXPRESION  ::= OPERADORUNARIO2:op par_ab EXPRESION:e par_ce
-{:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(e);
-    switch(op.getCodigo())
-    {
-        case sym.neg:
-            RESULT = new Nodo(accion.negacion, accion.acciones[accion.negacion], 1, 1, operandos,false);
-            break;
-
-        case sym.mas:
-            RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], 1, 1, operandos,false);
-            break;
-
-        case sym.menos:
-            RESULT = new Nodo(accion.negatividad, accion.acciones[accion.negatividad], 1, 1, operandos,false);
-            break;
-    }
-:};
-
-EXPRESION  ::= EXPRESION:e OPERADORUNARIO:op
-{:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(e);
-
-    switch(op.getCodigo())
-    {
-        case sym.inv:
-            RESULT = new Nodo(accion.inversa, accion.acciones[accion.inversa], 1, 1, operandos,false);
-            break;
-
-        case sym.transp:
-            RESULT = new Nodo(accion.transpuesta, accion.acciones[accion.transpuesta], 1, 1, operandos,false);
-            break;
-    }
-:};
-
-EXPRESION  ::= EXPRESION:e1 OPERADORBINARIO:op EXPRESION:e2
-{:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(e1);
-    operandos.add(e2);
-    switch(op.getCodigo())
-    {
-        case sym.dif:
-            RESULT = new Nodo(accion.diferente, accion.acciones[accion.diferente], 1, 1, operandos,false);
-            break;
-
-        case sym.div:
-            RESULT = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, operandos,false);
-            break;
-
-        case sym.ident:
-            RESULT = new Nodo(accion.identico, accion.acciones[accion.identico], 1, 1, operandos,false);
-            break;
-
-        case sym.mas:
-            RESULT = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor:
-            RESULT = new Nodo(accion.mayor, accion.acciones[accion.mayor], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor_igual:
-            RESULT = new Nodo(accion.mayor_igual, accion.acciones[accion.mayor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menor:
-            RESULT = new Nodo(accion.menor, accion.acciones[accion.menor], 1, 1, operandos,false);
-            break;
-
-        case sym.menor_igual:
-            RESULT = new Nodo(accion.menor_igual, accion.acciones[accion.menor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menos:
-            RESULT = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, operandos,false);
-            break;
-
-        case sym.mod:
-            RESULT = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, operandos,false);
-            break;
-
-        case sym.o:
-            RESULT = new Nodo(accion.disyuncion, accion.acciones[accion.disyuncion], 1, 1, operandos,false);
-            break;
-
-        case sym.prod:
-            RESULT = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, operandos,false);
-            break;
-
-        case sym.y:
-            RESULT = new Nodo(accion.conjuncion, accion.acciones[accion.conjuncion], 1, 1, operandos,false);
-            break;
-    }
-:};
-
-EXPRESION  ::= EXPRESION:e1 OPERADORBINARIO:op OPERANDO:o2
-{:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(e1);
-    operandos.add(o2);
-    switch(op.getCodigo())
-    {
-        case sym.dif:
-            RESULT = new Nodo(accion.diferente, accion.acciones[accion.diferente], 1, 1, operandos,false);
-            break;
-
-        case sym.div:
-            RESULT = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, operandos,false);
-            break;
-
-        case sym.ident:
-            RESULT = new Nodo(accion.identico, accion.acciones[accion.identico], 1, 1, operandos,false);
-            break;
-
-        case sym.mas:
-            RESULT = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor:
-            RESULT = new Nodo(accion.mayor, accion.acciones[accion.mayor], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor_igual:
-            RESULT = new Nodo(accion.mayor_igual, accion.acciones[accion.mayor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menor:
-            RESULT = new Nodo(accion.menor, accion.acciones[accion.menor], 1, 1, operandos,false);
-            break;
-
-        case sym.menor_igual:
-            RESULT = new Nodo(accion.menor_igual, accion.acciones[accion.menor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menos:
-            RESULT = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, operandos,false);
-            break;
-
-        case sym.mod:
-            RESULT = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, operandos,false);
-            break;
-
-        case sym.o:
-            RESULT = new Nodo(accion.disyuncion, accion.acciones[accion.disyuncion], 1, 1, operandos,false);
-            break;
-
-        case sym.prod:
-            RESULT = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, operandos,false);
-            break;
-
-        case sym.y:
-            RESULT = new Nodo(accion.conjuncion, accion.acciones[accion.conjuncion], 1, 1, operandos,false);
-            break;
-    }
-:};
-
-EXPRESION  ::= OPERANDO:o1 OPERADORBINARIO:op EXPRESION:e2
-{:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(o1);
-    operandos.add(e2);
-    switch(op.getCodigo())
-    {
-        case sym.dif:
-            RESULT = new Nodo(accion.diferente, accion.acciones[accion.diferente], 1, 1, operandos,false);
-            break;
-
-        case sym.div:
-            RESULT = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, operandos,false);
-            break;
-
-        case sym.ident:
-            RESULT = new Nodo(accion.identico, accion.acciones[accion.identico], 1, 1, operandos,false);
-            break;
-
-        case sym.mas:
-            RESULT = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor:
-            RESULT = new Nodo(accion.mayor, accion.acciones[accion.mayor], 1, 1, operandos,false);
-            break;
-
-        case sym.mayor_igual:
-            RESULT = new Nodo(accion.mayor_igual, accion.acciones[accion.mayor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menor:
-            RESULT = new Nodo(accion.menor, accion.acciones[accion.menor], 1, 1, operandos,false);
-            break;
-
-        case sym.menor_igual:
-            RESULT = new Nodo(accion.menor_igual, accion.acciones[accion.menor_igual], 1, 1, operandos,false);
-            break;
-
-        case sym.menos:
-            RESULT = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, operandos,false);
-            break;
-
-        case sym.mod:
-            RESULT = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, operandos,false);
-            break;
-
-        case sym.o:
-            RESULT = new Nodo(accion.disyuncion, accion.acciones[accion.disyuncion], 1, 1, operandos,false);
-            break;
-
-        case sym.prod:
-            RESULT = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, operandos,false);
-            break;
-
-        case sym.y:
-            RESULT = new Nodo(accion.conjuncion, accion.acciones[accion.conjuncion], 1, 1, operandos,false);
-            break;
-    }
-:};
 
 EXPRESION  ::= par_ab EXPRESION:e par_ce 
 {:
@@ -861,20 +705,10 @@ EXPRESION  ::= par_ab OPERANDO:o par_ce
 :};
 
 
-OPERADORUNARIO2 ::= neg:op
-{:
-    RESULT = op;
-:};
 
-OPERADORUNARIO2 ::= mas:op
-{:
-    RESULT = op;
-:} %prec premas;
 
-OPERADORUNARIO2 ::= menos:op
-{:
-    RESULT = op;
-:} %prec premenos;
+
+
 
 ARGUMENTO  ::= EXPGEN:e
 {:
@@ -959,13 +793,17 @@ INDICE  ::= cor_ab EXPGEN:e cor_ce
     RESULT = e;
 :};
 
+
 INI  ::= id igual EXPGEN 
 ;
 INI  ::= pr_entero id igual EXPGEN 
 ;
 
+
 LECTURA  ::= pr_leer par_ab id par_ce punto_coma 
 ;
+
+
 
 MATRIZ  ::= ll_ab NVECTOR ll_ce 
 ;
@@ -983,6 +821,7 @@ NELEMENTO  ::= EXPGEN
 NELEMENTO  ::= EXPGEN coma NELEMENTO 
 ;
 
+
 DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce
 ;
 DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce
@@ -999,6 +838,8 @@ DEFINICIONVARIABLE  ::= DECLARACION
 {:
 
 :};
+
+
 
 PARAMETRO  ::= TIPONUMERO id coma PARAMETRO 
 ;
@@ -1047,10 +888,14 @@ SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA
 SENTCASO  ::= pr_caso numero sig_pun 
 ;
 
+
+
 SENTDEFECTO  ::= pr_default sig_pun NSENTENCIA pr_saltar punto_coma  
 ;
 SENTDEFECTO  ::= pr_default sig_pun pr_saltar punto_coma 
 ;
+
+
 
 LLAMADAFUNCION  ::= id:i par_ab par_ce 
 {:
@@ -1121,81 +966,8 @@ OPERADORASIGNACION  ::= igual
 OPERADORASIGNACION  ::= a_mod 
 ;
 
-OPERADORBINARIO  ::= dif:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= div:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= ident:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= mas:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= mayor:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= mayor_igual:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= menor:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= menor_igual:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= menos:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= mod:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= o:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= prod:op
-{:
-    RESULT = op;
-:};
-
-OPERADORBINARIO  ::= y:op
-{:
-    RESULT = op;
-:};
 
 
-OPERADORUNARIO  ::= inv:op
-{:
-    RESULT = op;
-:};
-
-OPERADORUNARIO  ::= transp:op
-{:
-    RESULT = op;
-:};
 
 OPERANDOENTERO  ::= LLAMADAFUNCION:ll
 {:

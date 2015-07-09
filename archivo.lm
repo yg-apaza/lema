@@ -1,4 +1,4 @@
-entero c = 5*8+2*2;
+entero c = 8*(5+ inversa(3/2))*7;
 
 principal()
 {
