@@ -1,4 +1,5 @@
-entero a = 08, b;
+entero a = 88, b;
+entero c = A[3][6];
 
 
 principal()

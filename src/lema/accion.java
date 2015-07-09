@@ -2,13 +2,13 @@ package lema;
 
 public class accion
 {
-    public static final int programa = 0;
+    public static final int programa = 0;               // Usado
     
-    public static final int cabecera = 1;
-    public static final int programaPrincipal = 2;
-    public static final int defFuncion = 3;
+    public static final int cabecera = 1;               // Usado
+    public static final int programaPrincipal = 2;      // Usado
+    public static final int defFuncion = 3;             
     
-    public static final int bloque = 4;
+    public static final int bloque = 4;                 // Usado
     
     public static final int declaracionCons = 5;
     
@@ -20,11 +20,11 @@ public class accion
     public static final int tipoVector = 10;
     public static final int tipoMatriz = 11;
     
-    public static final int declaracionSim = 12;
+    public static final int declaracionSim = 12;        // Usado
     public static final int declaracionVec = 13;
     public static final int declaracionMat = 14;
     
-    public static final int declaracionSimIni = 15;
+    public static final int declaracionSimIni = 15;     // Usado
     public static final int declaracionVecIni = 16;
     public static final int declaracionMatIni = 17;
       
@@ -37,7 +37,7 @@ public class accion
     public static final int para = 23;
     public static final int si = 24;
     public static final int selector = 25;
-    public static final int llamadaFuncion = 26;
+    public static final int llamadaFuncion = 26;        // Usado
     public static final int escritura = 27;
     public static final int lectura = 28;
     public static final int actualizacion = 29;
@@ -68,18 +68,20 @@ public class accion
     
     public static final int operacionCond = 48;
     
-    public static final int argumento = 49;
+    public static final int argumento = 49;              // Usado    Parametro de llamada a funcion
     public static final int fila = 50;
     public static final int columna = 51;
     
     public static final int funcion = 52;
-    public static final int parametroFun = 53;
+    public static final int parametroFun = 53;         
     public static final int parametroFunDes = 54;
     public static final int declaracion = 55;
     public static final int casos = 56;
     public static final int caso = 57;
     public static final int pordefecto = 58;
-    public static final int declaracionVar = 59;
+    public static final int declaracionVar = 59;        // Usado
+    public static final int accesoMat = 60;             // Usado
+    public static final int accesoVec = 61;             // Usado
     
     public static final String[] acciones = new String[]
     {
@@ -142,7 +144,9 @@ public class accion
         "CASOS",
         "CASO",
         "POR DEFECTO",
-        "DECLARACIONES DE VARIABLES"
+        "DECLARACIONES DE VARIABLES",
+        "ACCESO A MATRIZ",
+        "ACCESO A VECTOR"
     };
 }
 

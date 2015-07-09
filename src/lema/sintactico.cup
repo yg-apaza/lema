@@ -80,7 +80,6 @@ DECCAD, DECCADALL,
 DEFINICIONPROTOTIPO,
 
 PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO, PARAMETROPROTOTIPO,
-ARGUMENTO,
 
 ASIGNACION, LLAMADAFUNCION, 
 CONDICIONALHACERMIENTRAS, CONDICIONALMIENTRAS, CONDICIONALPARA, CONDICIONALSI, 
@@ -97,7 +96,7 @@ OPERADORFUNCION, OPERADORCOND,
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
 
-non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO, DECALL;
+non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO, DECALL, ARGUMENTO;
 
 /* PRECEDENCIA */
 
@@ -301,9 +300,6 @@ DECLARACIONCON  ::= pr_const pr_real id igual hexa_r punto_coma
 DECLARACIONFUNCION  ::= DECLARACIONFUNCIONCABECERA BLOQUE 
 ;
 
-
-
-
 DECENTERO ::= id:i igual octa_e:v punto_coma
 {:
     /* Declaracion con Inicializacion de un entero octal */
@@ -349,9 +345,6 @@ DECREAL ::= id igual hexa_r punto_coma
 DECREAL ::= DECALL punto_coma
 ;
 
-
-
-
 DECALL  ::= DECSIMPLE:ds
 {:
     ArrayList<Nodo> da = new ArrayList<Nodo>();
@@ -363,7 +356,8 @@ DECALL  ::= DECVECT:dv
 {:
     ArrayList<Nodo> da = new ArrayList<Nodo>();
     da.add(dv);
-    RESULT = da;:};
+    RESULT = da;
+:};
 
 DECALL  ::= DECMAT:dm
 {:
@@ -528,8 +522,11 @@ EXPGEN ::= EXPRESION:e
 
 
 
-EXPRESION  ::= OPERANDO OPERADORBINARIO OPERANDO 
-;
+EXPRESION  ::= OPERANDO:o1 OPERADORBINARIO:op OPERANDO:o2
+{:
+    //RESULT = new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()),false);;
+:};
+
 EXPRESION  ::= OPERANDO OPERADORUNARIO 
 ;
 EXPRESION  ::= OPERADORUNARIO2 OPERANDO 
@@ -561,11 +558,18 @@ OPERADORUNARIO2 ::= mas %prec premas
 OPERADORUNARIO2 ::= menos %prec premenos
 ;
 
-ARGUMENTO  ::= EXPGEN 
-;
-ARGUMENTO  ::= EXPGEN coma ARGUMENTO 
-;
+ARGUMENTO  ::= EXPGEN:e
+{:
+    ArrayList<Nodo> arg = new ArrayList<Nodo>();
+    arg.add(e);
+    RESULT = arg;
+:};
 
+ARGUMENTO  ::= EXPGEN:e coma ARGUMENTO:a
+{:
+    a.add(0, e);
+    RESULT = a;
+:};
 
 
 ASIGNACION  ::= id igual cadena punto_coma 
@@ -632,8 +636,10 @@ ESCRITURA  ::= pr_mostrar par_ab cadena par_ce punto_coma
 ESCRITURA  ::= pr_mostrar par_ab par_ce punto_coma 
 ;
 
-INDICE  ::= cor_ab EXPGEN cor_ce 
-;
+INDICE  ::= cor_ab EXPGEN:e cor_ce 
+{:
+    RESULT = e;
+:};
 
 
 INI  ::= id igual EXPGEN 
@@ -731,11 +737,23 @@ SENTDEFECTO  ::= pr_default sig_pun pr_saltar punto_coma
 
 
 
-LLAMADAFUNCION  ::= id par_ab par_ce 
-;
-LLAMADAFUNCION  ::= id par_ab ARGUMENTO par_ce 
-;
+LLAMADAFUNCION  ::= id:i par_ab par_ce 
+{:
+    Nodo argumento = new Nodo(accion.argumento, accion.acciones[accion.argumento], 1, 1, (new ArrayList<Nodo>()), false);
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(argumento);
+    RESULT = new Nodo(accion.llamadaFuncion, accion.acciones[accion.llamadaFuncion], 1, 1, hijos, false);
+:};
 
+LLAMADAFUNCION  ::= id:i par_ab ARGUMENTO:a par_ce 
+{:
+    Nodo argumento = new Nodo(accion.argumento, accion.acciones[accion.argumento], 1, 1, a, false);
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(argumento);
+    RESULT = new Nodo(accion.llamadaFuncion, accion.acciones[accion.llamadaFuncion], 1, 1, hijos, false);
+:};
 
 
 OPERADORFUNCION  ::= OPERADORPALABRABINARIO PARAMETROBINARIO  
@@ -793,16 +811,37 @@ OPERADORUNARIO  ::= inv
 OPERADORUNARIO  ::= transp 
 ;
 
-OPERANDOENTERO  ::= LLAMADAFUNCION 
-;
-OPERANDOENTERO  ::= id INDICE INDICE   
-;
-OPERANDOENTERO  ::= id INDICE 
-;
-OPERANDOENTERO  ::= id 
-;
-OPERANDOENTERO  ::= numero 
-;
+OPERANDOENTERO  ::= LLAMADAFUNCION:ll
+{:
+    RESULT = ll;
+:};
+
+OPERANDOENTERO  ::= id:i INDICE:d1 INDICE:d2
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(d1);
+    hijos.add(d2);
+    RESULT = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijos, false);
+:};
+
+OPERANDOENTERO  ::= id:i INDICE:d1
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(d1);
+    RESULT = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijos, false);
+:};
+
+OPERANDOENTERO  ::= id:i
+{:
+    RESULT = i;
+:};
+
+OPERANDOENTERO  ::= numero:n
+{:
+    RESULT = n;
+:};
 
 OPERADORPALABRABINARIO  ::= pr_suma 
 ;
