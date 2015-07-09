@@ -43,45 +43,46 @@ public class accion
     public static final int actualizacion = 29;
     public static final int retornar = 30;
     
-    public static final int suma = 31;
-    public static final int resta = 32;
-    public static final int producto = 33;
-    public static final int division = 34;
+    public static final int suma = 31;                  // Usado
+    public static final int resta = 32;                 // Usado
+    public static final int producto = 33;              // Usado
+    public static final int division = 34;              // Usado
     
-    public static final int modulo = 35;
+    public static final int modulo = 35;                // Usado
     
-    public static final int mayor = 36;
-    public static final int mayor_igual = 37;
-    public static final int menor = 38;
-    public static final int menor_igual = 39;
+    public static final int mayor = 36;                 // Usado
+    public static final int mayor_igual = 37;           // Usado
+    public static final int menor = 38;                 // Usado
+    public static final int menor_igual = 39;           // Usado
     
-    public static final int disyuncion = 40; /* O */
-    public static final int conjuncion = 41; /* Y */
-    public static final int identico = 42;
-    public static final int diferente = 43;
+    public static final int disyuncion = 40; /* O */    // Usado
+    public static final int conjuncion = 41; /* Y */    // Usado
+    public static final int identico = 42;              // Usado
+    public static final int diferente = 43;             // Usado
     
-    public static final int inversa = 44;
-    public static final int transpuesta = 45;
+    public static final int negacion = 44;              // Usado
+    public static final int inversa = 45;               // Usado
+    public static final int transpuesta = 46;           // Usado
     
-    public static final int negatividad = 46;
-    public static final int positividad = 47;
+    public static final int negatividad = 47;           // Usado
+    public static final int positividad = 48;           // Usado
     
-    public static final int operacionCond = 48;
+    public static final int operacionCond = 49;
     
-    public static final int argumento = 49;              // Usado    Parametro de llamada a funcion
-    public static final int fila = 50;
-    public static final int columna = 51;
+    public static final int argumento = 50;              // Usado    Parametro de llamada a funcion
+    public static final int fila = 51;
+    public static final int columna = 52;
     
-    public static final int funcion = 52;
-    public static final int parametroFun = 53;         
-    public static final int parametroFunDes = 54;
-    public static final int declaracion = 55;
-    public static final int casos = 56;
-    public static final int caso = 57;
-    public static final int pordefecto = 58;
-    public static final int declaracionVar = 59;        // Usado
-    public static final int accesoMat = 60;             // Usado
-    public static final int accesoVec = 61;             // Usado
+    public static final int funcion = 53;
+    public static final int parametroFun = 54;         
+    public static final int parametroFunDes = 55;
+    public static final int declaracion = 56;
+    public static final int casos = 57;
+    public static final int caso = 58;
+    public static final int pordefecto = 59;
+    public static final int declaracionVar = 60;        // Usado
+    public static final int accesoMat = 61;             // Usado
+    public static final int accesoVec = 62;             // Usado
     
     public static final String[] acciones = new String[]
     {
@@ -129,6 +130,7 @@ public class accion
         "CONJUNCION",
         "IDENTICO",
         "DIFERENTE",
+        "NEGACION",
         "INVERSA",
         "TRANSPUESTA",
         "NEGATIVIDAD",
