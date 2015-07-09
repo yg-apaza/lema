@@ -1,6 +1,4 @@
- entero c = -5 + 2;
- entero c = 5 + 3 * 2;
-
+entero c = 5*8+2*2;
 
 principal()
 {

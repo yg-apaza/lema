@@ -630,11 +630,10 @@ EXPRESION  ::= OPERADORFUNCION:of
 EXPRESION  ::= OPERADORCOND
 ;
 
-EXPRESION  ::= OPERADORUNARIO2:op EXPRESION:e
+EXPRESION  ::= OPERADORUNARIO2:op par_ab EXPRESION:e par_ce
 {:
     ArrayList<Nodo> operandos = new ArrayList<Nodo>();
     operandos.add(e);
-
     switch(op.getCodigo())
     {
         case sym.neg:
@@ -960,17 +959,13 @@ INDICE  ::= cor_ab EXPGEN:e cor_ce
     RESULT = e;
 :};
 
-
 INI  ::= id igual EXPGEN 
 ;
 INI  ::= pr_entero id igual EXPGEN 
 ;
 
-
 LECTURA  ::= pr_leer par_ab id par_ce punto_coma 
 ;
-
-
 
 MATRIZ  ::= ll_ab NVECTOR ll_ce 
 ;
@@ -988,7 +983,6 @@ NELEMENTO  ::= EXPGEN
 NELEMENTO  ::= EXPGEN coma NELEMENTO 
 ;
 
-
 DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce
 ;
 DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce
@@ -1005,8 +999,6 @@ DEFINICIONVARIABLE  ::= DECLARACION
 {:
 
 :};
-
-
 
 PARAMETRO  ::= TIPONUMERO id coma PARAMETRO 
 ;
@@ -1055,14 +1047,10 @@ SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA
 SENTCASO  ::= pr_caso numero sig_pun 
 ;
 
-
-
 SENTDEFECTO  ::= pr_default sig_pun NSENTENCIA pr_saltar punto_coma  
 ;
 SENTDEFECTO  ::= pr_default sig_pun pr_saltar punto_coma 
 ;
-
-
 
 LLAMADAFUNCION  ::= id:i par_ab par_ce 
 {:
