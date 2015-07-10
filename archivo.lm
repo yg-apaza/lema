@@ -1,5 +1,5 @@
-entero c = 8*(5+ inversa(3/2))*7;
-
+entero c = -(!8*(5+ inversa(suma(a',5.3)))*7);
+real a = c;
 principal()
 {
 }
