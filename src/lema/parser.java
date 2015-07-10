@@ -1743,10 +1743,6 @@ class CUP$parser$actions {
 		int dvleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int dvright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo dv = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-    ArrayList<Nodo> da = new ArrayList<Nodo>();
-    da.add(dv);
-    RESULT = da;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECALL",56, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1759,10 +1755,6 @@ class CUP$parser$actions {
 		int dmleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int dmright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo dm = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-    ArrayList<Nodo> da = new ArrayList<Nodo>();
-    da.add(dm);
-    RESULT = da;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECALL",56, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1796,9 +1788,6 @@ class CUP$parser$actions {
 		int daleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int daright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		ArrayList<Nodo> da = (ArrayList<Nodo>)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-    da.add(0, dv);
-    RESULT = da;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECALL",56, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1814,9 +1803,6 @@ class CUP$parser$actions {
 		int daleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int daright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		ArrayList<Nodo> da = (ArrayList<Nodo>)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-    da.add(0, dm);
-    RESULT = da;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECALL",56, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
