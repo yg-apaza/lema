@@ -99,7 +99,6 @@ public class Nodo
     
     public void imprimir(Nodo nodo,int ancho,int largo)
     {
-        /* HOLA LOLA I hate U so MUCH !*/
         System.out.print("\n");
         if(!nodo.isTerminal())
         {   
