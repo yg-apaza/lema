@@ -39,8 +39,8 @@ WHITE = [ \t\r\n]
 
 /* TIPOS DE DATOS BASICOS */
 "vacio"                         { return symbol(sym.pr_vacio,   (new Nodo(sym.pr_vacio, yytext(), yyline, yycolumn, null, true)));  }
-"entero"                        { return symbol(sym.pr_entero);         }
-"real"                          { return symbol(sym.pr_real);           }
+"entero"                        { return symbol(sym.pr_entero, (new Nodo(sym.pr_entero, yytext(), yyline, yycolumn, null, true)));  }
+"real"                          { return symbol(sym.pr_real,  (new Nodo(sym.pr_real, yytext(), yyline, yycolumn, null, true)));    }
 "cadena"                        { return symbol(sym.pr_cadena,  (new Nodo(sym.pr_cadena, yytext(), yyline, yycolumn, null, true))); }
 
 /* OPERADORES DE AGRUPACIÓN */

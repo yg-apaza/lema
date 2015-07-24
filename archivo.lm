@@ -1,4 +1,14 @@
-entero a = 3 + 2*5 + suma(inversa(a'),b);
+entero a = ((a>b)?(5+4):(5))+5;
+entero fun();
+vacio fun(entero, real, entero[3], real[3][3]);
 principal()
 {
+	si(a > 8)
+		b--;
+	sino{
+		b--;}
+		
+	si(a > 4)
+		a = 4;
+	sino b++;
 }

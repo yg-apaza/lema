@@ -10,25 +10,28 @@ public class accion
     
     public static final int bloque = 4;                 // Usado
     
-    public static final int declaracionCons = 5;
+    public static final int declaracionConsSim = 5;     // Usado
+    public static final int declaracionConsVec = 63;    // Usado
+    public static final int declaracionConsMat = 64;    // Usado
     
-    public static final int declaracionProt = 6;
-    public static final int parametroPro = 7;
-    public static final int parametroProDes = 8;
+    public static final int declaracionProt = 6;        // Usado
+    public static final int parametroProt = 7;          // Usado     
+    public static final int parametroVec = 8;           // Usado
+    public static final int parametroMat = 65;          // Usado
     
     public static final int tipoNumero = 9;
     public static final int tipoVector = 10;
     public static final int tipoMatriz = 11;
     
     public static final int declaracionSim = 12;        // Usado
-    public static final int declaracionVec = 13;
-    public static final int declaracionMat = 14;
+    public static final int declaracionVec = 13;        // Usado
+    public static final int declaracionMat = 14;        // Usado
     
     public static final int declaracionSimIni = 15;     // Usado
-    public static final int declaracionVecIni = 16;
-    public static final int declaracionMatIni = 17;
+    public static final int declaracionVecIni = 16;     // Usado
+    public static final int declaracionMatIni = 17;     // Usado
       
-    public static final int asignacionSim = 18;
+    public static final int asignacion = 18;            // Usado
     public static final int asignacionVec = 19;
     public static final int asignacionMat = 20;
     
@@ -67,11 +70,11 @@ public class accion
     public static final int negatividad = 47;           // Usado
     public static final int positividad = 48;           // Usado
     
-    public static final int operacionCond = 49;
+    public static final int operacionCond = 49;         // Usado
     
     public static final int argumento = 50;              // Usado    Parametro de llamada a funcion
-    public static final int fila = 51;
-    public static final int columna = 52;
+    public static final int elemVec = 51;               // Usado
+    public static final int elemMat = 52;               // Usado
     
     public static final int funcion = 53;
     public static final int parametroFun = 54;         
@@ -91,10 +94,10 @@ public class accion
         "PROGRAMA PRINCIPAL",
         "DEFINICION FUNCIONES",
         "BLOQUE",
-        "DECLARACION CONSTANTES",
+        "DECLARACION CONSTANTE SIMPLE",
         "DECLARACION PROTOTIPOS",
         "PARAMETRO PROTOTIPO",
-        "DESCRIPCION PARAMETRO PROTOTIPO",
+        "PARAMETRO PROTOTIPO VECTOR",
         "TIPO NUMERO",
         "TIPO VECTOR",
         "TIPO MATRIZ",
@@ -104,7 +107,7 @@ public class accion
         "DECLARACION SIMPLE CON INI",
         "DECLARACION VECTOR CON INI",
         "DECLARACION MATRIZ CON INI",
-        "ASIGNACION SIMPLE",
+        "ASIGNACION",
         "ASIGNACION VECTOR",
         "ASIGNACION MATRIZ",
         "HACER MIENTRAS",
@@ -137,8 +140,8 @@ public class accion
         "POSITIVIDAD",
         "OPERACION CONDICIONAL",
         "ARGUMENTO",
-        "FILA",
-        "COLUMNA",
+        "ELEMENTOS VECTOR",
+        "ELEMENTOS MATRIZ",
         "FUNCION",
         "PARAMETRO FUNCION",
         "DESCRIPCION PARAMETRO FUNCION",
@@ -148,7 +151,10 @@ public class accion
         "POR DEFECTO",
         "DECLARACIONES DE VARIABLES",
         "ACCESO A MATRIZ",
-        "ACCESO A VECTOR"
+        "ACCESO A VECTOR",
+        "DECLARACION CONSTANTE VECTOR",
+        "DECLARACION CONSTANTE MATRIZ",
+        "PARAMETRO PROTOTIPO MATRIZ"
     };
 }
 
