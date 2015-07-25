@@ -1260,9 +1260,6 @@ public class parser extends java_cup.runtime.lr_parser {
 
     public Nodo raiz;
     
-    Nodo entero = new Nodo(sym.pr_entero, "entero", 1, 1, null, true);
-    Nodo real = new Nodo(sym.pr_real, "real", 1, 1, null, true);
-
     public void report_error(String message, Object info)
     {   
         StringBuilder m = new StringBuilder("Error");
@@ -2101,7 +2098,6 @@ class CUP$parser$actions {
 		
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(entero);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
@@ -2128,7 +2124,6 @@ class CUP$parser$actions {
 		
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(entero);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
@@ -2169,7 +2164,6 @@ class CUP$parser$actions {
 		
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(real);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
@@ -2196,7 +2190,6 @@ class CUP$parser$actions {
 		
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(real);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);

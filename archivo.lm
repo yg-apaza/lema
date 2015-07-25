@@ -6,7 +6,10 @@ principal()
 {
 	entero a;
 	cadena a = "asd";
-	
+	entero a = 0x88A;
+	entero b = 05;
+	real h = 08;
+	real h = 0x8A;
 	real mat[4][4] = {{1,1,1},{2,3,3},{2,2}};
 	fun(3,4, 3.4+8, 0x4);
 	mostrar(4+5*5);

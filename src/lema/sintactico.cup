@@ -489,7 +489,6 @@ DECENTERO ::= id:i igual octa_e:v punto_coma
 {:
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(entero);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
@@ -504,7 +503,6 @@ DECENTERO ::= id:i igual hexa_e:v punto_coma
 {:
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(entero);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
@@ -524,7 +522,6 @@ DECREAL ::= id:i igual octa_r:v punto_coma
 {:
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(real);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
@@ -539,7 +536,6 @@ DECREAL ::= id:i igual hexa_r:v punto_coma
 {:
     /* Declaracion con Inicializacion de un entero octal */
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(real);
     hijos.add(i);
     hijos.add(v);
     Nodo padre = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
