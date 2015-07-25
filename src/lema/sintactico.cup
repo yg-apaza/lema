@@ -6,9 +6,6 @@ parser code
 {:
     public Nodo raiz;
     
-    Nodo entero = new Nodo(sym.pr_entero, "entero", 1, 1, null, true);
-    Nodo real = new Nodo(sym.pr_real, "real", 1, 1, null, true);
-
     public void report_error(String message, Object info)
     {   
         StringBuilder m = new StringBuilder("Error");
@@ -70,35 +67,32 @@ non terminal Nodo PROGRAMA,
 PROGRAMAPRINCIPAL,
 
 EXPRESION, EXPGEN,
-SENTENCIA, NSENTENCIA,
+SENTENCIA,
 
-DECLARACIONFUNCION, DECLARACIONFUNCIONCABECERA, 
-DEFINICIONFUNCION,
+DECLARACIONFUNCION,
 DECSIMPLE, DECVECT, DECMAT, 
 
-DECCON, DECCONALL,
-DECCAD, DECCADALL,
+DECCON,
+DECCAD,
 DEFINICIONPROTOTIPO,
-
-PARAMETRO, PARAMETROPROTOTIPO,
 
 ASIGNACION, LLAMADAFUNCION, 
 CONDICIONALHACERMIENTRAS, CONDICIONALMIENTRAS, CONDICIONALPARA, CONDICIONALSI, 
 SENTSELECTOR, SENTDEFECTO,
-NCASO, SENTCASO, 
+SENTCASO, 
 
 ESCRITURA, LECTURA, 
-MATRIZ, NELEMENTO, NVECTOR, VECTOR,
+MATRIZ, VECTOR,
 INDICE, INI, ACT,
-CONDICIONAL, CONTROLADOR, 
+CONDICIONAL, 
 
-OPERANDOENTERO, OPERADORASIGNACION, OPERADORPALABRAUNARIO, OPERADORPALABRABINARIO,
+OPERANDOENTERO,
 OPERADORFUNCION, OPERADORCOND, 
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
 
 non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO, DECREAL, DECALL, ARGUMENTO,
-PARAMETROBINARIO, PARAMETROUNARIO;
+PARAMETROBINARIO, PARAMETROUNARIO, NELEMENTO, NVECTOR, DECCADALL, DECCONALL, PARAMETROPROTOTIPO, NSENTENCIA, CONTROLADOR, NCASO, DEFINICIONFUNCION, DECLARACIONFUNCIONCABECERA, PARAMETRO;
 
 /* PRECEDENCIA */
 
@@ -110,6 +104,7 @@ precedence left prod, div;
 precedence left transp, inv;
 precedence right incr, decr, neg;
 precedence right premas, premenos;
+
 
 precedence nonassoc pr_const; 
 precedence nonassoc pr_vacio; 
@@ -183,7 +178,8 @@ PROGRAMA  ::= DEFINICIONVARIABLECAB:dvc PROGRAMAPRINCIPAL:pp DEFINICIONFUNCION:d
     ArrayList<Nodo> hijos = new ArrayList <Nodo>();
     hijos.add(cab);
     hijos.add(pp);
-    hijos.add(df);
+    
+    hijos.add(new Nodo(accion.defFuncion, accion.acciones[accion.defFuncion], 1, 1, df, false));
     RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
     raiz = RESULT;
 :};
@@ -192,7 +188,7 @@ PROGRAMA  ::= PROGRAMAPRINCIPAL:pp DEFINICIONFUNCION:df
 {:
     ArrayList<Nodo> hijos = new ArrayList <Nodo>();
     hijos.add(pp);
-    hijos.add(df);
+    hijos.add(new Nodo(accion.defFuncion, accion.acciones[accion.defFuncion], 1, 1, df, false));
     RESULT = new Nodo(accion.programa, accion.acciones[accion.programa], 1, 1, hijos, false);
     raiz = RESULT;
 :};
@@ -221,8 +217,12 @@ DEFINICIONVARIABLECAB  ::= DECLARACIONCON:c
     RESULT = c;
 :};
 
-DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO
-;
+DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO:p
+{:
+    ArrayList<Nodo> dp = new ArrayList<Nodo>();
+    dp.add(p);
+    RESULT = dp;
+:};
 
 DEFINICIONVARIABLECAB  ::= DECLARACION:d DEFINICIONVARIABLECAB:r
 {:
@@ -236,74 +236,254 @@ DEFINICIONVARIABLECAB  ::= DECLARACIONCON:c DEFINICIONVARIABLECAB:r
     RESULT = c;
 :};
 
-DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO DEFINICIONVARIABLECAB
-;
-
-DEFINICIONPROTOTIPO	::= pr_entero id par_ab PARAMETROPROTOTIPO par_ce punto_coma
-;
-DEFINICIONPROTOTIPO	::= pr_entero id par_ab par_ce punto_coma
-;
-DEFINICIONPROTOTIPO	::= pr_real id par_ab PARAMETROPROTOTIPO par_ce punto_coma
-;
-DEFINICIONPROTOTIPO	::= pr_real id par_ab par_ce punto_coma
-;
-DEFINICIONPROTOTIPO	::= pr_vacio id par_ab PARAMETROPROTOTIPO par_ce punto_coma
-;
-DEFINICIONPROTOTIPO	::= pr_vacio id par_ab par_ce punto_coma
-;
-
-PARAMETROPROTOTIPO  ::= TIPONUMERO coma PARAMETROPROTOTIPO 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE INDICE coma PARAMETROPROTOTIPO 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE coma PARAMETROPROTOTIPO 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE INDICE 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO INDICE 
-;
-PARAMETROPROTOTIPO  ::= TIPONUMERO 
-;
-
-
-DEFINICIONFUNCION  ::= DECLARACIONFUNCION DEFINICIONFUNCION  
-;
-DEFINICIONFUNCION  ::= DECLARACIONFUNCION 
-;
-
-
-
-DECLARACION  ::= pr_entero DECENTERO:e
+DEFINICIONVARIABLECAB  ::= DEFINICIONPROTOTIPO:p DEFINICIONVARIABLECAB:r
 {:
-    RESULT = e;
-:};
-
-DECLARACION  ::= pr_real DECREAL:r
-{:
+    r.add(0, p);
     RESULT = r;
 :};
 
-DECLARACION  ::= pr_cadena DECCADALL punto_coma
-;
+DEFINICIONPROTOTIPO	::= pr_entero:t id:i par_ab PARAMETROPROTOTIPO:param par_ce punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+
+    Nodo parametros = new Nodo(accion.parametroProt, accion.acciones[accion.parametroProt], 1, 1, param, false);
+    hijos.add(parametros);
+    RESULT = new Nodo(accion.declaracionProt, accion.acciones[accion.declaracionProt], 1, 1, hijos, false);
+:};
+
+
+DEFINICIONPROTOTIPO	::= pr_entero:t id:i par_ab par_ce punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    Nodo parametros = new Nodo(accion.parametroProt, accion.acciones[accion.parametroProt], 1, 1, param, false);
+    hijos.add(parametros);
+    RESULT = new Nodo(accion.declaracionProt, accion.acciones[accion.declaracionProt], 1, 1, hijos, false);
+:};
+
+DEFINICIONPROTOTIPO	::= pr_real:t id:i par_ab PARAMETROPROTOTIPO:param par_ce punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    Nodo parametros = new Nodo(accion.parametroProt, accion.acciones[accion.parametroProt], 1, 1, param, false);
+    hijos.add(parametros);
+    RESULT = new Nodo(accion.declaracionProt, accion.acciones[accion.declaracionProt], 1, 1, hijos, false);
+:};
+
+DEFINICIONPROTOTIPO	::= pr_real:t id:i par_ab par_ce punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    Nodo parametros = new Nodo(accion.parametroProt, accion.acciones[accion.parametroProt], 1, 1, param, false);
+    hijos.add(parametros);
+    RESULT = new Nodo(accion.declaracionProt, accion.acciones[accion.declaracionProt], 1, 1, hijos, false);
+:};
+
+DEFINICIONPROTOTIPO	::= pr_vacio:t id:i par_ab PARAMETROPROTOTIPO:param par_ce punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    Nodo parametros = new Nodo(accion.parametroProt, accion.acciones[accion.parametroProt], 1, 1, param, false);
+    hijos.add(parametros);
+    RESULT = new Nodo(accion.declaracionProt, accion.acciones[accion.declaracionProt], 1, 1, hijos, false);
+:};
+
+DEFINICIONPROTOTIPO	::= pr_vacio:t id:i par_ab par_ce punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    Nodo parametros = new Nodo(accion.parametroProt, accion.acciones[accion.parametroProt], 1, 1, param, false);
+    hijos.add(parametros);
+    RESULT = new Nodo(accion.declaracionProt, accion.acciones[accion.declaracionProt], 1, 1, hijos, false);
+:};
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO:t coma PARAMETROPROTOTIPO:param
+{:
+    param.add(0, t);
+    RESULT = param;
+:};
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO:t INDICE:i1 INDICE:i2 coma PARAMETROPROTOTIPO:param
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i1);
+    hijos.add(i2);
+    Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], 1, 1, hijos, false);
+    
+    param.add(0, n);
+    RESULT = param;
+:};
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO:t INDICE:i1 coma PARAMETROPROTOTIPO:param
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i1);
+    Nodo n = new Nodo(accion.parametroProtVec, accion.acciones[accion.parametroProtVec], 1, 1, hijos, false);
+    
+    param.add(0, n);
+    RESULT = param;
+:};
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO:t INDICE:i1 INDICE:i2 
+{:
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i1);
+    hijos.add(i2);
+    Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], 1, 1, hijos, false);
+    
+    param.add(n);
+    RESULT = param;
+:};
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO:t INDICE:i1
+{:
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i1);
+    Nodo n = new Nodo(accion.parametroProtVec, accion.acciones[accion.parametroProtVec], 1, 1, hijos, false);
+    
+    param.add(n);
+    RESULT = param;
+:};
+
+PARAMETROPROTOTIPO  ::= TIPONUMERO:t
+{:
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    param.add(t);
+    RESULT = param;
+:};
+
+
+DEFINICIONFUNCION  ::= DECLARACIONFUNCION:f DEFINICIONFUNCION:df
+{:
+    df.add(0, f);
+    RESULT = df;
+:};
+
+DEFINICIONFUNCION  ::= DECLARACIONFUNCION:f 
+{:
+    ArrayList<Nodo> df = new ArrayList<Nodo>();
+    df.add(f);
+    RESULT = df;
+:};
 
 
 
+DECLARACION  ::= pr_entero:t DECENTERO:e
+{:
+    for(int i = 0; i < e.size(); i++)
+        e.get(i).getHijos().add(0, t);
 
-DECLARACIONCON  ::= pr_const pr_entero DECCONALL punto_coma 
-;
-DECLARACIONCON  ::= pr_const pr_real DECCONALL punto_coma 
-;
-DECLARACIONCON  ::= pr_const pr_entero id igual octa_e punto_coma 
-;
-DECLARACIONCON  ::= pr_const pr_entero id igual hexa_e punto_coma 
-;
-DECLARACIONCON  ::= pr_const pr_real id igual octa_r punto_coma 
-;
-DECLARACIONCON  ::= pr_const pr_real id igual hexa_r punto_coma 
-;
+    RESULT = e;
+:};
 
-DECLARACIONFUNCION  ::= DECLARACIONFUNCIONCABECERA BLOQUE 
-;
+DECLARACION  ::= pr_real:t DECREAL:r
+{:
+    for(int i = 0; i < r.size(); i++)
+        r.get(i).getHijos().add(0, t);
+
+    RESULT = r;
+:};
+
+DECLARACION  ::= pr_cadena:t DECCADALL:c punto_coma
+{:
+    for(int i = 0; i < c.size(); i++)
+        c.get(i).getHijos().add(0, t);
+    
+    RESULT = c;
+:};
+
+
+DECLARACIONCON  ::= pr_const pr_entero:t DECCONALL:e punto_coma 
+{:
+    for(int i = 0; i < e.size(); i++)
+        e.get(i).getHijos().add(0, t);
+
+    RESULT = e;
+:};
+
+DECLARACIONCON  ::= pr_const pr_real:t DECCONALL:r punto_coma 
+{:
+    for(int i = 0; i < r.size(); i++)
+        r.get(i).getHijos().add(0, t);
+
+    RESULT = r;
+:};
+
+DECLARACIONCON  ::= pr_const pr_entero:t id:i igual octa_e:v punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    hijos.add(v);
+    Nodo n = new Nodo(accion.declaracionConsSim, accion.acciones[accion.declaracionConsSim], 1, 1, hijos, false);
+    
+    ArrayList<Nodo> dc = new ArrayList<Nodo> ();
+    dc.add(n);
+    RESULT = dc;
+:};
+
+DECLARACIONCON  ::= pr_const pr_entero:t id:i igual hexa_e:v punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    hijos.add(v);
+    Nodo n = new Nodo(accion.declaracionConsSim, accion.acciones[accion.declaracionConsSim], 1, 1, hijos, false);
+    
+    ArrayList<Nodo> dc = new ArrayList<Nodo> ();
+    dc.add(n);
+    RESULT = dc;
+:};
+
+DECLARACIONCON  ::= pr_const pr_real:t id:i igual octa_r:v punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    hijos.add(v);
+    Nodo n = new Nodo(accion.declaracionConsSim, accion.acciones[accion.declaracionConsSim], 1, 1, hijos, false);
+    
+    ArrayList<Nodo> dc = new ArrayList<Nodo> ();
+    dc.add(n);
+    RESULT = dc;
+:};
+
+DECLARACIONCON  ::= pr_const pr_real:t id:i igual hexa_r:v punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    hijos.add(v);
+    Nodo n = new Nodo(accion.declaracionConsSim, accion.acciones[accion.declaracionConsSim], 1, 1, hijos, false);
+    
+    ArrayList<Nodo> dc = new ArrayList<Nodo> ();
+    dc.add(n);
+    RESULT = dc;
+:};
+
+DECLARACIONFUNCION  ::= DECLARACIONFUNCIONCABECERA:dc BLOQUE:b
+{:
+    dc.addAll(b);
+    RESULT = new Nodo(accion.funcion, accion.acciones[accion.funcion], 1, 1, dc, false);
+:};
 
 DECENTERO ::= id:i igual octa_e:v punto_coma
 {:
@@ -337,9 +517,6 @@ DECENTERO ::= id:i igual hexa_e:v punto_coma
 
 DECENTERO ::=  DECALL:da punto_coma
 {:
-    for(int i = 0; i < da.size(); i++)
-        da.get(i).getHijos().add(0, entero);
-
     RESULT = da;
 :};
 
@@ -375,9 +552,6 @@ DECREAL ::= id:i igual hexa_r:v punto_coma
 
 DECREAL ::= DECALL:da punto_coma
 {:
-    for(int i = 0; i < da.size(); i++)
-        da.get(i).getHijos().add(0, real);
-
     RESULT = da;
 :};
 
@@ -389,20 +563,18 @@ DECALL  ::= DECSIMPLE:ds
 :};
 
 DECALL  ::= DECVECT:dv
-/*
 {:
     ArrayList<Nodo> da = new ArrayList<Nodo>();
     da.add(dv);
     RESULT = da;
-:}*/;
+:};
 
 DECALL  ::= DECMAT:dm
-/*
 {:
     ArrayList<Nodo> da = new ArrayList<Nodo>();
     da.add(dm);
     RESULT = da;
-:}*/;
+:};
 
 DECALL  ::= DECSIMPLE:ds coma DECALL:da
 {:
@@ -411,18 +583,16 @@ DECALL  ::= DECSIMPLE:ds coma DECALL:da
 :};
 
 DECALL  ::= DECVECT:dv coma DECALL:da
-/*
 {:
     da.add(0, dv);
     RESULT = da;
-:}*/;
+:};
 
 DECALL  ::= DECMAT:dm coma DECALL:da
-/*
 {:
     da.add(0, dm);
     RESULT = da;
-:}*/;
+:};
 
 
 DECSIMPLE  ::= id:i igual EXPGEN:v
@@ -440,64 +610,178 @@ DECSIMPLE  ::= id:i
     RESULT = new Nodo(accion.declaracionSim, accion.acciones[accion.declaracionSim], 1, 1, hijos, false);
 :};
 
-DECVECT  ::= id INDICE igual EXPGEN 
-;
-DECVECT  ::= id INDICE igual VECTOR 
-;
-DECVECT  ::= id INDICE 
-;
-
-DECMAT  ::= id INDICE INDICE igual EXPGEN 
-;
-DECMAT  ::= id INDICE INDICE igual MATRIZ 
-;
-DECMAT  ::= id INDICE INDICE 
-;
-
-
-DECCAD  ::= id igual cadena 
-;
-DECCAD  ::= id 
-;
-
-DECCADALL	::= DECCAD
-;
-DECCADALL	::= DECCAD coma DECCADALL
-;
-
-
-
-DECCONALL  ::= DECCON 
-;
-DECCONALL  ::= DECCON coma DECCONALL 
-;
-
-
-DECCON	::= id igual EXPGEN 
-;
-DECCON	::= id INDICE igual EXPGEN 
-;
-DECCON	::= id INDICE igual VECTOR 
-;
-DECCON	::= id INDICE INDICE igual EXPGEN  
-;
-DECCON	::= id INDICE INDICE igual MATRIZ  
-;
-
-
-BLOQUE  ::= ll_ab NSENTENCIA ll_ce
+DECVECT  ::= id:i INDICE:i1 igual EXPGEN:e
 {:
-    /* NO SE  AGREGA AL ARBOL SEMANTICO */
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(e);
+    RESULT = new Nodo(accion.declaracionVecIni, accion.acciones[accion.declaracionVecIni], 1, 1, hijos, false);
 :};
 
-BLOQUE  ::= ll_ab DEFINICIONVARIABLE NSENTENCIA ll_ce 
+DECVECT  ::= id:i INDICE:i1 igual VECTOR:v 
 {:
-    /* NO SE  AGREGA AL ARBOL SEMANTICO */
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(v);
+    RESULT = new Nodo(accion.declaracionVecIni, accion.acciones[accion.declaracionVecIni], 1, 1, hijos, false);
+:};
+
+DECVECT  ::= id:i INDICE:i1
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    RESULT = new Nodo(accion.declaracionVec, accion.acciones[accion.declaracionVec], 1, 1, hijos, false);
+:};
+
+DECMAT  ::= id:i INDICE:i1 INDICE:i2 igual EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(i2);
+    hijos.add(e);
+    RESULT = new Nodo(accion.declaracionMatIni, accion.acciones[accion.declaracionMatIni], 1, 1, hijos, false);
+:};
+
+DECMAT  ::= id:i INDICE:i1 INDICE:i2 igual MATRIZ:m 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(i2);
+    hijos.add(m);
+    RESULT = new Nodo(accion.declaracionMatIni, accion.acciones[accion.declaracionMatIni], 1, 1, hijos, false);
+:};
+
+DECMAT  ::= id:i INDICE:i1 INDICE:i2
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(i2);
+    RESULT = new Nodo(accion.declaracionMat, accion.acciones[accion.declaracionMat], 1, 1, hijos, false);
+:};
+
+DECCAD  ::= id:i igual cadena:v 
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    hijos.add(i);
+    hijos.add(v);
+    RESULT = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], 1, 1, hijos, false);
+:};
+
+DECCAD  ::= id:i 
+{:
+    ArrayList<Nodo> hijos = new ArrayList <Nodo>();
+    hijos.add(i);
+    RESULT = new Nodo(accion.declaracionSim, accion.acciones[accion.declaracionSim], 1, 1, hijos, false);
+:};
+
+DECCADALL ::= DECCAD:c
+{:
+    ArrayList<Nodo> cadenas = new ArrayList <Nodo>();
+    cadenas.add(c);
+    RESULT = cadenas;
+:};
+
+DECCADALL ::= DECCAD:c coma DECCADALL:dca
+{:
+    dca.add(0, c);
+    RESULT = dca;
+:};
+
+
+DECCONALL  ::= DECCON:c
+{:
+    ArrayList<Nodo> constantes = new ArrayList <Nodo>();
+    constantes.add(c);
+    RESULT = constantes;
+:};
+
+DECCONALL  ::= DECCON:c coma DECCONALL:dca
+{:
+    dca.add(0, c);
+    RESULT = dca;
+:};
+
+
+DECCON	::= id:i igual EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(e);
+    RESULT = new Nodo(accion.declaracionConsSim, accion.acciones[accion.declaracionConsSim], 1, 1, hijos, false);
+:};
+
+DECCON	::= id:i INDICE:i1 igual EXPGEN:e 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(e);
+    RESULT = new Nodo(accion.declaracionConsVec, accion.acciones[accion.declaracionConsVec], 1, 1, hijos, false);
+:};
+
+DECCON	::= id:i INDICE:i1 igual VECTOR:v
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(v);
+    RESULT = new Nodo(accion.declaracionConsVec, accion.acciones[accion.declaracionConsVec], 1, 1, hijos, false);
+:};
+
+DECCON	::= id:i INDICE:i1 INDICE:i2 igual EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(i2);
+    hijos.add(e);
+    RESULT = new Nodo(accion.declaracionConsMat, accion.acciones[accion.declaracionConsMat], 1, 1, hijos, false);
+:};
+
+DECCON	::= id:i INDICE:i1 INDICE:i2 igual MATRIZ:m
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(i1);
+    hijos.add(i2);
+    hijos.add(m);
+    RESULT = new Nodo(accion.declaracionConsMat, accion.acciones[accion.declaracionConsMat], 1, 1, hijos, false);
+:};
+
+BLOQUE  ::= ll_ab NSENTENCIA:s ll_ce
+{:
+    Nodo declaracionVar = new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()),false);
+    Nodo bloque = new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, s, false);
+    ArrayList<Nodo> hijosProgPrin = new ArrayList<Nodo>();
+    hijosProgPrin.add(declaracionVar);
+    hijosProgPrin.add(bloque);
+    RESULT = hijosProgPrin;
+:};
+
+BLOQUE  ::= ll_ab DEFINICIONVARIABLE:dv NSENTENCIA:s ll_ce 
+{:
+    Nodo declaracionVar = new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, dv,false);
+    Nodo bloque = new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, s, false);
+    ArrayList<Nodo> hijosProgPrin = new ArrayList<Nodo>();
+    hijosProgPrin.add(declaracionVar);
+    hijosProgPrin.add(bloque);
+    RESULT = hijosProgPrin;
 :};
 
 BLOQUE  ::= ll_ab DEFINICIONVARIABLE:dv ll_ce 
 {:
-    RESULT = dv;
+    Nodo declaracionVar = new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, dv,false);
+    Nodo bloque = new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, (new ArrayList<Nodo>()), false);
+    ArrayList<Nodo> hijosProgPrin = new ArrayList<Nodo>();
+    hijosProgPrin.add(declaracionVar);
+    hijosProgPrin.add(bloque);
+    RESULT = hijosProgPrin;
 :};
 
 BLOQUE  ::= ll_ab ll_ce 
@@ -510,44 +794,193 @@ BLOQUE  ::= ll_ab ll_ce
     RESULT = hijosProgPrin;
 :};
 
-NSENTENCIA  ::= SENTENCIA NSENTENCIA   
-;
-NSENTENCIA  ::= SENTENCIA   
-;
+NSENTENCIA  ::= SENTENCIA:s NSENTENCIA:sentencias 
+{:
+    sentencias.add(0, s);
+    RESULT = sentencias;
+:};
 
-SENTENCIA  ::= ASIGNACION
-;
-SENTENCIA  ::= CONDICIONALHACERMIENTRAS
-;
-SENTENCIA  ::= CONDICIONALMIENTRAS
-;
-SENTENCIA  ::= CONDICIONALPARA
-;
-SENTENCIA  ::= CONDICIONALSI
-;
-SENTENCIA  ::= SENTSELECTOR
-;
-SENTENCIA  ::= LLAMADAFUNCION punto_coma
-;
-SENTENCIA  ::= ESCRITURA
-;
-SENTENCIA  ::= LECTURA
-;
-SENTENCIA  ::= ACT punto_coma
-;
-SENTENCIA  ::= pr_retornar EXPGEN punto_coma
-;
+NSENTENCIA  ::= SENTENCIA:s   
+{:
+    ArrayList<Nodo> sentencias = new ArrayList<Nodo>();
+    sentencias.add(s);
+    RESULT = sentencias;
+:};
+
+SENTENCIA  ::= ASIGNACION:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= CONDICIONALHACERMIENTRAS:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= CONDICIONALMIENTRAS:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= CONDICIONALPARA:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= CONDICIONALSI:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= SENTSELECTOR:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= LLAMADAFUNCION:s punto_coma
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= ESCRITURA:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= LECTURA:s
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= ACT:s punto_coma
+{:
+    RESULT = s;
+:};
+
+SENTENCIA  ::= pr_retornar EXPGEN:e punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(e);
+    RESULT = new Nodo(accion.retornar, accion.acciones[accion.retornar], 1, 1, hijos, false);
+:};
+
 SENTENCIA  ::= pr_retornar punto_coma
-;
+{:
+    RESULT = new Nodo(accion.retornar, accion.acciones[accion.retornar], 1, 1, (new ArrayList<Nodo>()), false);
+:};
 
+SENTENCIA ::= pr_saltar punto_coma
+{:
+    RESULT = new Nodo(accion.saltar, accion.acciones[accion.saltar], 1, 1, (new ArrayList<Nodo>()), false);
+:};
 
+ACT  ::= id:i decr 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
+    hijosRes.add(i);
+    Nodo uno = new Nodo(sym.numero, "1", 1, 1, null, true);
+    hijosRes.add(uno);
+    Nodo resta = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, hijosRes, false);
+    
+    hijos.add(resta);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
-ACT  ::= id decr 
-;
-ACT  ::= id incr 
-;
-ACT  ::= id OPERADORASIGNACION EXPGEN
-;
+ACT  ::= id:i incr 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
+    hijosSum.add(i);
+    Nodo uno = new Nodo(sym.numero, "1", 1, 1, null, true);
+    hijosSum.add(uno);
+    Nodo suma = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, hijosSum, false);
+    
+    hijos.add(suma);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ACT  ::= id:i a_div EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosDiv = new ArrayList<Nodo>();
+    hijosDiv.add(i);
+    hijosDiv.add(e);
+    Nodo div = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, hijosDiv, false);
+    
+    hijos.add(div);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ACT  ::= id:i a_prod EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosProd = new ArrayList<Nodo>();
+    hijosProd.add(i);
+    hijosProd.add(e);
+    Nodo prod = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, hijosProd, false);
+    
+    hijos.add(prod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ACT  ::= id:i a_resta EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
+    hijosRes.add(i);
+    hijosRes.add(e);
+    Nodo res = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, hijosRes, false);
+    
+    hijos.add(res);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ACT  ::= id:i a_suma EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
+    hijosSum.add(i);
+    hijosSum.add(e);
+    Nodo sum = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, hijosSum, false);
+    
+    hijos.add(sum);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ACT  ::= id:i igual EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(e);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ACT  ::= id:i a_mod EXPGEN:e
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    
+    ArrayList<Nodo> hijosMod = new ArrayList<Nodo>();
+    hijosMod.add(i);
+    hijosMod.add(e);
+    Nodo mod = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, hijosMod, false);
+    
+    hijos.add(mod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
 
 EXPGEN ::= OPERANDO:o 
@@ -729,9 +1162,10 @@ EXPRESION  ::= OPERADORFUNCION:of
     RESULT = of;
 :};
 
-EXPRESION  ::= OPERADORCOND
-;
-
+EXPRESION  ::= OPERADORCOND:op
+{: 
+    RESULT = op;
+:};
 
 EXPRESION  ::= par_ab EXPRESION:e par_ce 
 {:
@@ -757,69 +1191,495 @@ ARGUMENTO  ::= EXPGEN:e coma ARGUMENTO:a
 :};
 
 
-ASIGNACION  ::= id igual cadena punto_coma 
-;
+ASIGNACION  ::= id:i igual cadena:v punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(v);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
-ASIGNACION  ::= id OPERADORASIGNACION EXPGEN punto_coma 
-;
+ASIGNACION  ::= id:i a_div EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    ArrayList<Nodo> hijosDiv = new ArrayList<Nodo>();
+    hijosDiv.add(i);
+    hijosDiv.add(e);
+    Nodo div = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, hijosDiv, false );
+    hijos.add(div);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
-ASIGNACION  ::= id INDICE OPERADORASIGNACION EXPGEN punto_coma 
-;
+ASIGNACION  ::= id:i a_prod EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    ArrayList<Nodo> hijosProd = new ArrayList<Nodo>();
+    hijosProd.add(i);
+    hijosProd.add(e);
+    Nodo prod = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, hijosProd, false );
+    hijos.add(prod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
-ASIGNACION  ::= id INDICE INDICE OPERADORASIGNACION EXPGEN punto_coma 
-;
+ASIGNACION  ::= id:i a_resta EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
+    hijosRes.add(i);
+    hijosRes.add(e);
+    Nodo res = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, hijosRes, false );
+    hijos.add(res);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i a_suma EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
+    hijosSum.add(i);
+    hijosSum.add(e);
+    Nodo sum = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, hijosSum, false );
+    hijos.add(sum);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i igual EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(e);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i a_mod EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    ArrayList<Nodo> hijosMod = new ArrayList<Nodo>();
+    hijosMod.add(i);
+    hijosMod.add(e);
+    Nodo mod = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, hijosMod, false );
+    hijos.add(mod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+
+ASIGNACION  ::= id:i INDICE:i1 a_div EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijosVec, false);
+    
+    hijos.add(aVec);
+    
+    ArrayList<Nodo> hijosDiv = new ArrayList<Nodo>();
+    hijosDiv.add(aVec);
+    hijosDiv.add(e);
+    Nodo div = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, hijosDiv, false );
+
+    hijos.add(div);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 a_prod EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijosVec, false);
+    
+    hijos.add(aVec);
+    
+    ArrayList<Nodo> hijosProd = new ArrayList<Nodo>();
+    hijosProd.add(aVec);
+    hijosProd.add(e);
+    Nodo prod = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, hijosProd, false );
+
+    hijos.add(prod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 a_resta EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijosVec, false);
+    
+    hijos.add(aVec);
+    
+    ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
+    hijosRes.add(aVec);
+    hijosRes.add(e);
+    Nodo res = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, hijosRes, false );
+
+    hijos.add(res);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 a_suma EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijosVec, false);
+    
+    hijos.add(aVec);
+    
+    ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
+    hijosSum.add(aVec);
+    hijosSum.add(e);
+    Nodo sum = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, hijosSum, false );
+
+    hijos.add(sum);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 igual EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijosVec, false);
+    
+    hijos.add(aVec);
+    hijos.add(e);
+
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 a_mod EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], 1, 1, hijosVec, false);
+    
+    hijos.add(aVec);
+    
+    ArrayList<Nodo> hijosMod = new ArrayList<Nodo>();
+    hijosMod.add(aVec);
+    hijosMod.add(e);
+    Nodo mod = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, hijosMod, false );
+
+    hijos.add(mod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 INDICE:i2 a_div EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo aMat = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijosMat, false);
+    
+    hijos.add(aMat);
+    
+    ArrayList<Nodo> hijosDiv = new ArrayList<Nodo>();
+    hijosDiv.add(aMat);
+    hijosDiv.add(e);
+    Nodo div = new Nodo(accion.division, accion.acciones[accion.division], 1, 1, hijosDiv, false );
+
+    hijos.add(div);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 INDICE:i2 a_prod EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo aMat = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijosMat, false);
+    
+    hijos.add(aMat);
+    
+    ArrayList<Nodo> hijosProd = new ArrayList<Nodo>();
+    hijosProd.add(aMat);
+    hijosProd.add(e);
+    Nodo prod = new Nodo(accion.producto, accion.acciones[accion.producto], 1, 1, hijosProd, false );
+
+    hijos.add(prod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 INDICE:i2 a_resta EXPGEN:e punto_coma
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo aMat = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijosMat, false);
+    
+    hijos.add(aMat);
+    
+    ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
+    hijosRes.add(aMat);
+    hijosRes.add(e);
+    Nodo res = new Nodo(accion.resta, accion.acciones[accion.resta], 1, 1, hijosRes, false );
+
+    hijos.add(res);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 INDICE:i2 a_suma EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo aMat = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijosMat, false);
+    
+    hijos.add(aMat);
+    
+    ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
+    hijosSum.add(aMat);
+    hijosSum.add(e);
+    Nodo sum = new Nodo(accion.suma, accion.acciones[accion.suma], 1, 1, hijosSum, false );
+
+    hijos.add(sum);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 INDICE:i2 igual EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo aMat = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijosMat, false);
+    
+    hijos.add(aMat);
+    hijos.add(e);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
+
+ASIGNACION  ::= id:i INDICE:i1 INDICE:i2 a_mod EXPGEN:e punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo aMat = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], 1, 1, hijosMat, false);
+    
+    hijos.add(aMat);
+    
+    ArrayList<Nodo> hijosMod = new ArrayList<Nodo>();
+    hijosMod.add(aMat);
+    hijosMod.add(e);
+    Nodo mod = new Nodo(accion.modulo, accion.acciones[accion.modulo], 1, 1, hijosMod, false );
+
+    hijos.add(mod);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
 
 
 
-CONDICIONAL  ::= par_ab OPERANDO par_ce 
-;
-CONDICIONAL  ::= par_ab EXPRESION par_ce 
-;
+CONDICIONAL  ::= par_ab OPERANDO:op par_ce 
+{:
+    RESULT = op;
+:};
+
+CONDICIONAL  ::= par_ab EXPRESION:e par_ce 
+{:
+    RESULT = e;
+:};
 
 
-CONDICIONALHACERMIENTRAS  ::= pr_hacer BLOQUE pr_mientras CONDICIONAL punto_coma 
-;
-CONDICIONALHACERMIENTRAS  ::= pr_hacer SENTENCIA pr_mientras CONDICIONAL punto_coma 
-;
+CONDICIONALHACERMIENTRAS  ::= pr_hacer BLOQUE:b pr_mientras CONDICIONAL:c punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.addAll(b);
+    RESULT = new Nodo(accion.hacerMientras, accion.acciones[accion.hacerMientras], 1, 1, hijos, false);
+:};
 
-CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL BLOQUE 
-;
-CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL SENTENCIA 
-;
+CONDICIONALHACERMIENTRAS  ::= pr_hacer SENTENCIA:s pr_mientras CONDICIONAL:c punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent = new ArrayList<Nodo>();
+    sent.add(s);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent, false));
+    RESULT = new Nodo(accion.hacerMientras, accion.acciones[accion.hacerMientras], 1, 1, hijos, false);
+:};
+
+CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL:c BLOQUE:b 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.addAll(b);
+    RESULT = new Nodo(accion.mientras, accion.acciones[accion.mientras], 1, 1, hijos, false);
+:};
+
+CONDICIONALMIENTRAS  ::= pr_mientras CONDICIONAL:c SENTENCIA:s
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent = new ArrayList<Nodo>();
+    sent.add(s);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent, false));
+    RESULT = new Nodo(accion.mientras, accion.acciones[accion.mientras], 1, 1, hijos, false);
+:};
+
+CONDICIONALPARA  ::= pr_para CONTROLADOR:c BLOQUE:b
+{:
+    c.addAll(b);
+    RESULT = new Nodo(accion.para, accion.acciones[accion.para], 1, 1, c, false);
+:};
+
+CONDICIONALPARA  ::= pr_para CONTROLADOR:c SENTENCIA:s
+{: 
+    c.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent = new ArrayList<Nodo>();
+    sent.add(s);
+    c.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent, false));
+    RESULT = new Nodo(accion.para, accion.acciones[accion.para], 1, 1, c, false);
+:};
+
+CONDICIONALSI  ::= pr_si CONDICIONAL:c BLOQUE:b
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.addAll(b);
+    
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, (new ArrayList<Nodo>()), false));
+    RESULT = new Nodo(accion.si, accion.acciones[accion.si], 1, 1, hijos, false);
+:};
+
+CONDICIONALSI  ::= pr_si CONDICIONAL:c BLOQUE:b1 pr_sino BLOQUE:b2
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.addAll(b1);
+    hijos.addAll(b2);
+    
+    RESULT = new Nodo(accion.si, accion.acciones[accion.si], 1, 1, hijos, false);
+:};
+
+CONDICIONALSI  ::= pr_si CONDICIONAL:c SENTENCIA:s
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent = new ArrayList<Nodo>();
+    sent.add(s);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent, false));
+    
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, (new ArrayList<Nodo>()), false));
+    RESULT = new Nodo(accion.si, accion.acciones[accion.si], 1, 1, hijos, false);
+:};
+
+CONDICIONALSI  ::= pr_si CONDICIONAL:c BLOQUE:b pr_sino SENTENCIA:s
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.addAll(b);
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent = new ArrayList<Nodo>();
+    sent.add(s);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent, false));
+    
+    RESULT = new Nodo(accion.si, accion.acciones[accion.si], 1, 1, hijos, false);
+:};
+
+CONDICIONALSI  ::= pr_si CONDICIONAL:c SENTENCIA:s pr_sino BLOQUE:b
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent = new ArrayList<Nodo>();
+    sent.add(s);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent, false));
+    hijos.addAll(b);
+
+    RESULT = new Nodo(accion.si, accion.acciones[accion.si], 1, 1, hijos, false);
+:};
+
+CONDICIONALSI  ::= pr_si CONDICIONAL:c SENTENCIA:s1 pr_sino SENTENCIA:s2
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent1 = new ArrayList<Nodo>();
+    sent1.add(s1);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent1, false));
+    
+    hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], 1, 1, (new ArrayList<Nodo>()), false));
+    ArrayList<Nodo> sent2 = new ArrayList<Nodo>();
+    sent2.add(s2);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, sent2, false));
+
+    RESULT = new Nodo(accion.si, accion.acciones[accion.si], 1, 1, hijos, false);
+:};
 
 
-CONDICIONALPARA  ::= pr_para CONTROLADOR BLOQUE 
-;
-CONDICIONALPARA  ::= pr_para CONTROLADOR SENTENCIA 
-;
+CONTROLADOR  ::= par_ab INI:ini punto_coma EXPGEN:e punto_coma ACT:a par_ce 
+{:
+    ArrayList<Nodo> ctrl = new ArrayList<Nodo>();
+    ctrl.add(ini);
+    ctrl.add(e);
+    ctrl.add(a);
+    RESULT = ctrl;
+:};
 
 
-CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE 
-;
-CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE pr_sino BLOQUE 
-;
-CONDICIONALSI  ::= pr_si CONDICIONAL SENTENCIA 
-;
-CONDICIONALSI  ::= pr_si CONDICIONAL BLOQUE pr_sino SENTENCIA 
-;
-CONDICIONALSI  ::= pr_si CONDICIONAL SENTENCIA pr_sino BLOQUE 
-;
-CONDICIONALSI  ::= pr_si CONDICIONAL SENTENCIA pr_sino SENTENCIA 
-;
+ESCRITURA  ::= pr_mostrar par_ab EXPGEN:e par_ce punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(e);
+    RESULT = new Nodo(accion.escritura, accion.acciones[accion.escritura],1 ,1, hijos, false);
+:};
 
+ESCRITURA  ::= pr_mostrar par_ab cadena:c par_ce punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(c);
+    RESULT = new Nodo(accion.escritura, accion.acciones[accion.escritura],1 ,1, hijos, false);
+:};
 
-
-CONTROLADOR  ::= par_ab INI punto_coma EXPGEN punto_coma ACT par_ce 
-;
-
-
-ESCRITURA  ::= pr_mostrar par_ab EXPGEN par_ce punto_coma 
-;
-ESCRITURA  ::= pr_mostrar par_ab cadena par_ce punto_coma 
-;
 ESCRITURA  ::= pr_mostrar par_ab par_ce punto_coma 
-;
+{:
+    RESULT = new Nodo(accion.escritura, accion.acciones[accion.escritura],1 ,1, (new ArrayList<Nodo>()), false);
+:};
 
 INDICE  ::= cor_ab EXPGEN:e cor_ce 
 {:
@@ -827,65 +1687,178 @@ INDICE  ::= cor_ab EXPGEN:e cor_ce
 :};
 
 
-INI  ::= id igual EXPGEN 
-;
-INI  ::= pr_entero id igual EXPGEN 
-;
-
-
-LECTURA  ::= pr_leer par_ab id par_ce punto_coma 
-;
-
-
-
-MATRIZ  ::= ll_ab NVECTOR ll_ce 
-;
-
-NVECTOR  ::= VECTOR 
-;
-NVECTOR  ::= VECTOR coma NVECTOR 
-;
-
-VECTOR  ::= ll_ab NELEMENTO ll_ce 
-;
-
-NELEMENTO  ::= EXPGEN 
-;
-NELEMENTO  ::= EXPGEN coma NELEMENTO 
-;
-
-
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab PARAMETRO par_ce
-;
-DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION id par_ab par_ce
-;
-
-TIPOVARIABLEFUNCION  ::= TIPONUMERO 
-;
-TIPOVARIABLEFUNCION  ::= pr_vacio 
-;
-
-DEFINICIONVARIABLE  ::= DECLARACION DEFINICIONVARIABLE 
-;
-DEFINICIONVARIABLE  ::= DECLARACION
+INI  ::= id:i igual EXPGEN:e
 {:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    hijos.add(e);
+    RESULT = new Nodo(accion.asignacion, accion.acciones[accion.asignacion], 1, 1, hijos, false);
+:};
 
+INI  ::= pr_entero:t id:i igual EXPGEN:e 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(t);
+    hijos.add(i);
+    hijos.add(e);
+    RESULT = new Nodo(accion.declaracionSim, accion.acciones[accion.declaracionSim], 1, 1, hijos, false);
+:};
+
+LECTURA  ::= pr_leer par_ab id:i par_ce punto_coma 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(i);
+    RESULT = new Nodo(accion.lectura, accion.acciones[accion.lectura], 1, 1, hijos, false);
 :};
 
 
 
-PARAMETRO  ::= TIPONUMERO id coma PARAMETRO 
-;
-PARAMETRO  ::= TIPONUMERO id INDICE coma PARAMETRO 
-;
-PARAMETRO  ::= TIPONUMERO id INDICE INDICE coma PARAMETRO 
-;
-PARAMETRO  ::= TIPONUMERO id INDICE INDICE 
-;
-PARAMETRO  ::= TIPONUMERO id INDICE 
-;
-PARAMETRO  ::= TIPONUMERO id 
-;
+MATRIZ  ::= ll_ab NVECTOR:nvec ll_ce 
+{:
+    RESULT = new Nodo(accion.elemMat, accion.acciones[accion.elemMat], 1, 1, nvec, false);
+:};
+
+NVECTOR  ::= VECTOR:v
+{:
+    ArrayList <Nodo> vectores = new ArrayList<Nodo>();
+    vectores.add(v);
+    RESULT = vectores;
+:};
+
+NVECTOR  ::= VECTOR:v coma NVECTOR:nvec
+{:
+    nvec.add(0, v);
+    RESULT = nvec;
+:};
+
+VECTOR  ::= ll_ab NELEMENTO:el ll_ce 
+{:
+    RESULT = new Nodo(accion.elemVec, accion.acciones[accion.elemVec], 1, 1, el, false);
+:};
+
+NELEMENTO  ::= EXPGEN:e
+{:
+    ArrayList<Nodo> elementos = new ArrayList<Nodo>();
+    elementos.add(e);
+    RESULT = elementos;
+:};
+
+NELEMENTO  ::= EXPGEN:e coma NELEMENTO:elem 
+{:
+    elem.add(0, e);
+    RESULT = elem;
+:};
+
+
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION:t id:i par_ab PARAMETRO:param par_ce
+{:
+    ArrayList<Nodo> dfc = new ArrayList<Nodo>();
+    dfc.add(t);
+    dfc.add(i);
+    dfc.add(new Nodo(accion.parametroFun, accion.acciones[accion.parametroFun], 1, 1, param, false));
+    RESULT = dfc;
+:};
+
+DECLARACIONFUNCIONCABECERA  ::= TIPOVARIABLEFUNCION:t id:i par_ab par_ce
+{:
+    ArrayList<Nodo> dfc = new ArrayList<Nodo>();
+    dfc.add(t);
+    dfc.add(i);
+    dfc.add(new Nodo(accion.parametroFun, accion.acciones[accion.parametroFun], 1, 1, (new ArrayList<Nodo>()), false));
+    RESULT = dfc;
+:};
+
+
+TIPOVARIABLEFUNCION  ::= TIPONUMERO:t
+{:
+    RESULT = t;
+:};
+
+TIPOVARIABLEFUNCION  ::= pr_vacio:v
+{:
+    RESULT = v;
+:};
+
+DEFINICIONVARIABLE  ::= DECLARACION:d DEFINICIONVARIABLE:r
+{:
+    d.addAll(r);
+    RESULT = d;
+:};
+
+DEFINICIONVARIABLE  ::= DECLARACION:d
+{:
+    RESULT = d;
+:};
+
+
+PARAMETRO  ::= TIPONUMERO:t id:i coma PARAMETRO:param
+{:
+    ArrayList<Nodo> hijosSim = new ArrayList<Nodo>();
+    hijosSim.add(t);
+    hijosSim.add(i);
+    Nodo sim = new Nodo(accion.parametroFunSim, accion.acciones[accion.parametroFunSim], 1, 1, hijosSim, false);
+    param.add(0, sim);
+    RESULT = param;
+:};
+
+PARAMETRO  ::= TIPONUMERO:t id:i INDICE:i1 coma PARAMETRO:param
+{:
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(t);
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo vec = new Nodo(accion.parametroFunVec, accion.acciones[accion.parametroFunVec], 1, 1, hijosVec, false);
+    param.add(0, vec);
+    RESULT = param;
+:};
+
+PARAMETRO  ::= TIPONUMERO:t id:i INDICE:i1 INDICE:i2 coma PARAMETRO:param
+{:
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(t);
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo mat = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], 1, 1, hijosMat, false);
+    param.add(0, mat);
+    RESULT = param;
+:};
+
+PARAMETRO  ::= TIPONUMERO:t id:i INDICE:i1 INDICE:i2
+{:
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    ArrayList<Nodo> hijosMat = new ArrayList<Nodo>();
+    hijosMat.add(t);
+    hijosMat.add(i);
+    hijosMat.add(i1);
+    hijosMat.add(i2);
+    Nodo mat = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], 1, 1, hijosMat, false);
+    param.add(mat);
+    RESULT = param;
+:};
+
+PARAMETRO  ::= TIPONUMERO:t id:i INDICE:i1 
+{:
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
+    hijosVec.add(t);
+    hijosVec.add(i);
+    hijosVec.add(i1);
+    Nodo vec = new Nodo(accion.parametroFunVec, accion.acciones[accion.parametroFunVec], 1, 1, hijosVec, false);
+    param.add(vec);
+    RESULT = param;
+:};
+
+PARAMETRO  ::= TIPONUMERO:t id:i
+{:
+    ArrayList<Nodo> param = new ArrayList<Nodo>();
+    ArrayList<Nodo> hijosSim = new ArrayList<Nodo>();
+    hijosSim.add(t);
+    hijosSim.add(i);
+    Nodo sim = new Nodo(accion.parametroFunSim, accion.acciones[accion.parametroFunSim], 1, 1, hijosSim, false);
+    param.add(sim);
+    RESULT = param;
+:};
 
 PARAMETROBINARIO  ::= par_ab EXPGEN:e1 coma EXPGEN:e2 par_ce
 {:
@@ -902,32 +1875,69 @@ PARAMETROUNARIO  ::= par_ab EXPGEN:e1 par_ce
     RESULT = param;
 :};
 
-SENTSELECTOR  ::= pr_selector CONDICIONAL ll_ab NCASO SENTDEFECTO ll_ce 
-;
-SENTSELECTOR  ::= pr_selector CONDICIONAL ll_ab NCASO ll_ce 
-;
+SENTSELECTOR  ::= pr_selector CONDICIONAL:c ll_ab NCASO:nc SENTDEFECTO:df ll_ce 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo> ();
+    hijos.add(c);
+    Nodo casos = new Nodo(accion.casos, accion.acciones[accion.casos], 1, 1, nc, false);
+    hijos.add(casos);
+    hijos.add(df);
+    RESULT = new Nodo(accion.selector, accion.acciones[accion.selector], 1, 1, hijos, false);
+:};
 
-NCASO  ::= SENTCASO NCASO 
-;
-NCASO  ::= SENTCASO 
-;
+SENTSELECTOR  ::= pr_selector CONDICIONAL:c ll_ab NCASO:nc ll_ce 
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo> ();
+    hijos.add(c);
+    Nodo casos = new Nodo(accion.casos, accion.acciones[accion.casos], 1, 1, nc, false);
+    hijos.add(casos);    
+    hijos.add(new Nodo(accion.pordefecto, accion.acciones[accion.pordefecto], 1, 1, (new ArrayList<Nodo>()), false));
+    RESULT = new Nodo(accion.selector, accion.acciones[accion.selector], 1, 1, hijos, false);
+:};
 
-SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA pr_saltar punto_coma 
-;
-SENTCASO  ::= pr_caso numero sig_pun pr_saltar punto_coma 
-;
-SENTCASO  ::= pr_caso numero sig_pun NSENTENCIA 
-;
-SENTCASO  ::= pr_caso numero sig_pun 
-;
+NCASO  ::= SENTCASO:sc NCASO:casos
+{:
+    casos.add(0, sc);
+    RESULT = casos;
+:};
+
+NCASO  ::= SENTCASO:sc
+{:
+    ArrayList<Nodo> casos = new ArrayList<Nodo>();
+    casos.add(sc);
+    RESULT = casos;
+:};
+
+SENTCASO  ::= pr_caso numero:n sig_pun NSENTENCIA:ns
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(n);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, ns, false));
+    RESULT = new Nodo(accion.caso, accion.acciones[accion.caso], 1, 1, hijos, false);
+:};
+
+SENTCASO  ::= pr_caso numero:n sig_pun
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(n);
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, (new ArrayList<Nodo>()), false));
+    RESULT = new Nodo(accion.caso, accion.acciones[accion.caso], 1, 1, hijos, false);
+:};
 
 
+SENTDEFECTO  ::= pr_default sig_pun NSENTENCIA:ns  
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, ns, false));
+    RESULT = new Nodo(accion.pordefecto, accion.acciones[accion.pordefecto], 1, 1, hijos, false);
+:};
 
-SENTDEFECTO  ::= pr_default sig_pun NSENTENCIA pr_saltar punto_coma  
-;
-SENTDEFECTO  ::= pr_default sig_pun pr_saltar punto_coma 
-;
-
+SENTDEFECTO  ::= pr_default sig_pun
+{:
+    ArrayList<Nodo> hijos = new ArrayList<Nodo>();
+    hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], 1, 1, (new ArrayList<Nodo>()), false));
+    RESULT = new Nodo(accion.pordefecto, accion.acciones[accion.pordefecto], 1, 1, hijos, false);
+:};
 
 
 LLAMADAFUNCION  ::= id:i par_ab par_ce 
@@ -973,25 +1983,14 @@ OPERADORFUNCION  ::= pr_inv:op PARAMETROUNARIO:p
     RESULT = new Nodo(accion.inversa, accion.acciones[accion.inversa], 1, 1, p,false);
 :};
 
-OPERADORCOND  ::= CONDICIONAL sig_int EXPGEN sig_pun EXPGEN 
-;
-
-
-OPERADORASIGNACION  ::= a_div 
-;
-OPERADORASIGNACION  ::= a_prod 
-;
-OPERADORASIGNACION  ::= a_resta 
-;
-OPERADORASIGNACION  ::= a_suma 
-;
-OPERADORASIGNACION  ::= igual 
-;
-OPERADORASIGNACION  ::= a_mod 
-;
-
-
-
+OPERADORCOND  ::= CONDICIONAL:e1 sig_int par_ab EXPGEN:e2 par_ce sig_pun par_ab EXPGEN:e3 par_ce
+{:
+    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
+    operandos.add(e1);
+    operandos.add(e2);
+    operandos.add(e3);
+    RESULT = new Nodo(accion.operacionCond, accion.acciones[accion.operacionCond], 1, 1, operandos, false);
+:};
 
 OPERANDOENTERO  ::= LLAMADAFUNCION:ll
 {:
@@ -1025,33 +2024,6 @@ OPERANDOENTERO  ::= numero:n
     RESULT = n;
 :};
 
-OPERADORPALABRABINARIO  ::= pr_suma:op
-{:
-    RESULT = op;
-:};
-
-OPERADORPALABRABINARIO  ::= pr_resta:op
-{:
-    RESULT = op;
-:};
-
-OPERADORPALABRABINARIO  ::= pr_prod:op
-{:
-    RESULT = op;
-:};
-
-OPERADORPALABRAUNARIO  ::= pr_transp:op
-{:
-    RESULT = op;
-:};
-
-OPERADORPALABRAUNARIO  ::= pr_inv:op
-{:
-    RESULT = op;
-:};
-
-
-
 OPERANDO  ::= OPERANDOENTERO:oe
 {:
     RESULT = oe;
@@ -1082,8 +2054,12 @@ OPERANDO  ::= hexa_r:h
     RESULT = h;
 :};
 
+TIPONUMERO  ::= pr_entero:e
+{:
+    RESULT = e;
+:};
 
-TIPONUMERO  ::= pr_entero 
-;
-TIPONUMERO  ::= pr_real 
-;
+TIPONUMERO  ::= pr_real:r
+{:
+    RESULT = r;
+:};

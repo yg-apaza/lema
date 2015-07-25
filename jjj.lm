@@ -1,0 +1,33 @@
+/**
+* Area de declaracion de variables y constantes
+* Opcional
+*/
+
+/*		
+* Area de declaracion de función de prototipos
+* Opcional	
+*/
+
+/*		
+* Area del programa principal
+* Obligatorio	
+*/
+
+principal()
+{
+entero a;
+	cadena a = "asd";
+	
+	real mat[4][4] = {{1,1,1},{2,3,3},{2,2}};
+	fun(3,4, 3.4+8, 0x4);
+	mostrar(4+5*5);
+	leer(a);
+	retornar 4 + 5;
+	retornar fun();
+	retornar;
+}
+
+/*		
+* Area de definicion de funciones
+* Opcional	
+*/

@@ -91,13 +91,13 @@ public class Nodo
         this.terminal = terminal;
     }
     
-    public void print()
+    public void printTest()
     {
-        imprimir(this,0,0);
+        imprimirTest(this,0,0);
         System.out.print("\n");
     }
     
-    public void imprimir(Nodo nodo,int ancho,int largo)
+    public void imprimirTest(Nodo nodo,int ancho,int largo)
     {
         System.out.print("\n");
         if(!nodo.isTerminal())
@@ -111,7 +111,7 @@ public class Nodo
             largo = largo + ancho;
              
             for(int i = 0;i < nodo.getHijos().size();i++)                                        
-                imprimir(nodo.getHijos().get(i),ancho,largo);
+                imprimirTest(nodo.getHijos().get(i),ancho,largo);
         }
         else
         {
@@ -131,4 +131,58 @@ public class Nodo
             System.out.print(" " + nodo.getValor());
         }
     }
+    
+    public void print(){
+        imprimir(this,0,0,-1,this.getValor());
+    }
+    
+    public void imprimir(Nodo nodo,int ancho,int largo,int u,String padre)
+    {
+        System.out.println("");
+        System.out.flush();
+        if(!nodo.isTerminal())
+        {
+            for(int j = 0;j < ancho;j++)
+            {
+                System.out.print(" ");
+                System.out.flush();
+            } 
+
+            System.out.print("|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " )");
+            System.out.flush();
+            largo = (8+nodo.getValor().length())/2;
+            ancho = ancho + largo;
+            largo = largo + ancho;
+
+            for(int i = 0;i < nodo.getHijos().size();i++){
+                imprimir(nodo.getHijos().get(i),ancho,largo,i,nodo.getValor());
+            } 
+        }
+        else
+        {
+            int bandera = 0;
+            for(int j = 0;j < largo ;j++){
+                if(bandera == 1)
+                {
+                    System.out.print("-");
+                    System.out.flush();
+                }
+                else if(ancho == j)
+                {
+                    System.out.print("|");
+                    System.out.flush();
+                    bandera = 1;
+                }
+                else
+                {
+                    System.out.print(" ");
+                    System.out.flush();
+                }
+            }
+
+            System.out.print("[ " + nodo.getValor() + " ] --> ( " + padre + " + " + u + " )");
+            System.out.flush();
+        }
+    }
+    
 }
