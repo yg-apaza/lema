@@ -385,6 +385,10 @@ DEFINICIONFUNCION  ::= DECLARACIONFUNCION:f
 :};
 
 
+DECLARACIONCON  ::= pr_const pr_entero:t DECCONALL:e punto_coma 
+{:
+    for(int i = 0; i < e.size(); i++)
+        e.get(i).getHijos().add(0, t);
 
 DECLARACION  ::= pr_entero:t DECENTERO:e
 {:

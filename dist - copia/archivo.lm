@@ -1,4 +1,0 @@
-real A[4][4] = 3;
-principal()
-{
-}
