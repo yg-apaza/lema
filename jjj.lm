@@ -25,6 +25,12 @@ entero a;
 	retornar 4 + 5;
 	retornar fun();
 	retornar;
+	mientras (a < 2)
+	{
+		entero matriz[3][3] = {{5,4,5}};
+		
+		retornar;
+	}
 }
 
 /*		
