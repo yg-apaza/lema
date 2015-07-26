@@ -2,7 +2,7 @@
 * Area de declaracion de variables y constantes
 * Opcional
 */
-
+//casdds
 /*		
 * Area de declaracion de función de prototipos
 * Opcional	
@@ -16,7 +16,7 @@
 principal()
 {
 entero a;
-	cadena a = "asd";
+	cadena a = "asd";//kjhj
 	
 	real mat[4][4] = {{1,1,1},{2,3,3},{2,2}};
 	fun(3,4, 3.4+8, 0x4);

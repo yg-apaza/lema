@@ -32,7 +32,8 @@ WHITE = [ \t\r\n]
 {WHITE}                         { /* Ignorar */                         }
 
 /* IGNORAR COMENTARIOS */
-"/*"([^*]|\*+[^/*])*"*"+"/"    { /* Ignorar */                          }
+"/*"([^*]|\*+[^/*])*"*"+"/"     { /* Ignorar */                         }
+"//"([^\n]*)                    { /* Ignorar */                         }
 
 /* CONSTANTES */
 "const"                         { return symbol(sym.pr_const);          }
@@ -40,7 +41,7 @@ WHITE = [ \t\r\n]
 /* TIPOS DE DATOS BASICOS */
 "vacio"                         { return symbol(sym.pr_vacio,   (new Nodo(sym.pr_vacio, yytext(), yyline, yycolumn, null, true)));  }
 "entero"                        { return symbol(sym.pr_entero, (new Nodo(sym.pr_entero, yytext(), yyline, yycolumn, null, true)));  }
-"real"                          { return symbol(sym.pr_real,  (new Nodo(sym.pr_real, yytext(), yyline, yycolumn, null, true)));    }
+"real"                          { return symbol(sym.pr_real,  (new Nodo(sym.pr_real, yytext(), yyline, yycolumn, null, true)));     }
 "cadena"                        { return symbol(sym.pr_cadena,  (new Nodo(sym.pr_cadena, yytext(), yyline, yycolumn, null, true))); }
 
 /* OPERADORES DE AGRUPACIÓN */
@@ -107,7 +108,7 @@ WHITE = [ \t\r\n]
 {D}+"."{D}+                     { return symbol(sym.real,       (new Nodo(sym.real, yytext(), yyline, yycolumn, null, true)));      }
 
 /* CADENAS */
-\"[^\"]*\"                      { return symbol(sym.cadena,     (new Nodo(sym.cadena, yytext(), yyline, yycolumn, null, true)));    }
+\"[^\"\n]*\"                    { return symbol(sym.cadena,     (new Nodo(sym.cadena, yytext(), yyline, yycolumn, null, true)));    }
 
 /* INSTRUCCIONES DE ENTRADA Y SALIDA */
 "leer"                          { return symbol(sym.pr_leer);           }
