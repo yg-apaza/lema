@@ -28,8 +28,8 @@ public class accion
     public static final int declaracionSimIni = 16;     // Usado
     public static final int declaracionVecIni = 17;     // Usado
     public static final int declaracionMatIni = 18;     // Usado
-	
-	public static final int accesoVec = 19;         // Usado
+    
+    public static final int accesoVec = 19;         // Usado
     public static final int accesoMat = 20;             // Usado
       
     public static final int asignacion = 21;            // Usado
@@ -82,7 +82,7 @@ public class accion
     public static final int casos = 58;                 // Usado
     public static final int caso = 59;                  // Usado
     public static final int pordefecto = 60;            // Usado
-	public static final int saltar = 61;            // Usado
+    public static final int saltar = 61;            // Usado
     
     public static final String[] acciones = new String[]
     {
@@ -150,4 +150,3 @@ public class accion
         "SALTAR"        
     };
 }
-
