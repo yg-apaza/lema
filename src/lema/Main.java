@@ -14,7 +14,16 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
-       
+        /*
+        Env tabla = new Env();
+        tabla.putIdentificador("id", "45");
+        tabla.putBloque("bloque1");
+        tabla.putIdentificador("dsada", "666");
+        tabla.pop();
+        tabla.putIdentificador("id2", "23456");
+        System.out.println(tabla.toString());
+        */
+        
         if(args.length == 0)
         {
             System.out.println("Debe ingresar un archivo");
@@ -42,7 +51,6 @@ public class Main
                 }
             }
         }
-        
     }
     
     public static void ALexico(String file) throws FileNotFoundException, IOException
@@ -305,8 +313,22 @@ public class Main
         {
             parser p = new parser(new Lexico(new FileReader(file)));
             Object result = p.parse();
-            p.getAST().print();
+            Nodo raiz = p.getRaiz();
+            raiz.print();
+            System.out.println("-----------------------------------------------");
+            System.out.println(raiz.getLinea());
+            System.out.println("-----------------------------------------------");
+            AST ast = new AST(raiz);
+            ast.verificar();
+            ArrayList<String> errores = ast.getErrores();
+            if(errores.size() == 0)
+                System.out.println("No se encontraron errores");
+            else
+                for(int i = 0; i < errores.size(); i++)
+                    System.out.println(errores.get(i));
+            System.out.println(ast.getTabla().toString());
             System.out.flush();
+            
         }
         catch (FileNotFoundException ex)
         {

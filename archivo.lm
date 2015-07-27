@@ -1,35 +1,13 @@
-entero a = ((a>b)?(5+4):(5))+5;
-entero fun();
-vacio fun(entero, real, entero[3], real[3][3]);
-
 principal()
 {
-	entero a;
-	cadena a = "asd";
-	entero a = 0x88A;
-	entero b = 05;
-	real h = 08;
-	real h = 0x8A;
-	real mat[4][4] = {{1,1,1},{2,3,3},{2,2}};
-	fun(3,4, 3.4+8, 0x4);
-	mostrar(4+5*5);
-	leer(a);
-	retornar 4 + 5;
-	retornar fun();
-	retornar;
+	entero a[3][2] = {{1,2},{3,4},{5}};
+	entero b;
+	si(a > 7)
+	{
+		entero c;
+	}
+	sino
+	{
+		real d;
+	}
 }
-
-entero funcion()
-{
-	entero a;
-	cadena a = "asd";
-	
-	real mat[4][4] = {{1,1,1},{2,3,3},{2,2}};
-	fun(3,4, 3.4+8, 0x4);
-	mostrar(4+5*5);
-	leer(a);
-	retornar 4 + 5;
-	retornar fun();
-	retornar;
-}
-vacio fun(entero a, real a[4][0x5], entero b[08]){}

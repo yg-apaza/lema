@@ -70,7 +70,7 @@ public class accion
     public static final int operacionCond = 49;         // Usado
     
     public static final int argumento = 50;             // Usado 
-    public static final int elemVec = 51;               // Usado
+    public static final int finBloque = 51;               // Eliminar
     public static final int elemMat = 52;               // Usado
     
     public static final int funcion = 53;               // Usado
@@ -137,8 +137,8 @@ public class accion
         "POSITIVIDAD",
         "OPERACION CONDICIONAL",
         "ARGUMENTO",
-        "ELEMENTOS VECTOR",
-        "ELEMENTOS MATRIZ",
+        "FIN DE BLOQUE",
+        "ELEMENTOS",
         "FUNCION",
         "PARAMETRO FUNCION",
         "PARAMETRO FUNCION SIMPLE",

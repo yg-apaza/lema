@@ -90,7 +90,7 @@ public class Nodo
     {
         this.terminal = terminal;
     }
-    
+    /*
     public void printTest()
     {
         imprimirTest(this,0,0);
@@ -131,6 +131,7 @@ public class Nodo
             System.out.print(" " + nodo.getValor());
         }
     }
+    */
     
     public void print(){
         imprimir(this,0,0,-1,this.getValor());

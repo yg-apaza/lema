@@ -14,8 +14,9 @@
 */
 
 principal()
-{
-entero a;
+{	mostrar(4+5*5);
+
+	entero a;
 	cadena a = "asd";//kjhj
 	
 	real mat[4][4] = {{1,1,1},{2,3,3},{2,2}};
