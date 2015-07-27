@@ -315,13 +315,17 @@ public class Main
             Object result = p.parse();
             Nodo raiz = p.getRaiz();
             raiz.print();
+            
+            /* Prueba */
             System.out.println("-----------------------------------------------");
             System.out.println(raiz.getLinea());
             System.out.println("-----------------------------------------------");
+            /* Fin de la Prueba */
+            
             AST ast = new AST(raiz);
             ast.verificar();
             ArrayList<String> errores = ast.getErrores();
-            if(errores.size() == 0)
+            if(errores.isEmpty())
                 System.out.println("No se encontraron errores");
             else
                 for(int i = 0; i < errores.size(); i++)
