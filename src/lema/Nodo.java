@@ -149,7 +149,7 @@ public class Nodo
                 System.out.flush();
             } 
 
-            System.out.print("|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " )");
+            System.out.print("|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " )" + " Lin: " + nodo.getLinea() + " Col: " + nodo.getColumna());
             System.out.flush();
             largo = (8+nodo.getValor().length())/2;
             ancho = ancho + largo;
