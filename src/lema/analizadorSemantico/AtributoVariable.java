@@ -1,4 +1,4 @@
-package lema;
+package lema.analizadorSemantico;
 
 public class AtributoVariable
 {
@@ -7,7 +7,6 @@ public class AtributoVariable
     private boolean esMatriz;
     private int dimension1;
     private int dimension2;
-    private String valor [][];
     private boolean constante;
     
     public AtributoVariable()
@@ -22,7 +21,6 @@ public class AtributoVariable
         this.esMatriz = esMatriz;
         this.dimension1 = dimension1;
         this.dimension2 = dimension2;        
-        this.valor = new String [dimension1][dimension2];
         this.constante = constante;
     }
 
@@ -76,21 +74,6 @@ public class AtributoVariable
         this.dimension2 = dimension2;
     }
 
-    public String[][] getValor()
-    {
-        return valor;
-    }
-
-    public void setValor(String[][] valor)
-    {
-        this.valor = valor;
-    }
-    
-    public void setValor(String valor)
-    {
-        this.valor[0][0] = valor;
-    }
-
     public boolean isConstante()
     {
         return constante;
@@ -104,12 +87,6 @@ public class AtributoVariable
     public String toString()
     {
         String out = this.tipo + " " + this.id + "\n";
-        for(int i = 0; i < valor.length; i++)
-        {
-            for(int j = 0; j < valor[0].length; j++)
-                out += valor[i][j] + "\t";
-            out += "\n";
-        }
         return out;
     }    
 }

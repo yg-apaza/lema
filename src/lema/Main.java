@@ -1,5 +1,10 @@
 package lema;
 
+import lema.analizadorSemantico.AST;
+import lema.analizadorSemantico.Nodo;
+import lema.analizadorSintactico.parser;
+import lema.analizadorLexico.sym;
+import lema.analizadorLexico.Lexico;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

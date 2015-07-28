@@ -1,4 +1,4 @@
-package lema;
+package lema.analizadorSemantico;
 
 import java.util.ArrayList;
 

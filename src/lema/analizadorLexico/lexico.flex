@@ -1,5 +1,6 @@
-package lema;
+package lema.lexico;
 import java_cup.runtime.*;
+import lema.analizadorSemantico.Nodo;
 
 %%
 

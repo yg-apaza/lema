@@ -1,11 +1,11 @@
-package lema;
+package lema.analizadorSemantico;
 
 import java.util.ArrayList;
 
 public class AST
 {
     private Nodo raiz;
-    private Env tabla;
+    private Entorno tablaSimbolos;
     private int countB;
     private ArrayList<String> errores;
     
@@ -17,7 +17,7 @@ public class AST
     public AST(Nodo raiz)
     {
         this.raiz = raiz;
-        tabla = new Env();
+        tablaSimbolos = new Entorno();
         countB = 0;
         errores = new ArrayList<String>();
     }
@@ -33,7 +33,6 @@ public class AST
         if(!nodo.isTerminal())
         {
             AtributoVariable a;
-            String [][] valor;
             ArrayList<Nodo> elementos;
             ArrayList<Nodo> elementosMat;
             
@@ -45,23 +44,7 @@ public class AST
                                                                false,
                                                                1, 1,
                                                                false);
-                    
-                    switch(a.getTipo())
-                    {
-                        case "entero":
-                            a.setValor("0");
-                        break;
-                            
-                        case "real":
-                            a.setValor("0.0");
-                        break;
-                            
-                        case "cadena":
-                            a.setValor("Nulo");
-                        break;
-                    }
-                    
-                    if(!tabla.putIdentificador(a.getId(), a))
+                    if(!tablaSimbolos.putIdentificador(a.getId(), a))
                         errores.add("Identificador " + a.getId() + " ya fue declarado");
                 break;
                 
@@ -71,8 +54,7 @@ public class AST
                                                                false,
                                                                1, 1,
                                                                false);
-                    a.setValor(nodo.getHijos().get(2).getValor());
-                    if(!tabla.putIdentificador(a.getId(), a))
+                    if(!tablaSimbolos.putIdentificador(a.getId(), a))
                         errores.add("Identificador " + a.getId() + " ya fue declarado");
                 break;
                 
@@ -84,24 +66,7 @@ public class AST
                                                                1, Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                false);
                     
-                    valor = a.getValor();
-                    
-                    switch(a.getTipo())
-                    {
-                        case "entero":
-                            for(int i = 0; i < a.getDimension1(); i++)
-                                for(int j = 0; j < a.getDimension2(); j++)
-                                    valor[i][j] = "0";
-                        break;
-                            
-                        case "real":
-                            for(int i = 0; i < a.getDimension1(); i++)
-                                for(int j = 0; j < a.getDimension2(); j++)
-                                    valor[i][j] = "0.0";
-                        break;
-                    }
-                    
-                    if(!tabla.putIdentificador(a.getId(), a))
+                    if(!tablaSimbolos.putIdentificador(a.getId(), a))
                         errores.add("Identificador " + a.getId() + " ya fue declarado");
                 break;
                 
@@ -113,14 +78,10 @@ public class AST
                                                                1, Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                false);
                     
-                    valor = a.getValor();
                     elementos = nodo.getHijos().get(3).getHijos();
                     if(a.getDimension2() == elementos.size())
                     {
-                        for(int i = 0; i < elementos.size(); i++)
-                            valor[0][i] = elementos.get(i).getValor();
-
-                        if(!tabla.putIdentificador(a.getId(), a))
+                        if(!tablaSimbolos.putIdentificador(a.getId(), a))
                             errores.add("Identificador " + a.getId() + " ya fue declarado");
                     }
                     else
@@ -136,24 +97,7 @@ public class AST
                                                                Integer.parseInt(nodo.getHijos().get(3).getValor()),
                                                                false);
                     
-                    valor = a.getValor();
-                    
-                    switch(a.getTipo())
-                    {
-                        case "entero":
-                            for(int i = 0; i < a.getDimension1(); i++)
-                                for(int j = 0; j < a.getDimension2(); j++)
-                                    valor[i][j] = "0";
-                        break;
-                            
-                        case "real":
-                            for(int i = 0; i < a.getDimension1(); i++)
-                                for(int j = 0; j < a.getDimension2(); j++)
-                                    valor[i][j] = "0.0";
-                        break;
-                    }
-                    
-                    if(!tabla.putIdentificador(a.getId(), a))
+                    if(!tablaSimbolos.putIdentificador(a.getId(), a))
                         errores.add("Identificador " + a.getId() + " ya fue declarado");
                 break;
                 
@@ -166,7 +110,6 @@ public class AST
                                                                Integer.parseInt(nodo.getHijos().get(3).getValor()),
                                                                false);
                     
-                    valor = a.getValor();
                     elementosMat = nodo.getHijos().get(4).getHijos();
                     
                     if(a.getDimension1() == elementosMat.size())
@@ -174,16 +117,11 @@ public class AST
                         for(int i = 0; i < elementosMat.size(); i++)
                         {
                             ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
-                            if(a.getDimension2() == elementosMat2.size())
-                            {
-                                for(int j = 0; j < elementosMat2.size(); j++)
-                                    valor[i][j] = elementosMat2.get(j).getValor();
-                            }
-                            else
+                            if(!(a.getDimension2() == elementosMat2.size()))
                                 errores.add("Número de columnas de la fila " + i + " de la matriz " + a.getId() + " incorrecto");
                         }
 
-                        if(!tabla.putIdentificador(a.getId(), a))
+                        if(!tablaSimbolos.putIdentificador(a.getId(), a))
                             errores.add("Identificador " + a.getId() + " ya fue declarado");
                     }
                     else
@@ -196,8 +134,7 @@ public class AST
                                                                false,
                                                                1, 1,
                                                                true);
-                    a.setValor(nodo.getHijos().get(2).getValor());
-                    if(!tabla.putIdentificador(a.getId(), a))
+                    if(!tablaSimbolos.putIdentificador(a.getId(), a))
                         errores.add("Identificador " + a.getId() + " ya fue declarado");
                 break;
                 
@@ -209,14 +146,10 @@ public class AST
                                                                1, Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                true);
                     
-                    valor = a.getValor();
                     elementos = nodo.getHijos().get(3).getHijos();
                     if(a.getDimension2() == elementos.size())
                     {
-                        for(int i = 0; i < elementos.size(); i++)
-                            valor[0][i] = elementos.get(i).getValor();
-
-                        if(!tabla.putIdentificador(a.getId(), a))
+                        if(!tablaSimbolos.putIdentificador(a.getId(), a))
                             errores.add("Identificador " + a.getId() + " ya fue declarado");
                     }
                     else
@@ -232,7 +165,6 @@ public class AST
                                                                Integer.parseInt(nodo.getHijos().get(3).getValor()),
                                                                true);
                     
-                    valor = a.getValor();
                     elementosMat = nodo.getHijos().get(4).getHijos();
                     
                     if(a.getDimension1() == elementosMat.size())
@@ -240,16 +172,11 @@ public class AST
                         for(int i = 0; i < elementosMat.size(); i++)
                         {
                             ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
-                            if(a.getDimension2() == elementosMat2.size())
-                            {
-                                for(int j = 0; j < elementosMat2.size(); j++)
-                                    valor[i][j] = elementosMat2.get(j).getValor();
-                            }
-                            else
+                            if(!(a.getDimension2() == elementosMat2.size()))
                                 errores.add("Número de columnas de la fila " + i + " de la matriz " + a.getId() + " incorrecto");
                         }
 
-                        if(!tabla.putIdentificador(a.getId(), a))
+                        if(!tablaSimbolos.putIdentificador(a.getId(), a))
                             errores.add("Identificador " + a.getId() + " ya fue declarado");
                     }
                     else
@@ -257,12 +184,12 @@ public class AST
                 break;
                 
                 case accion.declaracionVar:
-                    tabla.putBloque("Bloque" + countB);
+                    tablaSimbolos.putBloque("Bloque" + countB);
                     countB++;
                 break;
                 
                 case accion.finBloque:
-                    tabla.pop();
+                    tablaSimbolos.pop();
                 break;
             }
             
@@ -276,8 +203,8 @@ public class AST
         return errores;
     }
     
-    public Env getTabla()
+    public Entorno getTabla()
     {
-        return tabla;
+        return tablaSimbolos;
     }
 }
