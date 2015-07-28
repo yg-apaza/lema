@@ -1,21 +1,10 @@
-/**
-* Area de declaracion de variables y constantes
-* Opcional
-*/
-//casdds
-/*		
-* Area de declaracion de función de prototipos
-* Opcional	
-*/
 
-/*		
-* Area del programa principal
-* Obligatorio	
-*/
+
+
+
 
 principal()
-{	mostrar(4+5*5);
-
+{
 	entero a;
 	cadena a = "asd";//kjhj
 	
