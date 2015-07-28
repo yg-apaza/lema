@@ -1,6 +1,8 @@
-package lema;
+package lema.analizadorSintactico;
 
 import java.util.ArrayList;
+import lema.analizadorSemantico.Nodo;
+import lema.analizadorSemantico.accion;
 
 parser code
 {:
