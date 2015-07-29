@@ -311,12 +311,6 @@ public class Main
             Nodo raiz = p.getRaiz();
             raiz.print();
             
-            /* Prueba */
-            System.out.println("-----------------------------------------------");
-            System.out.println(raiz.getLinea());
-            System.out.println("-----------------------------------------------");
-            /* Fin de la Prueba */
-            
             AST ast = new AST(raiz);
             ast.verificar();
             ArrayList<String> errores = ast.getErrores();
