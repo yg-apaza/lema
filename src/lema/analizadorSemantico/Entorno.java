@@ -45,7 +45,6 @@ public class Entorno
     public boolean putIdentificador(String id, AtributoVariable a)
     {
         EntornoNodo aux = actual;
-        
         do
         {
             if(aux.tabla.containsKey(id))
@@ -111,7 +110,7 @@ public class Entorno
         String out = e + "\n";
         if(e.bloques != null)
         {
-            for (EntornoNodo b : e.bloques)
+            for(EntornoNodo b : e.bloques)
             {
                 out += toString(b);
             }

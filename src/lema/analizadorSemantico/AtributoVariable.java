@@ -86,6 +86,6 @@ public class AtributoVariable
     
     public String toString()
     {
-        return this.tipo + " " + this.id;
+        return tipo + " " + id + " " + (esMatriz?"Matriz":"Simple") + " " + dimension1 + " " + dimension2 + " " + (constante?"Constante":"No constante");
     }    
 }

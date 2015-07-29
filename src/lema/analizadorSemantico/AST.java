@@ -60,7 +60,7 @@ public class AST
                     /*Convertir indice*/
                     a = new AtributoVariable( nodo.getHijos().get(0).getValor(),
                                                                nodo.getHijos().get(1).getValor(),
-                                                               false,
+                                                               true,
                                                                1, Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                false);
                     
@@ -72,7 +72,7 @@ public class AST
                     /*Convertir indice*/
                     a = new AtributoVariable( nodo.getHijos().get(0).getValor(),
                                                                nodo.getHijos().get(1).getValor(),
-                                                               false,
+                                                               true,
                                                                1, Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                false);
                     
@@ -90,7 +90,7 @@ public class AST
                     /*Convertir indice*/
                     a = new AtributoVariable( nodo.getHijos().get(0).getValor(),
                                                                nodo.getHijos().get(1).getValor(),
-                                                               false,
+                                                               true,
                                                                Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                Integer.parseInt(nodo.getHijos().get(3).getValor()),
                                                                false);
@@ -103,7 +103,7 @@ public class AST
                     /*Convertir indice*/
                     a = new AtributoVariable( nodo.getHijos().get(0).getValor(),
                                                                nodo.getHijos().get(1).getValor(),
-                                                               false,
+                                                               true,
                                                                Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                Integer.parseInt(nodo.getHijos().get(3).getValor()),
                                                                false);
@@ -140,7 +140,7 @@ public class AST
                     /*Convertir indice*/
                     a = new AtributoVariable( nodo.getHijos().get(0).getValor(),
                                                                nodo.getHijos().get(1).getValor(),
-                                                               false,
+                                                               true,
                                                                1, Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                true);
                     
@@ -158,7 +158,7 @@ public class AST
                     /*Convertir indice*/
                     a = new AtributoVariable( nodo.getHijos().get(0).getValor(),
                                                                nodo.getHijos().get(1).getValor(),
-                                                               false,
+                                                               true,
                                                                Integer.parseInt(nodo.getHijos().get(2).getValor()),
                                                                Integer.parseInt(nodo.getHijos().get(3).getValor()),
                                                                true);
