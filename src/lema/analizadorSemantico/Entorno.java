@@ -4,34 +4,58 @@ import java.util.*;
 
 public class Entorno
 {
-    Entorno raiz = new Entorno();
-    Entorno actual = raiz;
-    Entorno anterior;
-    ArrayList<Entorno> hijos;
-    
-    private HashMap tabla;
-    
+    private class EntornoNodo
+    {
+        private HashMap tabla;
+        private EntornoNodo anterior;
+        private ArrayList<EntornoNodo> bloques;
+
+        public EntornoNodo()
+        {
+            this(null, null, null);
+        }
+
+        public EntornoNodo(HashMap tabla, EntornoNodo anterior, ArrayList<EntornoNodo> bloques)
+        {
+            this.tabla = tabla;
+            this.anterior = anterior;
+            this.bloques = bloques;
+        }
+
+        public HashMap getTabla()
+        {
+            return tabla;
+        }
+        
+        public String toString()
+        {
+            return "" + tabla;
+        }
+    }
+
+    private EntornoNodo raiz;
+    private EntornoNodo actual;
     
     public Entorno()
     {
-        this(null);
-    }
-    
-    public Entorno(Entorno p)
-    {
-        tabla = new HashMap();
-        anterior = p;
-        hijos = null;
+        raiz = new EntornoNodo(new HashMap(), null, null);
+        actual = raiz;
     }
 
-    public boolean putIdentificador(String nombre, AtributoVariable a)
+    public boolean putIdentificador(String id, AtributoVariable a)
     {
-        if(!actual.tabla.containsKey(nombre))
-	{
-            actual.tabla.put(nombre, a);
-            return true;
+        EntornoNodo aux = actual;
+        
+        do
+        {
+            if(aux.tabla.containsKey(id))
+                return false;
+            aux = aux.anterior;
         }
-        return false;    
+        while(aux != null);
+        
+        actual.tabla.put(id, a);
+        return true;
     }
     
     public boolean putFuncion(String id, AtributoFuncion a)
@@ -44,62 +68,54 @@ public class Entorno
         return false;    
     }
 
-    public String get(String name)
+    public AtributoVariable buscarVariable(String name)
     {
-        for(Entorno e = actual; e != null; e = e.anterior)
-        { 
-            String found = (String)(e.tabla.get(name));
+        for(EntornoNodo e = actual; e != null; e = e.anterior)
+        {
+            AtributoVariable found = (AtributoVariable)(e.tabla.get(name));
             if (found != null)
                 return found;
         }
         return null;   
     }
+    
+    public AtributoFuncion buscarFuncion(String name)
+    {
+        AtributoFuncion found = (AtributoFuncion)(raiz.tabla.get(name));
+        if (found != null)
+            return found;
+        return null;   
+    }
 
     public void insertarBloque()
     {
-        if(hijos == null)
-            hijos = new ArrayList<Entorno>();
-        actual = new Entorno(actual);
-        hijos.add(actual);
+        if(actual.bloques == null)
+            actual.bloques = new ArrayList<EntornoNodo>();
+        EntornoNodo nuevo = new EntornoNodo(new HashMap(), actual, null);
+        actual.bloques.add(nuevo);
+        actual = nuevo;
     }
 
     public void salirBloque()
     {
         actual = actual.anterior;
     }
-
-    public ArrayList<Entorno> getHijos()
-    {
-        return hijos;
-    }
-
-    public void setHijos(ArrayList<Entorno> hijos)
-    {
-        this.hijos = hijos;
-    }
-
-    private String toString(Entorno e)
-    {
-        String out = "" + tabla;
-        if(e.getHijos() != null)
-        {
-            for (Entorno hijo : e.getHijos())
-            {
-                out += hijo.tabla;
-            }
-        }
-
-        return out;
-    }
     
     public String toString() 
     {
-        return this.toString(raiz);
-        /*
-        if(anterior != null)
-            return anterior.toString() + tabla;
-        else
-            return "" + tabla;
-                */
+        return toString(raiz);
+    }
+    
+    private String toString(EntornoNodo e)
+    {
+        String out = e + "\n";
+        if(e.bloques != null)
+        {
+            for (EntornoNodo b : e.bloques)
+            {
+                out += toString(b);
+            }
+        }
+        return out;
     }
 }

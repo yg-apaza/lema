@@ -180,16 +180,12 @@ public class AST
                     else
                         errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz '" + a.getId() + "' no coincide con las inicializadas");
                 break;
-                
-                     
                     
                 case accion.declaracionVar:
-                    //System.out.println("Se agrega nuevo bloque");
                     tablaSimbolos.insertarBloque();
                 break;
                 
                 case accion.finBloque:
-                    //System.out.println("Saliendo de bloque");
                     tablaSimbolos.salirBloque();
                 break;
             }
