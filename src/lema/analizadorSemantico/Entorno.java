@@ -4,10 +4,13 @@ import java.util.*;
 
 public class Entorno
 {
-    static Entorno raiz = new Entorno();
-    static Entorno actual = raiz;
-    HashMap tabla;
+    Entorno raiz = new Entorno();
+    Entorno actual = raiz;
     Entorno anterior;
+    ArrayList<Entorno> hijos;
+    
+    private HashMap tabla;
+    
     
     public Entorno()
     {
@@ -17,7 +20,8 @@ public class Entorno
     public Entorno(Entorno p)
     {
         tabla = new HashMap();
-        anterior = p;     
+        anterior = p;
+        hijos = null;
     }
 
     public boolean putIdentificador(String nombre, AtributoVariable a)
@@ -53,7 +57,10 @@ public class Entorno
 
     public void insertarBloque()
     {
+        if(hijos == null)
+            hijos = new ArrayList<Entorno>();
         actual = new Entorno(actual);
+        hijos.add(actual);
     }
 
     public void salirBloque()
@@ -61,11 +68,38 @@ public class Entorno
         actual = actual.anterior;
     }
 
+    public ArrayList<Entorno> getHijos()
+    {
+        return hijos;
+    }
+
+    public void setHijos(ArrayList<Entorno> hijos)
+    {
+        this.hijos = hijos;
+    }
+
+    private String toString(Entorno e)
+    {
+        String out = "" + tabla;
+        if(e.getHijos() != null)
+        {
+            for (Entorno hijo : e.getHijos())
+            {
+                out += hijo.tabla;
+            }
+        }
+
+        return out;
+    }
+    
     public String toString() 
     {
+        return this.toString(raiz);
+        /*
         if(anterior != null)
             return anterior.toString() + tabla;
         else
             return "" + tabla;
+                */
     }
 }
