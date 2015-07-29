@@ -6,7 +6,7 @@ public class Entorno
 {
     static Entorno raiz = new Entorno();
     static Entorno actual = raiz;
-    HashMap table;
+    HashMap tabla;
     Entorno anterior;
     
     public Entorno()
@@ -16,7 +16,7 @@ public class Entorno
     
     public Entorno(Entorno p)
     {
-        table = new HashMap();
+        tabla = new HashMap();
         anterior = p;     
     }
 
@@ -24,7 +24,7 @@ public class Entorno
     {
         return 0;
         /*
-        if(raiz.table.containsKey(c))
+        if(raiz.tabla.containsKey(c))
 	{
             System.out.print("FUNCION INGRESADA: " + c);
             push();
@@ -33,14 +33,14 @@ public class Entorno
         
         if(sc == null)
         {
-            raiz.table.put(c, a);
+            raiz.tabla.put(c, a);
             System.out.print("FUNCION INGRESADA: " + c);
-            actual.table.put(c, a);
+            actual.tabla.put(c, a);
             push();
             return 0;
         }
         
-        if(!raiz.table.containsKey(sc))
+        if(!raiz.tabla.containsKey(sc))
         {			
             System.out.print("FUNCION INGRESADA: " + c);
             push();
@@ -48,12 +48,12 @@ public class Entorno
         }
 	else
 	{
-            raiz.table.put(c,a);
+            raiz.tabla.put(c,a);
             System.out.print("FUNCION INGRESADA: " + c);
-            actual.table.put(c, a);
+            actual.tabla.put(c, a);
             push();
             return 0;
-        }*/   
+        }*/
     }
     
     public void putBloque(String bloque)
@@ -62,12 +62,12 @@ public class Entorno
         System.out.println(" BLOQUE INGRESADO: " + bloque);
     }
 
-    public boolean putIdentificador(String name, AtributoVariable a)
+    public boolean putIdentificador(String nombre, AtributoVariable a)
     {
-        if(!actual.table.containsKey(name))
+        if(!actual.tabla.containsKey(nombre))
 	{
-            actual.table.put(name, a);
-            System.out.println("  NUEVO IDENTIFICADOR: " + name + " -> ENTORNO ACTUAL: " + actual);
+            actual.tabla.put(nombre, a);
+            System.out.println("  NUEVO IDENTIFICADOR: " + nombre + " -> ENTORNO ACTUAL: " + actual);
             return true;
         }
         return false;    
@@ -75,10 +75,10 @@ public class Entorno
     
     public boolean putIdentificador(String id, AtributoFuncion a)
     {
-        if(!actual.table.containsKey(id))
+        if(!raiz.tabla.containsKey(id))
 	{
-            actual.table.put(id, a);
-            System.out.println("  NUEVO IDENTIFICADOR: " + id + " -> ENTORNO ACTUAL: " + actual);
+            raiz.tabla.put(id, a);
+            System.out.println("  NUEVO PROTOTIPO DE FUNCION: " + id + " -> ENTORNO ACTUAL: " + actual);
             return true;
         }
         return false;    
@@ -88,7 +88,7 @@ public class Entorno
     {
         for(Entorno e = actual; e != null; e = e.anterior)
         { 
-            String found = (String)(e.table.get(name));
+            String found = (String)(e.tabla.get(name));
             if (found != null)
                 return found;
         }
@@ -104,15 +104,15 @@ public class Entorno
     public void pop()
     {
         actual = actual.anterior;
-        System.out.print(" ENTORNO TERMINDADO");
+        System.out.print(" ENTORNO TERMINADO");
         System.out.println(" -> ENTORNO ACTUAL: " + actual);
     }
 
     public String toString() 
     {
         if(anterior != null)
-            return anterior.toString()+table;
+            return anterior.toString() + tabla;
         else
-            return "" + table;
+            return "" + tabla;
     }
 }

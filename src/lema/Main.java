@@ -19,16 +19,6 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
-        /*
-        Env tabla = new Env();
-        tabla.putIdentificador("id", "45");
-        tabla.putBloque("bloque1");
-        tabla.putIdentificador("dsada", "666");
-        tabla.pop();
-        tabla.putIdentificador("id2", "23456");
-        System.out.println(tabla.toString());
-        */
-        
         if(args.length == 0)
         {
             System.out.println("Debe ingresar un archivo");

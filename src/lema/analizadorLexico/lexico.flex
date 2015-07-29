@@ -1,9 +1,11 @@
-package lema.lexico;
+package lema.analizadorLexico;
+
 import java_cup.runtime.*;
 import lema.analizadorSemantico.Nodo;
 
 %%
 
+%public
 %class Lexico
 %line
 %column

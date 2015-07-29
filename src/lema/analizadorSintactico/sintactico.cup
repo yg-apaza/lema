@@ -10,7 +10,7 @@ parser code
     public Nodo raiz;
     
     public void report_error(String message, Object info)
-    {   
+    {
         StringBuilder m = new StringBuilder("Error");
 
         if (info instanceof java_cup.runtime.Symbol)
@@ -18,7 +18,7 @@ parser code
             java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
 
             if (s.left >= 0)
-            {                
+            {
                 m.append(" en la línea " + (s.left + 1));   
 
                 if (s.right >= 0)                    
