@@ -5,6 +5,7 @@
 
 package lema.analizadorSintactico;
 
+import lema.analizadorLexico.sym;
 import java.util.ArrayList;
 import lema.analizadorSemantico.Nodo;
 import lema.analizadorSemantico.accion;
