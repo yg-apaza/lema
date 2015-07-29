@@ -28,7 +28,7 @@ public class AST
     
     private void verificar(Nodo nodo)
     {
-        if(!nodo.isTerminal())
+        if(!nodo.esTerminal())
         {
             AtributoVariable v;
             AtributoFuncion f;
@@ -210,7 +210,36 @@ public class AST
                 
                     
                 case accion.declaracionProt:
-                    f = new AtributoFuncion();
+                    ArrayList<AtributoVariable> argumentos = new ArrayList<AtributoVariable>();
+                    ArrayList<Nodo> param = nodo.getHijos().get(2).getHijos();
+                    for(int i = 0; i < param.size(); i++)
+                    {
+                        if(param.get(i).esTerminal())
+                            argumentos.add(
+                                            new AtributoVariable(param.get(i).getValor(),
+                                            "", false, 1, 1, false)
+                                          );
+                        else
+                        {
+                            ArrayList<Nodo> datosMatriz = param.get(i).getHijos();
+                            argumentos.add(new AtributoVariable (
+                                                                    datosMatriz.get(0).getValor(),
+                                                                    "", true,
+                                                                    Integer.parseInt(datosMatriz.get(1).getValor()),
+                                                                    Integer.parseInt(datosMatriz.get(2).getValor()),
+                                                                    false
+                                                                ));
+                        }
+                    }
+                        
+                    f = new AtributoFuncion (
+                                                nodo.getHijos().get(0).getValor(),
+                                                nodo.getHijos().get(1).getValor(),
+                                                argumentos,
+                                                false
+                                            );
+                    if(!tablaSimbolos.putFuncion(f.getId(), f))
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + f.getId() + "' ya fue declarado");
                 break;
                 
                     

@@ -61,4 +61,9 @@ public class AtributoFuncion
     {
         this.definido = definido;
     }
+    
+    public String toString()
+    {
+        return tipoRetorno + " " + id + " " + argumentos + " " + (definido?"Definido":"No definido");
+    }
 }

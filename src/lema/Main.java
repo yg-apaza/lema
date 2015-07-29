@@ -310,7 +310,8 @@ public class Main
             Object result = p.parse();
             
             Nodo raiz = p.getRaiz();
-            raiz.imprimir();
+            System.out.println(raiz);
+            System.out.flush();
             AST ast = new AST(raiz);
             
             ast.verificar();

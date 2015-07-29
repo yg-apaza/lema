@@ -1,7 +1,10 @@
 entero a[2];
 entero b;
 entero funcion(entero, entero);
-real fun(real, real[3][3]);
+vacio func();
+entero func();
+
+real fun(real[2][2], real[3][3]);
 real h;
 
 principal()

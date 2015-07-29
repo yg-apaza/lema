@@ -81,7 +81,7 @@ public class Nodo
         this.hijos = hijos;
     }
 
-    public boolean isTerminal()
+    public boolean esTerminal()
     {
         return terminal;
     }
@@ -100,7 +100,7 @@ public class Nodo
     {
         String out = "\n";
         
-        if(!nodo.isTerminal())
+        if(!nodo.esTerminal())
         {
             for(int j = 0;j < ancho;j++)
                 out = out + " ";
