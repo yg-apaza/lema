@@ -4,7 +4,7 @@ public class AtributoVariable
 {
     private String tipo;
     private String id;
-    private boolean esMatriz;
+    private boolean matriz;
     private int dimension1;
     private int dimension2;
     private boolean constante;
@@ -14,11 +14,11 @@ public class AtributoVariable
         this("vacio", "NULL_ID", false, 1, 1, false);
     }
 
-    public AtributoVariable(String tipo, String id, boolean esMatriz, int dimension1, int dimension2, boolean constante)
+    public AtributoVariable(String tipo, String id, boolean matriz, int dimension1, int dimension2, boolean constante)
     {
         this.tipo = tipo;
         this.id = id;
-        this.esMatriz = esMatriz;
+        this.matriz = matriz;
         this.dimension1 = dimension1;
         this.dimension2 = dimension2;        
         this.constante = constante;
@@ -44,14 +44,14 @@ public class AtributoVariable
         this.id = id;
     }
 
-    public boolean isEsMatriz()
+    public boolean esMatriz()
     {
-        return esMatriz;
+        return matriz;
     }
 
-    public void setEsMatriz(boolean esMatriz)
+    public void setEsMatriz(boolean matriz)
     {
-        this.esMatriz = esMatriz;
+        this.matriz = matriz;
     }
 
     public int getDimension1()
@@ -74,7 +74,7 @@ public class AtributoVariable
         this.dimension2 = dimension2;
     }
 
-    public boolean isConstante()
+    public boolean esConstante()
     {
         return constante;
     }
@@ -86,6 +86,6 @@ public class AtributoVariable
     
     public String toString()
     {
-        return tipo + " " + id + " " + (esMatriz?"Matriz":"Simple") + " " + dimension1 + " " + dimension2 + " " + (constante?"Constante":"No constante");
+        return tipo + " " + id + " " + (matriz?"Matriz":"Simple") + " " + dimension1 + " " + dimension2 + " " + (constante?"Constante":"No constante");
     }    
 }
