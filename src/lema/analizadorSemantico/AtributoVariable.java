@@ -86,7 +86,6 @@ public class AtributoVariable
     
     public String toString()
     {
-        String out = this.tipo + " " + this.id + "\n";
-        return out;
+        return this.tipo + " " + this.id;
     }    
 }

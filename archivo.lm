@@ -1,14 +1,15 @@
-const entero a[3][2] = {{1,2},{3,4},{5,6}};
-cadena c = "dsaassd";
+entero a;
+entero b;
 principal()
-{	
-	entero b;
+{
+	entero c;
 	si(a > 7)
 	{
-		entero a;
+		entero d;
+		entero e;
 	}
 	sino
 	{
-		real d;
+		entero f;
 	}
 }

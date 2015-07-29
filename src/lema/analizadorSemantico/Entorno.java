@@ -19,30 +19,22 @@ public class Entorno
         tabla = new HashMap();
         anterior = p;     
     }
-    
-    public void putBloque(String bloque)
-    {
-	Entorno.push();
-        //System.out.println(" BLOQUE INGRESADO: " + bloque);
-    }
 
     public boolean putIdentificador(String nombre, AtributoVariable a)
     {
         if(!actual.tabla.containsKey(nombre))
 	{
             actual.tabla.put(nombre, a);
-            //System.out.println("  NUEVO IDENTIFICADOR: " + nombre + " -> ENTORNO ACTUAL: " + actual);
             return true;
         }
         return false;    
     }
     
-    public boolean putIdentificador(String id, AtributoFuncion a)
+    public boolean putFuncion(String id, AtributoFuncion a)
     {
         if(!raiz.tabla.containsKey(id))
 	{
             raiz.tabla.put(id, a);
-            //System.out.println("NUEVO PROTOTIPO DE FUNCION: " + id + " -> ENTORNO ACTUAL: " + actual);
             return true;
         }
         return false;    
@@ -59,17 +51,14 @@ public class Entorno
         return null;   
     }
 
-    private static void push()
+    public void insertarBloque()
     {
         actual = new Entorno(actual);
-        //System.out.println(" -> ENTORNO ACTUAL: " + actual);
     }
 
-    public void pop()
+    public void salirBloque()
     {
         actual = actual.anterior;
-        //System.out.print(" ENTORNO TERMINADO");
-        //System.out.println(" -> ENTORNO ACTUAL: " + actual);
     }
 
     public String toString() 

@@ -309,17 +309,21 @@ public class Main
             parser p = new parser(new Lexico(new FileReader(file)));
             Object result = p.parse();
             Nodo raiz = p.getRaiz();
-            raiz.print();
+            raiz.imprimir();
             
             AST ast = new AST(raiz);
             ast.verificar();
             ArrayList<String> errores = ast.getErrores();
+            
             if(errores.isEmpty())
-                System.out.println("No se encontraron errores");
+                System.out.println("\nNo se encontraron errores");
             else
-                for(int i = 0; i < errores.size(); i++)
-                    System.out.println(errores.get(i));
-            System.out.println(ast.getTabla().toString());
+            {
+                System.out.println();
+                for (String e : errores)
+                    System.out.println(e);
+            }
+            System.out.println(ast.getTabla());
             System.out.flush();
             
         }

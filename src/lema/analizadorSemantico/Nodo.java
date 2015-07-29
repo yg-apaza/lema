@@ -133,11 +133,13 @@ public class Nodo
     }
     */
     
-    public void print(){
+    public void imprimir()
+    {
         imprimir(this,0,0,-1,this.getValor());
+        System.out.println();
     }
     
-    public void imprimir(Nodo nodo,int ancho,int largo,int u,String padre)
+    private void imprimir(Nodo nodo, int ancho, int largo, int u, String padre)
     {
         System.out.println("");
         System.out.flush();
@@ -155,9 +157,8 @@ public class Nodo
             ancho = ancho + largo;
             largo = largo + ancho;
 
-            for(int i = 0;i < nodo.getHijos().size();i++){
+            for(int i = 0; i < nodo.getHijos().size(); i++)
                 imprimir(nodo.getHijos().get(i),ancho,largo,i,nodo.getValor());
-            } 
         }
         else
         {
