@@ -52,7 +52,7 @@ public class AtributoFuncion
         this.argumentos = argumentos;
     }
 
-    public boolean isDefinido()
+    public boolean esDefinido()
     {
         return definido;
     }

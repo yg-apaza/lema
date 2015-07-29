@@ -135,7 +135,7 @@ public class Nodo
     
     public void imprimir()
     {
-        imprimir(this,0,0,-1,this.getValor());
+        imprimir(this, 0, 0, -1, this.getValor());
         System.out.println();
     }
     

@@ -308,15 +308,16 @@ public class Main
         {
             parser p = new parser(new Lexico(new FileReader(file)));
             Object result = p.parse();
+            
             Nodo raiz = p.getRaiz();
             raiz.imprimir();
-            
             AST ast = new AST(raiz);
+            
             ast.verificar();
             ArrayList<String> errores = ast.getErrores();
             
             if(errores.isEmpty())
-                System.out.println("\nNo se encontraron errores");
+                System.out.println("No se encontraron errores");
             else
             {
                 System.out.println();

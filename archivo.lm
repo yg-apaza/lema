@@ -1,18 +1,10 @@
 entero a[2];
 entero b;
 entero funcion(entero, entero);
+real fun(real, real[3][3]);
+real h;
 
 principal()
 {
 	entero c;
-	si(x > 7)
-	{
-		entero d;
-		entero e;
-	}
-	sino
-	{
-		entero d;
-		entero f;
-	}
 }
