@@ -3,9 +3,10 @@ entero b;
 principal()
 {
 	entero c;
+	entero m[2] =  {2,2};
 	si(a > 7)
 	{
-		entero d;
+		entero c;
 		entero e;
 	}
 	sino
