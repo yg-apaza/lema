@@ -90,101 +90,48 @@ public class Nodo
     {
         this.terminal = terminal;
     }
-    /*
-    public void printTest()
+        
+    public String toString() 
     {
-        imprimirTest(this,0,0);
-        System.out.print("\n");
+        return imprimir(this,0,0,-1,this.getValor()) + "\n";
     }
     
-    public void imprimirTest(Nodo nodo,int ancho,int largo)
+    private String imprimir(Nodo nodo, int ancho, int largo, int u, String padre)
     {
-        System.out.print("\n");
-        if(!nodo.isTerminal())
-        {   
-            for(int j = 0;j < ancho;j++)
-                System.out.print(" ");    
-            
-            System.out.print("|--["+nodo.getValor()+"]");
-            largo = (6+nodo.getValor().length())/2;
-            ancho = ancho + largo;
-            largo = largo + ancho;
-             
-            for(int i = 0;i < nodo.getHijos().size();i++)                                        
-                imprimirTest(nodo.getHijos().get(i),ancho,largo);
-        }
-        else
-        {
-            int bandera = 0;
-            for(int j = 0;j < largo ;j++)
-            {
-                if(bandera == 1)
-                    System.out.print("-");                    
-                else if(ancho == j)
-                {
-                    System.out.print("|");
-                    bandera = 1;
-                }
-                else
-                    System.out.print(" ");
-            }
-            System.out.print(" " + nodo.getValor());
-        }
-    }
-    */
-    
-    public void imprimir()
-    {
-        imprimir(this,0,0,-1,this.getValor());
-        System.out.println();
-    }
-    
-    private void imprimir(Nodo nodo, int ancho, int largo, int u, String padre)
-    {
-        System.out.println("");
-        System.out.flush();
+        String out = "\n";
+        
         if(!nodo.isTerminal())
         {
             for(int j = 0;j < ancho;j++)
-            {
-                System.out.print(" ");
-                System.out.flush();
-            } 
+                out = out + " ";
 
-            System.out.print("|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " )");
-            System.out.flush();
+            out = out + "|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " )";
+            
             largo = (8+nodo.getValor().length())/2;
             ancho = ancho + largo;
             largo = largo + ancho;
 
             for(int i = 0; i < nodo.getHijos().size(); i++)
-                imprimir(nodo.getHijos().get(i),ancho,largo,i,nodo.getValor());
+                out = out + imprimir(nodo.getHijos().get(i),ancho,largo,i,nodo.getValor());
         }
         else
         {
             int bandera = 0;
             for(int j = 0;j < largo ;j++){
                 if(bandera == 1)
-                {
-                    System.out.print("-");
-                    System.out.flush();
-                }
+                    out = out + "-";
                 else if(ancho == j)
                 {
-                    System.out.print("|");
-                    System.out.flush();
+                    out = out + "|";
                     bandera = 1;
                 }
                 else
-                {
-                    System.out.print(" ");
-                    System.out.flush();
-                }
+                    out = out + " ";
             }
-
-            System.out.print("[ " + nodo.getValor() + " ] --> ( " + padre + " + " + u + " )");
-            System.out.flush();
+ 
+            out = out + "[ " + nodo.getValor() + " ] --> ( " + padre + " + " + u + " )";                
         }
-    }
-    
+        
+        return out;
+    }   
 }

@@ -309,7 +309,7 @@ public class Main
             parser p = new parser(new Lexico(new FileReader(file)));
             Object result = p.parse();
             Nodo raiz = p.getRaiz();
-            raiz.imprimir();
+            System.out.print(raiz); 
             
             AST ast = new AST(raiz);
             ast.verificar();
