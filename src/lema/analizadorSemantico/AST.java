@@ -43,7 +43,7 @@ public class AST
                                                                1, 1,
                                                                false);
                     if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                        errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                 break;
                 
                 case accion.declaracionSimIni:
@@ -53,7 +53,7 @@ public class AST
                                                                1, 1,
                                                                false);
                     if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                        errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                 break;
                 
                 case accion.declaracionVec:
@@ -65,7 +65,7 @@ public class AST
                                                                false);
                     
                     if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                        errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                 break;
                 
                 case accion.declaracionVecIni:
@@ -80,10 +80,10 @@ public class AST
                     if(a.getDimension2() == elementos.size())
                     {
                         if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                            errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                            errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                     }
                     else
-                        errores.add("Tamaño del vector '" + a.getId() + "' no coincide con elementos introducidos");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Tamaño del vector '" + a.getId() + "' no coincide con elementos introducidos");
                 break;
                 
                 case accion.declaracionMat:
@@ -96,7 +96,7 @@ public class AST
                                                                false);
                     
                     if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                        errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                 break;
                 
                 case accion.declaracionMatIni:
@@ -116,14 +116,14 @@ public class AST
                         {
                             ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
                             if(!(a.getDimension2() == elementosMat2.size()))
-                                errores.add("Número de columnas de la fila " + i + " de la matriz '" + a.getId() + "' incorrecto");
+                                errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz '" + a.getId() + "' incorrecto");
                         }
 
                         if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                            errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                            errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                     }
                     else
-                        errores.add("Número de filas de la matriz '" + a.getId() + "' no coincide con las inicializadas");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz '" + a.getId() + "' no coincide con las inicializadas");
                 break;
                 
                 case accion.declaracionConsSim:
@@ -133,7 +133,7 @@ public class AST
                                                                1, 1,
                                                                true);
                     if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                        errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                 break;
                 
                 case accion.declaracionConsVec:
@@ -148,10 +148,10 @@ public class AST
                     if(a.getDimension2() == elementos.size())
                     {
                         if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                            errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                            errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                     }
                     else
-                        errores.add("Tamaño del vector '" + a.getId() + "' no coincide con elementos introducidos");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Tamaño del vector '" + a.getId() + "' no coincide con elementos introducidos");
                 break;
                 
                 case accion.declaracionConsMat:
@@ -171,14 +171,14 @@ public class AST
                         {
                             ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
                             if(!(a.getDimension2() == elementosMat2.size()))
-                                errores.add("Número de columnas de la fila " + i + " de la matriz '" + a.getId() + "' incorrecto");
+                                errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz '" + a.getId() + "' incorrecto");
                         }
 
                         if(!tablaSimbolos.putIdentificador(a.getId(), a))
-                            errores.add("Identificador '" + a.getId() + "' ya fue declarado");
+                            errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Identificador '" + a.getId() + "' ya fue declarado");
                     }
                     else
-                        errores.add("Número de filas de la matriz '" + a.getId() + "' no coincide con las inicializadas");
+                        errores.add("Lin: " + (nodo.getLinea()+1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz '" + a.getId() + "' no coincide con las inicializadas");
                 break;
                 
                      
