@@ -1807,7 +1807,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(t);
-    hijos.add(new Nodo(sym.numero, "1", tleft, cright, null, true));
+    hijos.add(new Nodo(sym.numero, "1", tleft, cright, (new ArrayList<Nodo> ()), true));
     hijos.add(i1);
     Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], tleft, cright, hijos, false);    
     p.add(0, n);
@@ -1860,7 +1860,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> param = new ArrayList<Nodo>();
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(t);
-    hijos.add(new Nodo(sym.numero, "1", tleft, i1right, null, true));
+    hijos.add(new Nodo(sym.numero, "1", tleft, i1right, (new ArrayList<Nodo> ()), true));
     hijos.add(i1);
     Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], tleft, i1right, hijos, false);    
     param.add(n);
@@ -1917,7 +1917,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> df = new ArrayList<Nodo>();
     df.add(f);
-    df.add(new Nodo(accion.finFuncion, accion.acciones[accion.finFuncion], 1, 1, (new ArrayList<Nodo>()), false));
+    df.add(new Nodo(accion.finFuncion, accion.acciones[accion.finFuncion], -1, 1, (new ArrayList<Nodo>()), false));
     RESULT = df;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICIONFUNCION",51, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2506,7 +2506,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    hijos.add(new Nodo(sym.numero, "1", eleft, eright, null, true));
+    hijos.add(new Nodo(sym.numero, "1", eleft, eright, (new ArrayList<Nodo> ()), true));
     hijos.add(i1);
     hijos.add(e);
 
@@ -2529,7 +2529,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    hijos.add(new Nodo(sym.numero, "1", i1left, i1right, null, true));
+    hijos.add(new Nodo(sym.numero, "1", i1left, i1right, (new ArrayList<Nodo> ()), true));
     hijos.add(i1);
     RESULT = new Nodo(accion.declaracionMat, accion.acciones[accion.declaracionMat], i1left, i1right, hijos, false);
 
@@ -2737,7 +2737,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    hijos.add(new Nodo(sym.numero, "1", eleft, eright, null, true));
+    hijos.add(new Nodo(sym.numero, "1", eleft, eright, (new ArrayList<Nodo> ()), true));
     hijos.add(i1);
     hijos.add(e);
 
@@ -3109,7 +3109,7 @@ class CUP$parser$actions {
     hijos.add(i);    
     ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
     hijosRes.add(i);
-    hijosRes.add(new Nodo(sym.numero, "1", ileft, iright, null, true));
+    hijosRes.add(new Nodo(sym.numero, "1", ileft, iright, (new ArrayList<Nodo> ()), true));
     Nodo resta = new Nodo(accion.resta, accion.acciones[accion.resta], ileft, iright, hijosRes, false);    
     hijos.add(resta);
 
@@ -3131,7 +3131,7 @@ class CUP$parser$actions {
     hijos.add(i);    
     ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
     hijosSum.add(i);
-    hijosSum.add(new Nodo(sym.numero, "1", ileft, iright, null, true));
+    hijosSum.add(new Nodo(sym.numero, "1", ileft, iright, (new ArrayList<Nodo> ()), true));
     Nodo suma = new Nodo(accion.suma, accion.acciones[accion.suma], ileft, iright, hijosSum, false);    
     hijos.add(suma);
 
@@ -4034,7 +4034,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4073,7 +4073,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4112,7 +4112,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4151,7 +4151,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4190,7 +4190,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);
@@ -4225,7 +4225,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -5230,7 +5230,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(t);
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", tleft, fright, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", tleft, fright, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo vec = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], tleft, fright, hijosVec, false);
     param.add(0, vec);
@@ -5328,7 +5328,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(t);
     hijosVec.add(i);
-    hijosVec.add(new Nodo(sym.numero, "1", tleft, i1right, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", tleft, i1right, (new ArrayList<Nodo> ()), true));
     hijosVec.add(i1);
     Nodo vec = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], tleft, i1right, hijosVec, false);
     param.add(vec);
@@ -5786,7 +5786,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    hijos.add(new Nodo(sym.numero, "1", ileft, d1right, null, true));
+    hijos.add(new Nodo(sym.numero, "1", ileft, d1right, (new ArrayList<Nodo> ()), true));
     hijos.add(d1);
 
     RESULT = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, d1right, hijos, false);

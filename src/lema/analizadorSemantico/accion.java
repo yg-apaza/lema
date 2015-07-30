@@ -72,12 +72,13 @@ public class accion
     public static final int parametroFun = 49;          // Usado
     public static final int parametroFunSim = 50;       // Usado
     public static final int parametroFunMat = 51;       // Usado   
+    public static final int finFuncion = 52;            // Usado
 	
-    public static final int casos = 52;                 // Usado
-    public static final int caso = 53;                  // Usado
-    public static final int pordefecto = 54;            // Usado
-    public static final int saltar = 55;                // Usado
-    public static final int finFuncion = 56;            // Usado
+    public static final int casos = 53;                 // Usado
+    public static final int caso = 54;                  // Usado
+    public static final int pordefecto = 55;            // Usado
+    public static final int saltar = 56;                // Usado
+    
     
     public static final String[] acciones = new String[]
     {
@@ -133,10 +134,10 @@ public class accion
         "PARAMETRO FUNCION",
         "PARAMETRO FUNCION SIMPLE",
         "PARAMETRO FUNCION MATRIZ",
+        "FIN DE FUNCION",
         "CASOS",
         "CASO",
         "POR DEFECTO",
-        "SALTAR",
-        "FIN DE FUNCION"
+        "SALTAR"        
     };
 }
