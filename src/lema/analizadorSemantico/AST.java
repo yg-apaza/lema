@@ -122,7 +122,7 @@ public class AST
                                     
                                     if(v.getDimension2() != elementosMat.size())
                                         errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de elementos introducidos a la matriz/vector '" + v.getId() + "' incorrecto");
-                                    else if(!tablaSimbolos.putIdentificador(v.getId(), v))
+                                    if(!tablaSimbolos.putIdentificador(v.getId(), v))
                                                 errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
                                 }
                                 else
@@ -143,24 +143,16 @@ public class AST
                                 }
                                 if(d2)
                                 {
-                                    if(v.getDimension1() == elementosMat.size())
-                                    {
-                                        boolean numero = true;
-                                        for(int i = 0; i < elementosMat.size(); i++)
-                                        {
-                                            ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
-                                            if(!(v.getDimension2() == elementosMat2.size()))
-                                            {
-                                                errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz/vector '" + v.getId() + "' incorrecto");
-                                                numero = false;
-                                            }
-                                        }
-                                        if(numero)
-                                            if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
-                                    }
-                                    else
+                                    if(v.getDimension1() != elementosMat.size())
                                         errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz/vector '" + v.getId() + "' no coincide con las inicializadas");
+                                    for(int i = 0; i < elementosMat.size(); i++)
+                                    {
+                                        ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
+                                        if(v.getDimension2() != elementosMat2.size())
+                                            errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz/vector '" + v.getId() + "' incorrecto");
+                                    }
+                                    if(!tablaSimbolos.putIdentificador(v.getId(), v))
+                                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
                                 }
                             }
                         }
@@ -221,7 +213,7 @@ public class AST
                                     
                                     if(v.getDimension2() != elementosMat.size())
                                         errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de elementos introducidos a la matriz/vector '" + v.getId() + "' incorrecto");
-                                    else if(!tablaSimbolos.putIdentificador(v.getId(), v))
+                                    if(!tablaSimbolos.putIdentificador(v.getId(), v))
                                                 errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
                                 }
                                 else
@@ -242,24 +234,16 @@ public class AST
                                 }
                                 if(d2)
                                 {
-                                    if(v.getDimension1() == elementosMat.size())
-                                    {
-                                        boolean numero = true;
-                                        for(int i = 0; i < elementosMat.size(); i++)
-                                        {
-                                            ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
-                                            if(!(v.getDimension2() == elementosMat2.size()))
-                                            {
-                                                errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz/vector '" + v.getId() + "' incorrecto");
-                                                numero = false;
-                                            }
-                                        }
-                                        if(numero)
-                                            if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
-                                    }
-                                    else
+                                    if(v.getDimension1() != elementosMat.size())
                                         errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz/vector '" + v.getId() + "' no coincide con las inicializadas");
+                                    for(int i = 0; i < elementosMat.size(); i++)
+                                    {
+                                        ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
+                                        if(v.getDimension2() != elementosMat2.size())
+                                            errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz/vector '" + v.getId() + "' incorrecto");
+                                    }
+                                    if(!tablaSimbolos.putIdentificador(v.getId(), v))
+                                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
                                 }
                             }
                         }
@@ -368,13 +352,26 @@ public class AST
                                 }
                                 
                                 if(flag)
+                                {
                                     f.setDefinido(true);
+                                    tablaSimbolos.insertarBloque();
+                                    for (AtributoVariable argumento : f.getArgumentos())
+                                    {
+                                        if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
+                                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                                " Identificador '" + argumento.getId() + "' ya fue declarado");
+                                    }
+                                }
                                 
                             }
                         }
                     }
                 break;
                 
+                case accion.finFuncion:
+                    tablaSimbolos.salirBloque();
+                break;
+                    
                     
                 case accion.declaracionVar:
                     tablaSimbolos.insertarBloque();
