@@ -6,31 +6,31 @@ public class accion
     
     public static final int cabecera = 1;               // Usado
     public static final int programaPrincipal = 2;      // Usado
-    public static final int defFuncion = 3;             //Usado
+    public static final int defFuncion = 3;             // Usado
     
     public static final int bloque = 4;                 // Usado
     public static final int finBloque = 5;		// Usado
     
     public static final int declaracionConsSim = 6;     // Usado
-    public static final int declaracionConsVec = 7;     // Usado
+    public static final int declaracionConsVec = 7;     // Eliminar
     public static final int declaracionConsMat = 8; 	// Usado
     
     public static final int declaracionProt = 9;        // Usado
     public static final int parametroProt = 10;         // Usado     
-    public static final int parametroProtVec = 11;      // Usado
+    public static final int parametroProtVec = 11;      // Eliminar
     public static final int parametroProtMat = 12;	// Usado
     
     public static final int declaracionVar = 13;        // Usado
 	
     public static final int declaracionSim = 14;        // Usado
-    public static final int declaracionVec = 15;        // Usado
+    public static final int declaracionVec = 15;        // Eliminar
     public static final int declaracionMat = 16;        // Usado
     
     public static final int declaracionSimIni = 17;     // Usado
-    public static final int declaracionVecIni = 18;     // Usado
+    public static final int declaracionVecIni = 18;     // Eliminar
     public static final int declaracionMatIni = 19;     // Usado
     
-    public static final int accesoVec = 20;             // Usado
+    public static final int accesoVec = 20;             // Eliminar
     public static final int accesoMat = 21;             // Usado
       
     public static final int asignacion = 22;            // Usado
@@ -76,7 +76,7 @@ public class accion
     public static final int funcion = 53;               // Usado
     public static final int parametroFun = 54;          // Usado
     public static final int parametroFunSim = 55;       // Usado
-    public static final int parametroFunVec = 56;       // Usado
+    public static final int parametroFunVec = 56;       // Eliminar
     public static final int parametroFunMat = 57;       // Usado   
 	
     public static final int casos = 58;                 // Usado

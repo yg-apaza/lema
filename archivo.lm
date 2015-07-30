@@ -1,13 +1,9 @@
-entero a[2];
-entero b;
-entero funcion(entero, entero);
-vacio func();
-entero func();
-
-real fun(real[2][2], real[3][3]);
-real h;
-
+const entero a[2][3] = {{1,2,3}, {2,2,3}};
+entero fun(entero[5]);
 principal()
 {
-	entero c;
+}
+
+entero fun(entero a[4], entero b[5][6])
+{
 }

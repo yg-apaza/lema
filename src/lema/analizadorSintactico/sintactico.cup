@@ -3,6 +3,7 @@ package lema.analizadorSintactico;
 import java.util.ArrayList;
 import lema.analizadorSemantico.Nodo;
 import lema.analizadorSemantico.accion;
+import lema.analizadorLexico.sym;
 
 parser code
 {:
@@ -341,8 +342,10 @@ PARAMETROPROTOTIPO ::= TIPONUMERO:t INDICE:i1 coma:c PARAMETROPROTOTIPO:p
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(t);
+    // Revisar
+    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijos.add(i1);
-    Nodo n = new Nodo(accion.parametroProtVec, accion.acciones[accion.parametroProtVec], tleft, cright, hijos, false);    
+    Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], tleft, cright, hijos, false);    
     p.add(0, n);
 
     RESULT = p;
@@ -366,8 +369,10 @@ PARAMETROPROTOTIPO ::= TIPONUMERO:t INDICE:i1
     ArrayList<Nodo> param = new ArrayList<Nodo>();
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(t);
+    // Revisar
+    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijos.add(i1);
-    Nodo n = new Nodo(accion.parametroProtVec, accion.acciones[accion.parametroProtVec], tleft, i1right, hijos, false);    
+    Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], tleft, i1right, hijos, false);    
     param.add(n);
 
     RESULT = param;
@@ -634,19 +639,22 @@ DECVECT ::= id:i INDICE:i1 igual EXPGEN:e
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
+    // Revisar
+    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijos.add(i1);
     hijos.add(e);
 
-    RESULT = new Nodo(accion.declaracionVecIni, accion.acciones[accion.declaracionVecIni], eleft, eright, hijos, false);
+    RESULT = new Nodo(accion.declaracionMatIni, accion.acciones[accion.declaracionMatIni], eleft, eright, hijos, false);
 :};
 
 DECVECT ::= id:i INDICE:i1
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
+    // Revisar
+    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijos.add(i1);
-
-    RESULT = new Nodo(accion.declaracionVec, accion.acciones[accion.declaracionVec], i1left, i1right, hijos, false);
+    RESULT = new Nodo(accion.declaracionMat, accion.acciones[accion.declaracionMat], i1left, i1right, hijos, false);
 :};
 
 DECMAT ::= id:i INDICE:i1 INDICE:i2 igual EXPGEN:e
@@ -729,10 +737,12 @@ DECCON ::= id:i INDICE:i1 igual EXPGEN:e
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
+    // Revisar
+    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijos.add(i1);
     hijos.add(e);
 
-    RESULT = new Nodo(accion.declaracionConsVec, accion.acciones[accion.declaracionConsVec], eleft, eright, hijos, false);
+    RESULT = new Nodo(accion.declaracionConsMat, accion.acciones[accion.declaracionConsMat], eleft, eright, hijos, false);
 :};
 
 DECCON ::= id:i INDICE:i1 INDICE:i2 igual EXPGEN:e
@@ -887,8 +897,7 @@ ACT ::= id:i decr
     hijos.add(i);    
     ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
     hijosRes.add(i);
-    Nodo uno = new Nodo(sym.numero, "1", ileft, iright, null, true);
-    hijosRes.add(uno);
+    hijosRes.add(new Nodo(sym.numero, "1", ileft, iright, null, true));
     Nodo resta = new Nodo(accion.resta, accion.acciones[accion.resta], ileft, iright, hijosRes, false);    
     hijos.add(resta);
 
@@ -901,8 +910,7 @@ ACT ::= id:i incr
     hijos.add(i);    
     ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
     hijosSum.add(i);
-    Nodo uno = new Nodo(sym.numero, "1", ileft, iright, null, true);
-    hijosSum.add(uno);
+    hijosSum.add(new Nodo(sym.numero, "1", ileft, iright, null, true));
     Nodo suma = new Nodo(accion.suma, accion.acciones[accion.suma], ileft, iright, hijosSum, false);    
     hijos.add(suma);
 
@@ -1299,8 +1307,10 @@ ASIGNACION ::= id:i INDICE:i1 a_div:o EXPGEN:e punto_coma:f
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, oright, hijosVec, false);    
+    Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
     ArrayList<Nodo> hijosDiv = new ArrayList<Nodo>();
     hijosDiv.add(aVec);
@@ -1316,8 +1326,10 @@ ASIGNACION ::= id:i INDICE:i1 a_prod:o EXPGEN:e punto_coma:f
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, oright, hijosVec, false);    
+    Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
     ArrayList<Nodo> hijosProd = new ArrayList<Nodo>();
     hijosProd.add(aVec);
@@ -1333,8 +1345,10 @@ ASIGNACION ::= id:i INDICE:i1 a_resta:o EXPGEN:e punto_coma:f
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, oright, hijosVec, false);    
+    Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
     ArrayList<Nodo> hijosRes = new ArrayList<Nodo>();
     hijosRes.add(aVec);
@@ -1350,8 +1364,10 @@ ASIGNACION ::= id:i INDICE:i1 a_suma:o EXPGEN:e punto_coma:f
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, oright, hijosVec, false);    
+    Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
     ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
     hijosSum.add(aVec);
@@ -1367,8 +1383,10 @@ ASIGNACION ::= id:i INDICE:i1 igual:o EXPGEN:e punto_coma:f
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, oright, hijosVec, false);    
+    Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);
     hijos.add(e);
 
@@ -1380,8 +1398,10 @@ ASIGNACION ::= id:i INDICE:i1 a_mod:o EXPGEN:e punto_coma:f
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo aVec = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, oright, hijosVec, false);    
+    Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
     ArrayList<Nodo> hijosMod = new ArrayList<Nodo>();
     hijosMod.add(aVec);
@@ -1785,8 +1805,10 @@ PARAMETRO ::= TIPONUMERO:t id:i INDICE:i1 coma:f PARAMETRO:param
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(t);
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo vec = new Nodo(accion.parametroFunVec, accion.acciones[accion.parametroFunVec], tleft, fright, hijosVec, false);
+    Nodo vec = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], tleft, fright, hijosVec, false);
     param.add(0, vec);
 
     RESULT = param;
@@ -1825,8 +1847,10 @@ PARAMETRO ::= TIPONUMERO:t id:i INDICE:i1
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(t);
     hijosVec.add(i);
+    // Revisar
+    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijosVec.add(i1);
-    Nodo vec = new Nodo(accion.parametroFunVec, accion.acciones[accion.parametroFunVec], tleft, i1right, hijosVec, false);
+    Nodo vec = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], tleft, i1right, hijosVec, false);
     param.add(vec);
 
     RESULT = param;
@@ -2007,9 +2031,11 @@ OPERANDOENTERO  ::= id:i INDICE:d1
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
+    // Revisar
+    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
     hijos.add(d1);
 
-    RESULT = new Nodo(accion.accesoVec, accion.acciones[accion.accesoVec], ileft, d1right, hijos, false);
+    RESULT = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, d1right, hijos, false);
 :};
 
 OPERANDOENTERO  ::= id:i

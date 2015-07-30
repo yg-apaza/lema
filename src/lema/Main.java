@@ -20,9 +20,7 @@ public class Main
     public static void main(String[] args) throws IOException
     {
         if(args.length == 0)
-        {
             System.out.println("Debe ingresar un archivo");
-        }
         else
         {
             if(args.length == 1)
