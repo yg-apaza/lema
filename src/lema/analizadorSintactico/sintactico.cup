@@ -395,7 +395,7 @@ DEFINICIONFUNCION ::= DECLARACIONFUNCION:f
 {:
     ArrayList<Nodo> df = new ArrayList<Nodo>();
     df.add(f);
-
+    df.add(new Nodo(accion.finFuncion, accion.acciones[accion.finFuncion], 1, 1, (new ArrayList<Nodo>()), false));
     RESULT = df;
 :};
 
@@ -503,7 +503,6 @@ DECLARACIONCON ::= pr_const:c pr_real:t id:i igual hexa_r:v punto_coma:f
 DECLARACIONFUNCION ::= DECLARACIONFUNCIONCABECERA:dc BLOQUE:b
 {:
     dc.addAll(b);
-
     RESULT = new Nodo(accion.funcion, accion.acciones[accion.funcion], bleft, bright, dc, false);
 :};
 

@@ -1,10 +1,11 @@
-const entero a[2][3] = {{1,2,3}, {2,2,3}};
-entero fun(entero[5]);
+const entero a[2][3] = {{1,2,3}, {2,2}};
+entero fun(entero, entero[5][3]);
 principal()
 {
 	entero s[3];
 }
 
-entero fun(entero a[4], entero b[5][6])
+entero fun(entero a, entero b[5][3])
 {
+	entero b;
 }

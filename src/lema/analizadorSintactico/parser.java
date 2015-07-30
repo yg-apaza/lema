@@ -1917,7 +1917,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> df = new ArrayList<Nodo>();
     df.add(f);
-
+    df.add(new Nodo(accion.finFuncion, accion.acciones[accion.finFuncion], 1, 1, (new ArrayList<Nodo>()), false));
     RESULT = df;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICIONFUNCION",51, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2190,7 +2190,6 @@ class CUP$parser$actions {
 		ArrayList<Nodo> b = (ArrayList<Nodo>)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
     dc.addAll(b);
-
     RESULT = new Nodo(accion.funcion, accion.acciones[accion.funcion], bleft, bright, dc, false);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DECLARACIONFUNCION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

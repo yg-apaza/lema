@@ -314,6 +314,10 @@ public class Main
             
             ast.verificar();
             ArrayList<String> errores = ast.getErrores();
+            ArrayList<String> warnings = ast.getWarnings();
+            
+            for(String w : warnings)
+                System.out.println(w);
             
             if(errores.isEmpty())
                 System.out.println("No se encontraron errores");

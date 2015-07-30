@@ -77,6 +77,7 @@ public class accion
     public static final int caso = 53;                  // Usado
     public static final int pordefecto = 54;            // Usado
     public static final int saltar = 55;                // Usado
+    public static final int finFuncion = 56;            // Usado
     
     public static final String[] acciones = new String[]
     {
@@ -135,6 +136,7 @@ public class accion
         "CASOS",
         "CASO",
         "POR DEFECTO",
-        "SALTAR"        
+        "SALTAR",
+        "FIN DE FUNCION"
     };
 }
