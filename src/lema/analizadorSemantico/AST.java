@@ -1,12 +1,19 @@
 package lema.analizadorSemantico;
 
 import java.util.ArrayList;
+import lema.analizadorLexico.sym;
 
 public class AST
 {
     private Nodo raiz;
     private Entorno tablaSimbolos;
     private ArrayList<ArrayList<String>> errores;
+    
+    final boolean[][] compatibilidad =  {
+                                            {true,  true,   false},
+                                            {true,  true,   false},
+                                            {false, false,  true},
+                                        };
     
     public AST()
     {
@@ -31,6 +38,7 @@ public class AST
     
     private void verificar(Nodo nodo)
     {
+        ArrayList<String> datos = new ArrayList<String>();
         if(!nodo.esTerminal())
         {
             AtributoVariable v;
@@ -368,6 +376,27 @@ public class AST
                     }
                 break;
                 
+               
+                case accion.asignacion:
+                    AtributoVariable t;
+                    if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
+                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                            " Identificador '" + nodo.getHijos().get(0).getValor() + "' no declarado");
+                    else
+                    {
+                        if(nodo.getHijos().get(1).esTerminal())
+                        {
+                            
+                        }
+                        else
+                        {
+                            datos.add(t.getTipo());
+                            datos.add(t.esMatriz()?"true":"false");
+                        }
+                    }
+                break;
+                    
+                    
                 case accion.finFuncion:
                     tablaSimbolos.salirBloque();
                 break;
@@ -384,7 +413,160 @@ public class AST
             }
             
             for(int i = 0; i < nodo.getHijos().size(); i++)
-                verificar(nodo.getHijos().get(i));
+            {
+                if(datos.isEmpty())
+                    verificar(nodo.getHijos().get(i));
+                else
+                    verificar(nodo.getHijos().get(i), datos);
+            }
+        }
+    }
+    
+    private void verificar(Nodo nodo, ArrayList<String> datos)
+    {
+        if(!nodo.esTerminal())
+        {
+            switch(nodo.getCodigo())
+            {
+                case accion.suma:
+                    if(nodo.getHijos().get(0).esTerminal())
+                    {
+                        int iC = -1;
+                        switch(datos.get(0))
+                        {
+                            case "entero":
+                                iC = 0;
+                            break;
+
+                            case "real":
+                                iC = 1;
+                            break;
+
+                            case "cadena":
+                                iC = 2;
+                            break;
+                        }
+                        
+                        if(nodo.getHijos().get(0).getCodigo() == sym.id)
+                        {
+                            
+                            AtributoVariable t;
+                            if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
+                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                    " Identificador '" + nodo.getHijos().get(0).getValor() + "' no declarado");
+                            else
+                            {
+                                int iA = -1;
+                                switch(t.getTipo())
+                                {
+                                    case "entero":
+                                        iA = 0;
+                                    break;
+
+                                    case "real":
+                                        iA = 1;
+                                    break;
+
+                                    case "cadena":
+                                        iA = 2;
+                                    break;
+                                }
+
+                                if(!compatibilidad[iC][iA])
+                                    errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                        " Variable '" + nodo.getHijos().get(0).getValor() + "' no es compatible con el tipo de dato de asignación");
+                            }
+                        }
+                        else
+                        {
+                            int iA = -1;
+                            switch(nodo.getHijos().get(0).getCodigo())
+                            {
+                                case sym.octa_e:
+                                case sym.hexa_e:
+                                case sym.numero:
+                                    iA = 0;
+                                break;
+
+                                case sym.octa_r:
+                                case sym.hexa_r:
+                                case sym.real:
+                                    iA = 1;
+                                break;
+                                
+                                case sym.cadena:
+                                    iA = 2;
+                                break;
+                            }
+
+                            if(!compatibilidad[iC][iA])
+                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                    " El valor '" + nodo.getHijos().get(0).getValor() + "' no es compatible con el tipo de dato de asignación");
+                        }
+                        if(nodo.getHijos().get(1).getCodigo() == sym.id)
+                        {
+                            AtributoVariable t;
+                            if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(1).getValor())) == null)
+                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                    " Identificador '" + nodo.getHijos().get(1).getValor() + "' no declarado");
+                            else
+                            {
+                                int iA = -1;
+                                switch(t.getTipo())
+                                {
+                                    case "entero":
+                                        iA = 0;
+                                    break;
+
+                                    case "real":
+                                        iA = 1;
+                                    break;
+
+                                    case "cadena":
+                                        iA = 2;
+                                    break;
+                                }
+
+                                if(!compatibilidad[iC][iA])
+                                    errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                        " Variable '" + nodo.getHijos().get(1).getValor() + "' no es compatible con el tipo de dato de asignación");
+                            }
+                        }
+                        else
+                        {
+                            int iA = -1;
+                            switch(nodo.getHijos().get(1).getCodigo())
+                            {
+                                case sym.octa_e:
+                                case sym.hexa_e:
+                                case sym.numero:
+                                    iA = 0;
+                                break;
+
+                                case sym.octa_r:
+                                case sym.hexa_r:
+                                case sym.real:
+                                    iA = 1;
+                                break;
+                                
+                                case sym.cadena:
+                                    iA = 2;
+                                break;
+                            }
+
+                            if(!compatibilidad[iC][iA])
+                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                    " El valor '" + nodo.getHijos().get(1).getValor() + "' no es compatible con el tipo de dato de asignación");
+                        }
+                    }
+                    
+                break;
+            }
+            
+            for(int i = 0; i < nodo.getHijos().size(); i++)
+            {
+                verificar(nodo.getHijos().get(i), datos);
+            }
         }
     }
     

@@ -3664,10 +3664,7 @@ class CUP$parser$actions {
 		int o1right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo o1 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(o1);
-
-    RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], o1left, o1right, operandos, false);
+    RESULT = o1;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3681,10 +3678,7 @@ class CUP$parser$actions {
 		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nodo e1 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(e1);
-
-    RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], e1left, e1right, operandos, false);
+    RESULT = e1;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3700,7 +3694,6 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> operandos = new ArrayList<Nodo>();
     operandos.add(o1);
-
     RESULT = new Nodo(accion.negatividad, accion.acciones[accion.negatividad], o1left, o1right, operandos, false);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

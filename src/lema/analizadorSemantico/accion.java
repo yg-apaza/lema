@@ -61,7 +61,7 @@ public class accion
     public static final int transpuesta = 42;           // Usado
     
     public static final int negatividad = 43;           // Usado
-    public static final int positividad = 44;           // Usado
+    public static final int positividad = 44;           // Eliminar
     
     public static final int operacionCond = 45;         // Usado
     

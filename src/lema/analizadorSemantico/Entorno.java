@@ -71,7 +71,15 @@ public class Entorno
     {
         for(EntornoNodo e = actual; e != null; e = e.anterior)
         {
-            AtributoVariable found = (AtributoVariable)(e.tabla.get(name));
+            AtributoVariable found;
+            try
+            {
+                found = (AtributoVariable)(e.tabla.get(name));
+            }
+            catch(ClassCastException ex)
+            {
+                return null;
+            }
             if (found != null)
                 return found;
         }
@@ -80,7 +88,16 @@ public class Entorno
     
     public AtributoFuncion buscarFuncion(String name)
     {
-        AtributoFuncion found = (AtributoFuncion)(raiz.tabla.get(name));
+        AtributoFuncion found;
+        try
+        {
+            found = (AtributoFuncion)(raiz.tabla.get(name));
+        }
+        catch(ClassCastException ex)
+        {
+            return null;
+        }
+        
         if (found != null)
             return found;
         return null;   

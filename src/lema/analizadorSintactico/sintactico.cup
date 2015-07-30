@@ -1147,25 +1147,18 @@ EXPRESION ::= neg par_ab EXPRESION:e1 par_ce
 
 EXPRESION ::= mas OPERANDO:o1
 {:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(o1);
-
-    RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], o1left, o1right, operandos, false);
+    RESULT = o1;
 :} %prec premas;
 
 EXPRESION ::= mas par_ab EXPRESION:e1 par_ce
 {:
-    ArrayList<Nodo> operandos = new ArrayList<Nodo>();
-    operandos.add(e1);
-
-    RESULT = new Nodo(accion.positividad, accion.acciones[accion.positividad], e1left, e1right, operandos, false);
+    RESULT = e1;
 :} %prec premas;
 
 EXPRESION ::= menos OPERANDO:o1
 {:
     ArrayList<Nodo> operandos = new ArrayList<Nodo>();
     operandos.add(o1);
-
     RESULT = new Nodo(accion.negatividad, accion.acciones[accion.negatividad], o1left, o1right, operandos, false);
 :} %prec premenos;
 

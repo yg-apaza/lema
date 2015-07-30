@@ -1,12 +1,8 @@
-const entero a[2][3] = {{1,2,3}, {2,2}};
-entero fun(entero, entero[5][3]);
+entero fun(entero, real);
 principal()
 {
-	entero s[3];
-}
-
-entero fun(entero x, entero b[5][3])
-{
-	entero a;
-	
+	cadena a  = "oa";
+	entero b;
+	a = 5 + 6;
+	b = a;
 }
