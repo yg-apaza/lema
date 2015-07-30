@@ -1807,8 +1807,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(t);
-    // Revisar
-    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijos.add(new Nodo(sym.numero, "1", tleft, cright, null, true));
     hijos.add(i1);
     Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], tleft, cright, hijos, false);    
     p.add(0, n);
@@ -1861,8 +1860,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> param = new ArrayList<Nodo>();
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(t);
-    // Revisar
-    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijos.add(new Nodo(sym.numero, "1", tleft, i1right, null, true));
     hijos.add(i1);
     Nodo n = new Nodo(accion.parametroProtMat, accion.acciones[accion.parametroProtMat], tleft, i1right, hijos, false);    
     param.add(n);
@@ -2509,8 +2507,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    // Revisar
-    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijos.add(new Nodo(sym.numero, "1", eleft, eright, null, true));
     hijos.add(i1);
     hijos.add(e);
 
@@ -2533,8 +2530,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    // Revisar
-    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijos.add(new Nodo(sym.numero, "1", i1left, i1right, null, true));
     hijos.add(i1);
     RESULT = new Nodo(accion.declaracionMat, accion.acciones[accion.declaracionMat], i1left, i1right, hijos, false);
 
@@ -2742,8 +2738,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    // Revisar
-    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijos.add(new Nodo(sym.numero, "1", eleft, eright, null, true));
     hijos.add(i1);
     hijos.add(e);
 
@@ -4040,8 +4035,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4080,8 +4074,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4120,8 +4113,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4160,8 +4152,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -4200,8 +4191,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);
@@ -4236,8 +4226,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", ileft, oright, null, true));
     hijosVec.add(i1);
     Nodo aVec = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, oright, hijosVec, false);    
     hijos.add(aVec);    
@@ -5242,8 +5231,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(t);
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", tleft, fright, null, true));
     hijosVec.add(i1);
     Nodo vec = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], tleft, fright, hijosVec, false);
     param.add(0, vec);
@@ -5341,8 +5329,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijosVec = new ArrayList<Nodo>();
     hijosVec.add(t);
     hijosVec.add(i);
-    // Revisar
-    hijosVec.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijosVec.add(new Nodo(sym.numero, "1", tleft, i1right, null, true));
     hijosVec.add(i1);
     Nodo vec = new Nodo(accion.parametroFunMat, accion.acciones[accion.parametroFunMat], tleft, i1right, hijosVec, false);
     param.add(vec);
@@ -5800,8 +5787,7 @@ class CUP$parser$actions {
 		
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(i);
-    // Revisar
-    hijos.add(new Nodo(sym.numero, "1", 1, 1, null, true));
+    hijos.add(new Nodo(sym.numero, "1", ileft, d1right, null, true));
     hijos.add(d1);
 
     RESULT = new Nodo(accion.accesoMat, accion.acciones[accion.accesoMat], ileft, d1right, hijos, false);
