@@ -12,7 +12,7 @@ public class AST
     final boolean[][] compatibilidad =  {
                                             {true,  true,   false},
                                             {true,  true,   false},
-                                            {false, false,  true},
+                                            {false, false,  true}
                                         };
     
     public AST()
@@ -449,7 +449,6 @@ public class AST
                         
                         if(nodo.getHijos().get(0).getCodigo() == sym.id)
                         {
-                            
                             AtributoVariable t;
                             if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
                                 errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +

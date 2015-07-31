@@ -25,7 +25,7 @@ import lema.analizadorSemantico.Nodo;
 
 L = [a-zA-Z_]
 H = [0-9A-F]
-O = [0-8]
+O = [0-7]
 D = [0-9]
 WHITE = [ \t\r\n]
 
