@@ -3,50 +3,50 @@ package lema.analizadorSemantico;
 public class TypeCheck
 {
     /** Matriz de compatibilidad para operaciones unarias
-     * (negacion, inversa, transpuesta, negatividad)
+     * (negacion, inversa, transpuesta, negatividad, simple)
      * (D1: Tipo Esperado, D2: Tipo Dado, D3: Operacion)
      */
     private static final boolean [][][] compatibilidad1 = 
         {
             // Entero
             {
-                {true , false, false, true },
-                {true , false, false, true },
-                {true , false, false, false},
-                {true , false, false, false},
-                {false, false, false, false}
+                {true , false, false, true , true },
+                {true , false, false, true , true },
+                {true , false, false, false, false},
+                {true , false, false, false, false},
+                {false, false, false, false, false}
             },
             // Real
             {
-                {true , false, false, true },
-                {true , false, false, true },
-                {true , false, false, false},
-                {true , false, false, false},
-                {false, false, false, false}
+                {true , false, false, true , true },
+                {true , false, false, true , true },
+                {true , false, false, false, false},
+                {true , false, false, false, false},
+                {false, false, false, false, false}
             },
             // Entero[]
             {
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, true , true , true },
-                {false, true , true , true },
-                {false, false, false, false}
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, true , true , true , true },
+                {false, true , true , true , true },
+                {false, false, false, false, false}
             },
             // Real[]
             {
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, true ,  true,  true},
-                {false, true ,  true,  true},
-                {false, false, false, false}
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, true ,  true,  true, true },
+                {false, true ,  true,  true, true },
+                {false, false, false, false, false}
             },
             // Cadena
             {
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false}
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, false, false, false, true }
             }
         }
     ;
@@ -1239,4 +1239,8 @@ public class TypeCheck
             }
         }
     ;
+    
+    
+    
+    
 }
