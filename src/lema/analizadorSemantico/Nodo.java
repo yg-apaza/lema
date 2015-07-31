@@ -105,7 +105,7 @@ public class Nodo
             for(int j = 0;j < ancho;j++)
                 out = out + " ";
 
-            out = out + "|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " )";
+            out = out + "|--[ " + nodo.getValor() + " ]" + " --> ( " + padre + " + " + u + " ) Lin: " + linea + " Col: " + columna;
             
             largo = (8+nodo.getValor().length())/2;
             ancho = ancho + largo;
@@ -129,9 +129,9 @@ public class Nodo
                     out = out + " ";
             }
  
-            out = out + "[ " + nodo.getValor() + " ] --> ( " + padre + " + " + u + " )";                
+            out = out + "[ " + nodo.getValor() + " ] --> ( " + padre + " + " + u + " ) Lin: " + linea + " Col: " + columna;                
         }
         
         return out;
-    }   
+    }
 }

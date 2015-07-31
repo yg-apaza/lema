@@ -77,6 +77,7 @@ public class accion
     public static final int caso = 53;                  // Usado
     public static final int pordefecto = 54;            // Usado
     public static final int saltar = 55;                // Usado
+    public static final int elemVec = 56;               // Usado
     
     
     public static final String[] acciones = new String[]
@@ -127,7 +128,7 @@ public class accion
         "NEGATIVIDAD",
         "OPERACION CONDICIONAL",
         "ARGUMENTO",        
-        "ELEMENTOS",
+        "ELEMENTO MATRIZ",
         "FUNCION",
         "PARAMETRO FUNCION",
         "PARAMETRO FUNCION SIMPLE",
@@ -136,6 +137,7 @@ public class accion
         "CASOS",
         "CASO",
         "POR DEFECTO",
-        "SALTAR"        
+        "SALTAR",
+        "ELEMENTO VECTOR"
     };
 }

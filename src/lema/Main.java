@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
+import lema.analizadorSemantico.TypeCheck;
 
 public class Main
 {
@@ -308,8 +309,6 @@ public class Main
             Object result = p.parse();
             
             Nodo raiz = p.getRaiz();
-            System.out.println(raiz);
-            System.out.flush();
             AST ast = new AST(raiz);
             
             ast.verificar();
@@ -330,7 +329,13 @@ public class Main
             }
             
             System.out.println("TABLA DE SIMBOLOS");
+            System.out.flush();
             System.out.println(ast.getTabla());
+            System.out.flush();
+            
+            System.out.println("ARBOL DE SINTAXIS ABSTRACTA");
+            System.out.flush();
+            System.out.println(ast);
             System.out.flush();
             
         }

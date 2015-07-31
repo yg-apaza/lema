@@ -1,12 +1,14 @@
 package lema.analizadorSemantico;
 
+import java.util.ArrayList;
+
 public class TypeCheck
 {
     /** Matriz de compatibilidad para operaciones unarias
      * (negacion, inversa, transpuesta, negatividad, simple)
      * (D1: Tipo Esperado, D2: Tipo Dado, D3: Operacion)
      */
-    private static final boolean [][][] compatibilidad1 = 
+    public static final boolean [][][] compatibilidad1 = 
         {
             // Entero
             {
@@ -56,7 +58,7 @@ public class TypeCheck
      * (D1: Tipo Esperado, D2: Tipo Dado 1, D3: Tipo Dado 2, D4: Operacion)
      */
     
-    private static final boolean [][][][] compatibilidad2 =
+    public static final boolean [][][][] compatibilidad2 =
         {
             // Entero
             {
@@ -400,7 +402,7 @@ public class TypeCheck
      * (+, -, *, /, %, >, <, >=, <=, Y, O, ==, !=)
      * (D1: Tipo Esperado, D2: Tipo Dado 1, D3: Tipo Dado 2, D4: Tipo Dado 3)
      */
-    private final static boolean [][][][] compatibilidad3 =
+    public final static boolean [][][][] compatibilidad3 =
         {
             // Entero
             {
@@ -1239,8 +1241,40 @@ public class TypeCheck
             }
         }
     ;
-    
-    
-    
+    /** Dimension: 0 - unarios, 1 - binarios, 2 - ternarios */
+    public int tipoCompatible(ArrayList<Integer> operandos, int op, int dimension)
+    {
+        try
+        {
+            switch(dimension)
+            {
+                case 0:
+                    for(int i = 0; i < compatibilidad1[0].length; i++)
+                        if(compatibilidad1[i][operandos.get(0)][op])
+                            return i;
+                break;
+
+                case 1:
+                    for(int i = 0; i < compatibilidad2[0].length; i++)
+                        if(compatibilidad2[i][operandos.get(0)][operandos.get(1)][op])
+                            return i;
+                break;
+
+                case 2:
+                    for(int i = 0; i < compatibilidad3[0].length; i++)
+                        if(compatibilidad3[i][operandos.get(0)][operandos.get(1)][operandos.get(2)])
+                            return i;
+                break;
+            }
+        }
+        catch(ArrayIndexOutOfBoundsException ex)
+        {
+            System.out.println("EXCEPCION");
+            return -1;
+        }
+        
+        return -1;
+    }        
+            
     
 }

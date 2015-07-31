@@ -8,13 +8,15 @@ public class AST
     private Nodo raiz;
     private Entorno tablaSimbolos;
     private ArrayList<ArrayList<String>> errores;
+    TypeCheck tc;
     
+    /*
     final boolean[][] compatibilidad =  {
                                             {true,  true,   false},
                                             {true,  true,   false},
                                             {false, false,  true}
                                         };
-    
+    */
     public AST()
     {
         this(new Nodo());
@@ -27,10 +29,74 @@ public class AST
         errores = new ArrayList<>();
         errores.add(new ArrayList<String>());
         errores.add(new ArrayList<String>());
+        tc = new TypeCheck();
+    }
+    
+    private void fix(Nodo nodo)
+    {
+        switch(nodo.getCodigo())
+        {
+            case accion.elemMat:
+                ArrayList<Nodo> elementosMat = nodo.getHijos();
+                if(elementosMat.isEmpty())
+                {
+                    // Revisar
+                    nodo.getHijos().add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), (new ArrayList<Nodo>()), false));
+                }
+                else
+                {
+                    /** Los elementos contenidos por la matriz son simples o vectores, TRUE Matrices, FALSE Simples*/
+                    boolean flag = (accion.elemMat == elementosMat.get(0).getCodigo());
+                    boolean iguales = true;
+                    for(int i = 0; i < elementosMat.size(); i++)
+                    {
+                        if(elementosMat.get(i).getCodigo() == accion.elemMat)
+                        {
+                            elementosMat.get(i).setCodigo(accion.elemVec);
+                            elementosMat.get(i).setValor(accion.acciones[accion.elemVec]);
+                        }
+                    }
+                    
+                    for(int i = 1; i < elementosMat.size(); i++)
+                    {
+                        if(!((elementosMat.get(i).getCodigo() == accion.elemVec) == flag))
+                        {
+                            iguales = false;
+                            break;
+                        }
+                    }
+                    
+                    if(iguales && !flag)
+                    {
+                        // Revisar
+                        ArrayList<Nodo> enlace = new ArrayList<Nodo>();
+                        enlace.add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), elementosMat, false));
+                        nodo.setHijos(enlace);
+                        //nodo.getHijos().set(0, new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), elementosMat, false));
+                    }
+                }
+            break;
+                
+            case accion.elemVec:
+                for(int i = 0; i < nodo.getHijos().size(); i++)
+                {
+                    if(nodo.getHijos().get(i).getCodigo() == accion.elemMat)
+                    {
+                        nodo.getHijos().get(i).setCodigo(accion.elemVec);
+                        nodo.getHijos().get(i).setValor(accion.acciones[accion.elemVec]);
+                    }
+                }
+            break;
+        }
+        
+        if(!nodo.esTerminal())
+            for(int i = 0; i < nodo.getHijos().size(); i++)
+                fix(nodo.getHijos().get(i));
     }
     
     public void verificar()
     {
+        fix(raiz);
         errores.get(0).clear();
         errores.get(1).clear();
         verificar(raiz);
@@ -38,7 +104,6 @@ public class AST
     
     private void verificar(Nodo nodo)
     {
-        ArrayList<String> datos = new ArrayList<String>();
         if(!nodo.esTerminal())
         {
             AtributoVariable v;
@@ -384,15 +449,57 @@ public class AST
                                             " Identificador '" + nodo.getHijos().get(0).getValor() + "' no declarado");
                     else
                     {
-                        if(nodo.getHijos().get(1).esTerminal())
+                        // Suponiendo que el nodo es un ID
+                        int e = -1;
+                        
+                        if(t.esMatriz())
                         {
-                            
+                            switch(t.getTipo())
+                            {
+                                case "entero":
+                                    e = 2;
+                                break;
+                                    
+                                case "real":
+                                    e = 3;
+                                break;
+                                    
+                                case "cadena":
+                                    e = -1;
+                                break;
+                            }
                         }
                         else
                         {
-                            datos.add(t.getTipo());
-                            datos.add(t.esMatriz()?"true":"false");
+                            switch(t.getTipo())
+                            {
+                                case "entero":
+                                    e = 0;
+                                break;
+                                    
+                                case "real":
+                                    e = 1;
+                                break;
+                                    
+                                case "cadena":
+                                    e = 4;
+                                break;
+                            }
                         }
+                        
+                        int r = verificarExp(nodo.getHijos().get(1));
+                        try
+                        {
+                            if(!TypeCheck.compatibilidad1[e][r][4])
+                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                " Tipo de dato asignado a la variable '" + t.getId() + "' no es compatible");
+                        }
+                        catch(ArrayIndexOutOfBoundsException ex)
+                        {
+                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
+                                                " Tipo de dato asignado a la variable '" + t.getId() + "' no es compatible");
+                        }
+                        
                     }
                 break;
                     
@@ -413,162 +520,283 @@ public class AST
             }
             
             for(int i = 0; i < nodo.getHijos().size(); i++)
-            {
-                if(datos.isEmpty())
                     verificar(nodo.getHijos().get(i));
-                else
-                    verificar(nodo.getHijos().get(i), datos);
-            }
         }
     }
     
-    private void verificar(Nodo nodo, ArrayList<String> datos)
+    public int verificarExp(Nodo exp)
     {
-        if(!nodo.esTerminal())
+        ArrayList<Integer> tiposOp = new ArrayList<Integer>();
+        int r = -1;
+        if(!exp.esTerminal())
         {
-            switch(nodo.getCodigo())
+            if(exp.getCodigo() != accion.llamadaFuncion && exp.getCodigo() != accion.accesoMat)
+                for(int i = 0; i < exp.getHijos().size(); i++)
+                    tiposOp.add(verificarExp(exp.getHijos().get(i)));
+            
+            if(exp.getCodigo() == accion.accesoMat)
+                for(int i = 1; i < exp.getHijos().size(); i++)
+                    tiposOp.add(verificarExp(exp.getHijos().get(i)));
+            
+            switch(exp.getCodigo())
             {
                 case accion.suma:
-                    if(nodo.getHijos().get(0).esTerminal())
+                    r =  tc.tipoCompatible(tiposOp, 0, 1);
+                break;
+                
+                case accion.resta:
+                    r =  tc.tipoCompatible(tiposOp, 1, 1);
+                break;
+                    
+                case accion.producto:
+                    r =  tc.tipoCompatible(tiposOp, 2, 1);
+                break;
+                
+                case accion.division:
+                    r =  tc.tipoCompatible(tiposOp, 3, 1);
+                break;
+                    
+                case accion.modulo:
+                    r =  tc.tipoCompatible(tiposOp, 4, 1);
+                break;
+                    
+                case accion.mayor:
+                    r =  tc.tipoCompatible(tiposOp, 5, 1);
+                break;
+                    
+                case accion.menor:
+                    r =  tc.tipoCompatible(tiposOp, 6, 1);
+                break;
+                    
+                case accion.mayor_igual:
+                    r =  tc.tipoCompatible(tiposOp, 7, 1);
+                break;
+                    
+                case accion.menor_igual:
+                    r =  tc.tipoCompatible(tiposOp, 8, 1);
+                break;
+                    
+                case accion.conjuncion:
+                    r =  tc.tipoCompatible(tiposOp, 9, 1);
+                break;
+                    
+                case accion.disyuncion:
+                    r =  tc.tipoCompatible(tiposOp, 10, 1);
+                break;
+                    
+                case accion.identico:
+                    r =  tc.tipoCompatible(tiposOp, 11, 1);
+                break;
+                    
+                case accion.diferente:
+                    r =  tc.tipoCompatible(tiposOp, 12, 1);
+                break;
+
+                case accion.negacion:
+                    r =  tc.tipoCompatible(tiposOp, 0, 0);
+                break;
+                    
+                case accion.inversa:
+                    r =  tc.tipoCompatible(tiposOp, 1, 0);
+                break;
+                
+                case accion.transpuesta:
+                    r =  tc.tipoCompatible(tiposOp, 2, 0);
+                break;
+                    
+                case accion.negatividad:
+                    r =  tc.tipoCompatible(tiposOp, 3, 0);
+                break;
+                    
+                case accion.operacionCond:
+                    r = tc.tipoCompatible(tiposOp, 0, 2);
+                break;
+                
+                case accion.llamadaFuncion:
+                    AtributoFuncion f;
+                    if((f = tablaSimbolos.buscarFuncion(exp.getHijos().get(0).getValor())) == null)
+                        errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                            " La función '" + exp.getHijos().get(0).getValor() + "' no existe");
+                    else
                     {
-                        int iC = -1;
-                        switch(datos.get(0))
+                        switch(f.getTipoRetorno())
                         {
                             case "entero":
-                                iC = 0;
+                                r = 0;
                             break;
 
                             case "real":
-                                iC = 1;
+                                r = 1;
                             break;
 
                             case "cadena":
-                                iC = 2;
+                                r = 4;
                             break;
                         }
-                        
-                        if(nodo.getHijos().get(0).getCodigo() == sym.id)
-                        {
-                            AtributoVariable t;
-                            if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                    " Identificador '" + nodo.getHijos().get(0).getValor() + "' no declarado");
-                            else
-                            {
-                                int iA = -1;
-                                switch(t.getTipo())
-                                {
-                                    case "entero":
-                                        iA = 0;
-                                    break;
-
-                                    case "real":
-                                        iA = 1;
-                                    break;
-
-                                    case "cadena":
-                                        iA = 2;
-                                    break;
-                                }
-
-                                if(!compatibilidad[iC][iA])
-                                    errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                        " Variable '" + nodo.getHijos().get(0).getValor() + "' no es compatible con el tipo de dato de asignación");
-                            }
-                        }
-                        else
-                        {
-                            int iA = -1;
-                            switch(nodo.getHijos().get(0).getCodigo())
-                            {
-                                case sym.octa_e:
-                                case sym.hexa_e:
-                                case sym.numero:
-                                    iA = 0;
-                                break;
-
-                                case sym.octa_r:
-                                case sym.hexa_r:
-                                case sym.real:
-                                    iA = 1;
-                                break;
-                                
-                                case sym.cadena:
-                                    iA = 2;
-                                break;
-                            }
-
-                            if(!compatibilidad[iC][iA])
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                    " El valor '" + nodo.getHijos().get(0).getValor() + "' no es compatible con el tipo de dato de asignación");
-                        }
-                        if(nodo.getHijos().get(1).getCodigo() == sym.id)
-                        {
-                            AtributoVariable t;
-                            if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(1).getValor())) == null)
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                    " Identificador '" + nodo.getHijos().get(1).getValor() + "' no declarado");
-                            else
-                            {
-                                int iA = -1;
-                                switch(t.getTipo())
-                                {
-                                    case "entero":
-                                        iA = 0;
-                                    break;
-
-                                    case "real":
-                                        iA = 1;
-                                    break;
-
-                                    case "cadena":
-                                        iA = 2;
-                                    break;
-                                }
-
-                                if(!compatibilidad[iC][iA])
-                                    errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                        " Variable '" + nodo.getHijos().get(1).getValor() + "' no es compatible con el tipo de dato de asignación");
-                            }
-                        }
-                        else
-                        {
-                            int iA = -1;
-                            switch(nodo.getHijos().get(1).getCodigo())
-                            {
-                                case sym.octa_e:
-                                case sym.hexa_e:
-                                case sym.numero:
-                                    iA = 0;
-                                break;
-
-                                case sym.octa_r:
-                                case sym.hexa_r:
-                                case sym.real:
-                                    iA = 1;
-                                break;
-                                
-                                case sym.cadena:
-                                    iA = 2;
-                                break;
-                            }
-
-                            if(!compatibilidad[iC][iA])
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                    " El valor '" + nodo.getHijos().get(1).getValor() + "' no es compatible con el tipo de dato de asignación");
-                        }
                     }
+                break;
+                
+                case accion.accesoMat:
+                    AtributoVariable t;
+                    if((t = tablaSimbolos.buscarVariable(exp.getHijos().get(0).getValor())) == null)
+                        errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                            " Identificador '" + exp.getValor() + "' no declarado");
+                    else
+                    {
+                        if(t.esMatriz())
+                        {
+                            for(int i = 0; i < tiposOp.size(); i++)
+                            {
+                                if(tiposOp.get(i) != 0)
+                                {
+                                    errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                                    " Índice " + i + " de la matriz/vector '" + exp.getHijos().get(0).getValor() + "' no es entero");
+                                    return -1;
+                                }
+                            }
+                            
+                            switch(t.getTipo())
+                            {
+                                case "entero":
+                                    r = 0;
+                                break;
+
+                                case "real":
+                                    r = 1;
+                                break;
+
+                                case "cadena":
+                                    r = 4;
+                                break;
+                            }
+                        }
+                        else
+                            errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                                " El identificador '" + exp.getHijos().get(0).getValor() + "' no es una matriz/vector");
+                    }
+                break;
                     
+                case accion.elemMat:
+                    ArrayList<Nodo> elementosMat = exp.getHijos();
+                    /** Los elementos contenidos por la matriz son simples o vectores, TRUE Vectores, FALSE Simples*/
+                    boolean noVacio = true;
+                    for(int i = 0; i < elementosMat.size(); i++)
+                    {
+                            if(elementosMat.get(i).getCodigo() == accion.elemVec && elementosMat.get(i).getHijos().isEmpty())
+                            {
+                               errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() + " No se puede inicializar matrices/vectores con tamaño 0");
+                               noVacio = false;
+                            }
+                    }
+                    if(noVacio)
+                    {
+                        for(int i = 0; i < tiposOp.size(); i++)
+                        {
+                            if(!(tiposOp.get(i) == 2 || tiposOp.get(i) == 3))
+                            {
+                                errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                                " Elemento " + i + " de la matriz/vector no es correcto");
+                                return -1;
+                            }
+                        }
+                        r = 3;
+                    }
+                break;
+                    
+                case accion.elemVec:
+                    ArrayList<Nodo> elementosVec = exp.getHijos();
+                    /** Los elementos contenidos por la matriz son simples o vectores, TRUE Vectores, FALSE Simples*/
+                    boolean noVacioVec = true;
+
+                    if(elementosVec.isEmpty())
+                    {
+                       errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() + " No se puede inicializar matrices/vectores con tamaño 0");
+                       noVacioVec = false;
+                    }
+                    if(noVacioVec)
+                    {
+                        for(int i = 0; i < tiposOp.size(); i++)
+                        {
+                            if(!(tiposOp.get(i) == 0 || tiposOp.get(i) == 1))
+                            {
+                                errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                                " Elemento " + i + " de la matriz/vector no es correcto");
+                                return -1;
+                            }
+                        }
+                        r = 3;
+                    }
                 break;
             }
-            
-            for(int i = 0; i < nodo.getHijos().size(); i++)
+        }
+        else
+        {
+            switch(exp.getCodigo())
             {
-                verificar(nodo.getHijos().get(i), datos);
+                case sym.numero:
+                case sym.octa_e:
+                case sym.hexa_e:
+                    r = 0;
+                break;
+                
+                case sym.real:
+                case sym.octa_r:
+                case sym.hexa_r:
+                    r = 1;
+                break;
+                    
+                case sym.cadena:
+                    r = 4;
+                break;
+                
+                case sym.id:
+                    AtributoVariable t;
+                    if((t = tablaSimbolos.buscarVariable(exp.getValor())) == null)
+                        errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
+                                            " Identificador '" + exp.getValor() + "' no declarado");
+                    else
+                    {
+                        if(t.esMatriz())
+                        {
+                            switch(t.getTipo())
+                            {
+                                case "entero":
+                                    r = 2;
+                                break;
+                                    
+                                case "real":
+                                    r = 3;
+                                break;
+                                    
+                                case "cadena":
+                                    r = -1;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            switch(t.getTipo())
+                            {
+                                case "entero":
+                                    r = 0;
+                                break;
+                                    
+                                case "real":
+                                    r = 1;
+                                break;
+                                    
+                                case "cadena":
+                                    r = 4;
+                                break;
+                            }
+                        }
+                    }
+                break;
             }
         }
+        return r;
     }
-    
+
     public ArrayList<String> getErrores()
     {
         return errores.get(0);
@@ -582,5 +810,10 @@ public class AST
     public Entorno getTabla()
     {
         return tablaSimbolos;
+    }
+    
+    public String toString()
+    {
+        return "" + raiz;
     }
 }
