@@ -1,21 +1,26 @@
 package lema;
 
-public class Converter {
+public class Converter
+{
     private String number;
     
-    public Converter(String number){
+    public Converter(String number)
+    {
         check(number);
     }
     
-    private void check(String number){
+    private void check(String number)
+    {
         this.number = (number.contains("x"))?number.substring(2):number.substring(1);
     }
     
-    public String getNumber() {
+    public String getNumber()
+    {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(String number)
+    {
         check(number);
     }
     
@@ -43,7 +48,8 @@ public class Converter {
         return value;
     }
     
-    public double hexToDouble() throws Exception{
+    public double hexToDouble() throws Exception
+    {
         double value = change(16);
         if(value > 32767.9999)
             throw new Exception("Valor Fuera de Rango");
@@ -51,7 +57,8 @@ public class Converter {
         return value;
     }
     
-    public double octToDouble() throws Exception{
+    public double octToDouble() throws Exception
+    {
         double value = change(8);
         if(value > 32767.9999)
             throw new Exception("Valor Fuera de Rango");
@@ -59,7 +66,8 @@ public class Converter {
         return value;
     }
     
-    public int hexToInt() throws Exception{
+    public int hexToInt() throws Exception
+    {
         int value = (int) change(16);
         if(value > 32767)
             throw new Exception("Valor Fuera de Rango");
@@ -67,7 +75,8 @@ public class Converter {
         return value;
     }
     
-    public int octToInt() throws Exception{
+    public int octToInt() throws Exception
+    {
         int value = (int) change(8);
         if(value > 32767)
             throw new Exception("Valor Fuera de Rango");
