@@ -20,6 +20,11 @@ public class Main
     private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
+        String [] datos = {"HOLA", "2", "3"};
+        errores.insertarError(0, 0, datos);
+        
+        
+        /*
         if(args.length == 0)
             System.out.println("Debe ingresar un archivo");
         else
@@ -44,7 +49,7 @@ public class Main
                         break;
                 }
             }
-        }
+        }*/
     }
     
     public static void ALexico(String file) throws FileNotFoundException, IOException
