@@ -17,6 +17,7 @@ import java_cup.runtime.Symbol;
 
 public class Main
 {
+    private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
         if(args.length == 0)
@@ -53,7 +54,7 @@ public class Main
         System.out.flush();
         Reader reader = new BufferedReader(new FileReader(file));
         
-        Lexico lexico = new Lexico(reader);
+        Lexico lexico = new Lexico(reader, errores);
         String resultado = "";
         
         Symbol token = lexico.next_token();
@@ -257,8 +258,10 @@ public class Main
                 case sym.id:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
+                /*
                 case sym.err:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token '"+ token.value + "' no reconocido\n";
+                        */
             }
             
             token = lexico.next_token();
@@ -308,8 +311,6 @@ public class Main
             Object result = p.parse();
             
             Nodo raiz = p.getRaiz();
-            System.out.println(raiz);
-            System.out.flush();
             AST ast = new AST(raiz);
             
             ast.verificar();
@@ -330,7 +331,13 @@ public class Main
             }
             
             System.out.println("TABLA DE SIMBOLOS");
+            System.out.flush();
             System.out.println(ast.getTabla());
+            System.out.flush();
+            
+            System.out.println("ARBOL DE SINTAXIS ABSTRACTA");
+            System.out.flush();
+            System.out.println(ast);
             System.out.flush();
             
         }
