@@ -10,7 +10,7 @@ public class Mistake
     
     private final String [] listaLexico =
     {
-        "Error Lexico: Token ? no reconocido. Lin: ? Col: ?"
+        "Error Lexico: Token $ no reconocido. Lin: $ Col: $"
     };
     
     private final String [] listaSintactico =
@@ -30,7 +30,7 @@ public class Mistake
         errorSemantico  = new ArrayList<String>();
     }
     
-    public void insertarError(int tipo, int codigo, ArrayList<String> datos)
+    public void insertarError(int tipo, int codigo, String[] datos)
     {
         String err = "";
         switch(tipo)
@@ -52,13 +52,16 @@ public class Mistake
         }
     }
     
-    private String unir(String error, ArrayList<String> datos)
+    private String unir(String error, String[] datos)
     {
-        /*
-        String dev = "";
-        for(int i = 0; i < datos.size(); i++)
-            System.out.println(error.replaceFirst("?", datos.get(i)));
-                */
+        int index = 0;
+        
+        for (String dato : datos) 
+        {
+            index = error.indexOf("$", index);
+            error = error.substring(0, index) + dato + error.substring(index+1);
+        }
+        
         return error;
     }
     
