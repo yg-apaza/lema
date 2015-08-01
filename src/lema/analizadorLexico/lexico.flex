@@ -2,6 +2,8 @@ package lema.analizadorLexico;
 
 import java_cup.runtime.*;
 import lema.analizadorSemantico.Nodo;
+import java.util.ArrayList;
+import lema.Mistake;
 
 %%
 
@@ -12,11 +14,19 @@ import lema.analizadorSemantico.Nodo;
 %cup
 
 %{
+    public Mistake e;
+
+    public Lexico(java.io.Reader in, Mistake e)
+    {
+        this.e = e;
+        this.zzReader = in;
+    }
+
     private Symbol symbol(int type)
     {
         return new Symbol(type, yyline, yycolumn);
     }
-
+    
     private Symbol symbol(int type, Object value)
     {
         return new Symbol(type, yyline, yycolumn, value);
@@ -146,4 +156,9 @@ WHITE = [ \t\r\n]
 {L}+({L}|{D})*                  { return symbol(sym.id,         (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );       }
 
 /* ERROR */
-.                               { return symbol(sym.err, yytext());     }
+.                               { 
+                                    ArrayList<String> err = new ArrayList<>();
+                                    err.add(yytext());
+                                    err.add(String.valueOf(yyline));
+                                    err.add(String.valueOf(yycolumn));
+                                    e.insertarError(0, 0, err);         }

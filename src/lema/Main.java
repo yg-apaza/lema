@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
-import lema.analizadorSemantico.TypeCheck;
 
 public class Main
 {
+    private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
         if(args.length == 0)
@@ -54,7 +54,7 @@ public class Main
         System.out.flush();
         Reader reader = new BufferedReader(new FileReader(file));
         
-        Lexico lexico = new Lexico(reader);
+        Lexico lexico = new Lexico(reader, errores);
         String resultado = "";
         
         Symbol token = lexico.next_token();
@@ -258,8 +258,6 @@ public class Main
                 case sym.id:
                     resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token: Identificador " + ((Nodo)(token.value)).getValor() + "\n";
                     break;
-                case sym.err:
-                    resultado = resultado + "LINEA: " + (token.left + 1) + " -> Token '"+ token.value + "' no reconocido\n";
             }
             
             token = lexico.next_token();
@@ -279,7 +277,7 @@ public class Main
         System.out.flush();
         try
         {
-            parser p = new parser(new Lexico(new FileReader(file)));
+            parser p = new parser(new Lexico(new FileReader(file), errores));
             Object result = p.parse();
             
         }
@@ -305,7 +303,7 @@ public class Main
         
         try
         {
-            parser p = new parser(new Lexico(new FileReader(file)));
+            parser p = new parser(new Lexico(new FileReader(file), errores));
             Object result = p.parse();
             
             Nodo raiz = p.getRaiz();
