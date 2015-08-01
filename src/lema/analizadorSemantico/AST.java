@@ -65,7 +65,6 @@ public class AST
                         ArrayList<Nodo> enlace = new ArrayList<Nodo>();
                         enlace.add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), elementosMat, false));
                         nodo.setHijos(enlace);
-                        //nodo.getHijos().set(0, new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), elementosMat, false));
                     }
                 }
             break;

@@ -52,7 +52,7 @@ public class Mistake
         }
     }
     
-    public String unir(String error, String[] datos)
+    private String unir(String error, String[] datos)
     {
         int index = -1;
         
