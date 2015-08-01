@@ -33,7 +33,7 @@ import lema.Mistake;
     }
 %}
 
-L = [a-zA-Z_]
+L = [a-zA-Z]
 H = [0-9A-F]
 O = [0-7]
 D = [0-9]
@@ -153,10 +153,10 @@ WHITE = [ \t\r\n]
 "principal"                     { return symbol(sym.pr_principal);      }
 
 /* IDENTIFICADOR */
-{L}+({L}|{D})*                  { return symbol(sym.id,         (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );       }
+{L}+({L}|{D}|"_")*                  { return symbol(sym.id,         (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );       }
 
 /* ERROR */
 .                               { String[] datos = {yytext(),
-                                                    String.valueOf(yyline),
+                                                    String.valueOf(yyline + 1),
                                                     String.valueOf(yycolumn)};
                                   e.insertarError(0, 0, datos);         }

@@ -9,14 +9,7 @@ public class AST
     private Entorno tablaSimbolos;
     private ArrayList<ArrayList<String>> errores;
     TypeCheck tc;
-    
-    /*
-    final boolean[][] compatibilidad =  {
-                                            {true,  true,   false},
-                                            {true,  true,   false},
-                                            {false, false,  true}
-                                        };
-    */
+
     public AST()
     {
         this(new Nodo());

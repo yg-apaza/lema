@@ -10,12 +10,12 @@ public class Mistake
     
     private final String [] listaLexico =
     {
-        "Error Lexico: Token $ no reconocido. Lin: $ Col: $"
+        "Error Lexico: Token '$' no reconocido. Lin: $ Col: $"
     };
     
     private final String [] listaSintactico =
     {
-        "Error Sintactico: Lin: ? Col: ?"
+        "Error Sintactico: $. Lin: $ Col: $"
     };
     
     private final String [] listaSemantico =
@@ -52,13 +52,13 @@ public class Mistake
         }
     }
     
-    private String unir(String error, String[] datos)
+    public String unir(String error, String[] datos)
     {
-        int index = 0;
+        int index = -1;
         
         for (String dato : datos) 
         {
-            index = error.indexOf("$", index);
+            index = error.indexOf("$", index + 1);
             error = error.substring(0, index) + dato + error.substring(index+1);
         }
         

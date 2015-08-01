@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import lema.analizadorSemantico.Nodo;
 import lema.analizadorSemantico.accion;
 import lema.analizadorLexico.sym;
+import lema.Mistake;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20150326 (SVN rev 63) generated parser.
@@ -1269,7 +1270,8 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
     public Nodo raiz;
-    
+    public Mistake errores;
+    public parser(java_cup.runtime.Scanner s, Mistake errores) {super(s); this.errores = errores;}
     public void report_error(String message, Object info)
     {   
         StringBuilder m = new StringBuilder("Error");
@@ -1279,23 +1281,14 @@ public class parser extends java_cup.runtime.lr_parser {
             java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
 
             if (s.left >= 0)
-            {                
-                m.append(" en la línea " + (s.left + 1));   
-
-                if (s.right >= 0)                    
-                    m.append(", columna " + (s.right + 1));
-            }
+                if (s.right >= 0)
+                    errores.insertarError(1, 0, (new String[]{message, String.valueOf(s.left + 1), String.valueOf(s.right)}));
         }
-
-        m.append(" : " + message);
-
-        System.err.println(m);
     }
 
     public void report_fatal_error(String message, Object info)
     {
         report_error(message, info);
-        System.exit(1);
     }
 
     public Nodo getRaiz()
