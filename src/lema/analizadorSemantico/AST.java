@@ -1,27 +1,34 @@
+/*Kef*/
 package lema.analizadorSemantico;
 
 import java.util.ArrayList;
+import lema.Mistake;
 import lema.analizadorLexico.sym;
 
 public class AST
 {
     private Nodo raiz;
     private Entorno tablaSimbolos;
-    private ArrayList<ArrayList<String>> errores;
-    TypeCheck tc;
-
+    private TypeCheck tc;
+    private Mistake errores;
+    
+    /*
+    final boolean[][] compatibilidad =  {
+                                            {true,  true,   false},
+                                            {true,  true,   false},
+                                            {false, false,  true}
+                                        };
+    */
     public AST()
     {
-        this(new Nodo());
+        this(new Nodo(),null);
     }
     
-    public AST(Nodo raiz)
+    public AST(Nodo raiz, Mistake errores)
     {
         this.raiz = raiz;
         tablaSimbolos = new Entorno();
-        errores = new ArrayList<>();
-        errores.add(new ArrayList<String>());
-        errores.add(new ArrayList<String>());
+        this.errores = errores;
         tc = new TypeCheck();
     }
     
@@ -32,10 +39,7 @@ public class AST
             case accion.elemMat:
                 ArrayList<Nodo> elementosMat = nodo.getHijos();
                 if(elementosMat.isEmpty())
-                {
-                    // Revisar
                     nodo.getHijos().add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), (new ArrayList<Nodo>()), false));
-                }
                 else
                 {
                     /** Los elementos contenidos por la matriz son simples o vectores, TRUE Matrices, FALSE Simples*/
@@ -61,8 +65,7 @@ public class AST
                     
                     if(iguales && !flag)
                     {
-                        // Revisar
-                        ArrayList<Nodo> enlace = new ArrayList<Nodo>();
+                        ArrayList<Nodo> enlace = new ArrayList<>();
                         enlace.add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), elementosMat, false));
                         nodo.setHijos(enlace);
                     }
@@ -89,8 +92,6 @@ public class AST
     public void verificar()
     {
         fix(raiz);
-        errores.get(0).clear();
-        errores.get(1).clear();
         verificar(raiz);
     }
     
@@ -100,7 +101,6 @@ public class AST
         {
             AtributoVariable v;
             AtributoFuncion f;
-            ArrayList<Nodo> elementos;
             ArrayList<Nodo> elementosMat;
 
             switch(nodo.getCodigo())
@@ -111,10 +111,10 @@ public class AST
                                                 nodo.getHijos().get(1).getValor(),
                                                 false,
                                                 1, 1,
-                                                false
+                                                false 
                                             );
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                 break;
                 
                     
@@ -127,7 +127,7 @@ public class AST
                                                 false
                                             );
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                 break;
 
                 
@@ -143,7 +143,7 @@ public class AST
                                             );
                     
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                 break;
                 
                     
@@ -161,7 +161,7 @@ public class AST
                     elementosMat = nodo.getHijos().get(4).getHijos();
                     
                     if(elementosMat.isEmpty())
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " No se puede inicializar matrices/vectores con tamaño 0");
+                        errores.insertarError(2, 1, (new String[] {String.valueOf(nodo.getHijos().get(4).getLinea()+1),String.valueOf(nodo.getHijos().get(4).getColumna())}));
                     else
                     {
                         /** Los elementos contenidos por la matriz son simples o vectores, TRUE Vectores, FALSE Simples*/
@@ -170,7 +170,7 @@ public class AST
                         for(int i = 1; i < elementosMat.size(); i++)
                             if(!((elementosMat.get(i).getCodigo() == accion.elemMat) == flag))
                             {
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Datos introducidos en la matriz/vector '" + v.getId() + "' distintos");
+                                errores.insertarError(2, 2, (new String[] {v.getId(),String.valueOf(elementosMat.get(i).getLinea()+1),String.valueOf(elementosMat.get(i).getColumna())}));
                                 iguales = false;
                                 break;
                             }
@@ -186,12 +186,12 @@ public class AST
                                     nodo.getHijos().get(4).setHijos(enlace);
                                     
                                     if(v.getDimension2() != elementosMat.size())
-                                        errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de elementos introducidos a la matriz/vector '" + v.getId() + "' incorrecto");
+                                        errores.insertarError(2, 3, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
                                 else
-                                    errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " La matriz/vector '" + v.getId() + "' no debe poseer 1 fila");
+                                    errores.insertarError(2, 4, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                             }
                             else
                             {
@@ -201,7 +201,7 @@ public class AST
                                     for(int j = 0; j < elementosMat.get(i).getHijos().size(); j++)
                                         if(elementosMat.get(i).getHijos().get(j).getCodigo() == accion.elemMat)
                                         {
-                                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Solo se permite matrices/vectores unidimensionales o bidimensionales");
+                                            errores.insertarError(2, 5, (new String[] {String.valueOf(elementosMat.get(i).getHijos().get(j).getLinea()+1),String.valueOf(elementosMat.get(i).getHijos().get(j).getColumna())}));
                                             d2 = false;
                                             break;
                                         }
@@ -209,15 +209,15 @@ public class AST
                                 if(d2)
                                 {
                                     if(v.getDimension1() != elementosMat.size())
-                                        errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz/vector '" + v.getId() + "' no coincide con las inicializadas");
+                                        errores.insertarError(2, 6, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     for(int i = 0; i < elementosMat.size(); i++)
                                     {
                                         ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
                                         if(v.getDimension2() != elementosMat2.size())
-                                            errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz/vector '" + v.getId() + "' incorrecto");
+                                            errores.insertarError(2, 7, (new String[] {v.getId(),String.valueOf(i),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     }
                                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
                             }
                         }
@@ -234,7 +234,7 @@ public class AST
                                                 true
                                             );
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                 break;
 
                 
@@ -252,7 +252,7 @@ public class AST
                     elementosMat = nodo.getHijos().get(4).getHijos();
                     
                     if(elementosMat.isEmpty())
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " No se puede inicializar matrices/vectores con tamaño 0");
+                        errores.insertarError(2, 1, (new String[] {String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                     else
                     {
                         /** Los elementos contenidos por la matriz son simples o vectores, TRUE Vectores, FALSE Simples*/
@@ -261,7 +261,7 @@ public class AST
                         for(int i = 1; i < elementosMat.size(); i++)
                             if(!((elementosMat.get(i).getCodigo() == accion.elemMat) == flag))
                             {
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Datos introducidos en la matriz/vector '" + v.getId() + "' distintos");
+                                errores.insertarError(2, 2, (new String[] {v.getId(),String.valueOf(elementosMat.get(i).getLinea()+1),String.valueOf(elementosMat.get(i).getColumna())}));
                                 iguales = false;
                                 break;
                             }
@@ -277,12 +277,12 @@ public class AST
                                     nodo.getHijos().get(4).setHijos(enlace);
                                     
                                     if(v.getDimension2() != elementosMat.size())
-                                        errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de elementos introducidos a la matriz/vector '" + v.getId() + "' incorrecto");
+                                        errores.insertarError(2, 3, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
                                 else
-                                    errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " La matriz/vector '" + v.getId() + "' no debe poseer 1 fila");
+                                    errores.insertarError(2, 4, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                             }
                             else
                             {
@@ -292,7 +292,7 @@ public class AST
                                     for(int j = 0; j < elementosMat.get(i).getHijos().size(); j++)
                                         if(elementosMat.get(i).getHijos().get(j).getCodigo() == accion.elemMat)
                                         {
-                                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Solo se permite matrices/vectores unidimensionales o bidimensionales");
+                                            errores.insertarError(2, 5, (new String[] {String.valueOf(elementosMat.get(i).getHijos().get(j).getLinea()+1),String.valueOf(elementosMat.get(i).getHijos().get(j).getColumna())}));
                                             d2 = false;
                                             break;
                                         }
@@ -300,15 +300,15 @@ public class AST
                                 if(d2)
                                 {
                                     if(v.getDimension1() != elementosMat.size())
-                                        errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de filas de la matriz/vector '" + v.getId() + "' no coincide con las inicializadas");
+                                        errores.insertarError(2, 6, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     for(int i = 0; i < elementosMat.size(); i++)
                                     {
                                         ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
                                         if(v.getDimension2() != elementosMat2.size())
-                                            errores.get(1).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Número de columnas de la fila " + i + " de la matriz/vector '" + v.getId() + "' incorrecto");
+                                            errores.insertarError(2, 7, (new String[] {v.getId(),String.valueOf(i),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     }
                                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + v.getId() + "' ya fue declarado");
+                                        errores.insertarError(2, 0, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
                             }
                         }
@@ -346,24 +346,21 @@ public class AST
                                                 false
                                             );
                     if(!tablaSimbolos.putFuncion(f.getId(), f))
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() + " Identificador '" + f.getId() + "' ya fue declarado");
+                        errores.insertarError(2, 0, (new String[] {f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                 break;
                 
                 
                 case accion.funcion:
                     if((f = tablaSimbolos.buscarFuncion(nodo.getHijos().get(1).getValor())) == null)
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                            " No hay un prototipo declarado para la función '" + nodo.getHijos().get(1).getValor() + "'");
+                        errores.insertarError(2, 8, (new String[] {nodo.getHijos().get(1).getValor(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                     else
                     {
                         if(!f.getTipoRetorno().equals(nodo.getHijos().get(0).getValor()))
-                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                " Tipo de dato de retorno de la función '" + f.getId() + "' no coincide con su prototipo");
+                            errores.insertarError(2, 9, (new String[] {nodo.getHijos().get(1).getValor(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                         else
                         {
                             if(f.getArgumentos().size() != nodo.getHijos().get(2).getHijos().size())
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                " Número de argumentos de la función '" + f.getId() + "' no coincide con su prototipo");
+                                errores.insertarError(2, 10, (new String[] {f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                             else
                             {
                                 ArrayList<Nodo> arg = nodo.getHijos().get(2).getHijos();
@@ -375,8 +372,7 @@ public class AST
                                     {
                                         if(arg.get(i).getCodigo() == accion.parametroFunSim)
                                         {
-                                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                                " Argumento " + (i + 1) + " de la función '" + f.getId() + "' debe ser una matriz/vector");
+                                            errores.insertarError(2, 11, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                             flag = false;
                                         }
                                         else
@@ -385,8 +381,7 @@ public class AST
                                                 (aux.getDimension1() == Integer.parseInt(arg.get(i).getHijos().get(2).getValor())) && 
                                                 (aux.getDimension2() == Integer.parseInt(arg.get(i).getHijos().get(3).getValor()))))
                                             {
-                                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                                   " Argumento " + (i + 1) + " de la función '" + f.getId() + "' no coincide con el prototipo");
+                                                errores.insertarError(2, 12, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(arg.get(i).getHijos().get(1).getLinea()+1),String.valueOf(arg.get(i).getHijos().get(1).getColumna())}));
                                                 flag = false;
                                             }
                                             else
@@ -397,16 +392,14 @@ public class AST
                                     {
                                         if(arg.get(i).getCodigo() == accion.parametroFunMat)
                                         {
-                                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                                " Argumento " + (i + 1) + " de la función '" + f.getId() + "' no debe ser una matriz/vector");
+                                            errores.insertarError(2, 13, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                             flag = false;
                                         }
                                         else
                                         {
                                             if(!aux.getTipo().equals(arg.get(i).getHijos().get(0).getValor()))
                                             {
-                                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                                    " Argumento " + (i + 1) + " de la función '" + f.getId() + "' no coincide con el prototipo");
+                                                errores.insertarError(2, 12, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                                 flag = false;
                                             }
                                             else
@@ -421,11 +414,8 @@ public class AST
                                     f.setDefinido(true);
                                     tablaSimbolos.insertarBloque();
                                     for (AtributoVariable argumento : f.getArgumentos())
-                                    {
                                         if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
-                                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                                " Identificador '" + argumento.getId() + "' ya fue declarado");
-                                    }
+                                            errores.insertarError(2, 0, (new String[] {argumento.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
                                 
                             }
@@ -437,8 +427,7 @@ public class AST
                 case accion.asignacion:
                     AtributoVariable t;
                     if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
-                        errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                            " Identificador '" + nodo.getHijos().get(0).getValor() + "' no declarado");
+                        errores.insertarError(2, 0, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                     else
                     {
                         // Suponiendo que el nodo es un ID
@@ -483,13 +472,12 @@ public class AST
                         try
                         {
                             if(!TypeCheck.compatibilidad1[e][r][4])
-                                errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                " Tipo de dato asignado a la variable '" + t.getId() + "' no es compatible");
+                                errores.insertarError(2, 14, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+
                         }
                         catch(ArrayIndexOutOfBoundsException ex)
                         {
-                            errores.get(0).add("Lin: " + (nodo.getLinea() + 1) + " Col: " + nodo.getColumna() +
-                                                " Tipo de dato asignado a la variable '" + t.getId() + "' no es compatible");
+                            errores.insertarError(2, 14, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                         }
                         
                     }
@@ -607,8 +595,7 @@ public class AST
                 case accion.llamadaFuncion:
                     AtributoFuncion f;
                     if((f = tablaSimbolos.buscarFuncion(exp.getHijos().get(0).getValor())) == null)
-                        errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                            " La función '" + exp.getHijos().get(0).getValor() + "' no existe");
+                        errores.insertarError(2, 15, (new String[] {exp.getHijos().get(0).getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
                     else
                     {
                         switch(f.getTipoRetorno())
@@ -631,8 +618,7 @@ public class AST
                 case accion.accesoMat:
                     AtributoVariable t;
                     if((t = tablaSimbolos.buscarVariable(exp.getHijos().get(0).getValor())) == null)
-                        errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                            " Identificador '" + exp.getValor() + "' no declarado");
+                        errores.insertarError(2, 0, (new String[] {exp.getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
                     else
                     {
                         if(t.esMatriz())
@@ -641,8 +627,7 @@ public class AST
                             {
                                 if(tiposOp.get(i) != 0)
                                 {
-                                    errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                                    " Índice " + i + " de la matriz/vector '" + exp.getHijos().get(0).getValor() + "' no es entero");
+                                    errores.insertarError(2, 16, (new String[] {String.valueOf(i),exp.getHijos().get(0).getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
                                     return -1;
                                 }
                             }
@@ -663,8 +648,7 @@ public class AST
                             }
                         }
                         else
-                            errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                                " El identificador '" + exp.getHijos().get(0).getValor() + "' no es una matriz/vector");
+                            errores.insertarError(2, 17, (new String[] {exp.getHijos().get(0).getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
                     }
                 break;
                     
@@ -676,7 +660,7 @@ public class AST
                     {
                             if(elementosMat.get(i).getCodigo() == accion.elemVec && elementosMat.get(i).getHijos().isEmpty())
                             {
-                               errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() + " No se puede inicializar matrices/vectores con tamaño 0");
+                               errores.insertarError(2, 1, (new String[] {String.valueOf(elementosMat.get(i).getLinea()+1),String.valueOf(elementosMat.get(i).getColumna())}));
                                noVacio = false;
                             }
                     }
@@ -686,8 +670,7 @@ public class AST
                         {
                             if(!(tiposOp.get(i) == 2 || tiposOp.get(i) == 3))
                             {
-                                errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                                " Elemento " + i + " de la matriz/vector no es correcto");
+                                errores.insertarError(2, 18, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                                 return -1;
                             }
                         }
@@ -702,7 +685,7 @@ public class AST
 
                     if(elementosVec.isEmpty())
                     {
-                       errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() + " No se puede inicializar matrices/vectores con tamaño 0");
+                       errores.insertarError(2, 1, (new String[] {String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                        noVacioVec = false;
                     }
                     if(noVacioVec)
@@ -711,8 +694,7 @@ public class AST
                         {
                             if(!(tiposOp.get(i) == 0 || tiposOp.get(i) == 1))
                             {
-                                errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                                " Elemento " + i + " de la matriz/vector no es correcto");
+                                errores.insertarError(2, 18, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                                 return -1;
                             }
                         }
@@ -744,8 +726,7 @@ public class AST
                 case sym.id:
                     AtributoVariable t;
                     if((t = tablaSimbolos.buscarVariable(exp.getValor())) == null)
-                        errores.get(0).add("Lin: " + (exp.getLinea() + 1) + " Col: " + exp.getColumna() +
-                                            " Identificador '" + exp.getValor() + "' no declarado");
+                        errores.insertarError(2, 19, (new String[] {exp.getValor(),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                     else
                     {
                         if(t.esMatriz())
@@ -788,17 +769,7 @@ public class AST
         }
         return r;
     }
-
-    public ArrayList<String> getErrores()
-    {
-        return errores.get(0);
-    }
-    
-    public ArrayList<String> getWarnings()
-    {
-        return errores.get(1);
-    }
-    
+        
     public Entorno getTabla()
     {
         return tablaSimbolos;

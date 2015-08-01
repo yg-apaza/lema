@@ -1,31 +1,15 @@
+/*Kef*/
 package lema;
 
 public class Converter
-{
-    private String number;
-    
-    public Converter(String number)
+{     
+    private String check(String number)
     {
-        check(number);
+        return (number.contains("x"))?number.substring(2):number.substring(1);
     }
-    
-    private void check(String number)
-    {
-        this.number = (number.contains("x"))?number.substring(2):number.substring(1);
-    }
-    
-    public String getNumber()
-    {
-        return number;
-    }
-
-    public void setNumber(String number)
-    {
-        check(number);
-    }
-    
-    private double change(int base)
-    {
+       
+    private double change(String number, int base)
+    {        
         double value = 0.0;
         int point = (number.contains("."))?number.indexOf("."):number.length();
         
@@ -48,39 +32,23 @@ public class Converter
         return value;
     }
     
-    public double hexToDouble() throws Exception
-    {
-        double value = change(16);
-        if(value > 32767.9999)
-            throw new Exception("Valor Fuera de Rango");
-        
-        return value;
+    public String hexToDouble(String number)
+    {       
+        return String.valueOf(change(check(number), 16));
     }
     
-    public double octToDouble() throws Exception
-    {
-        double value = change(8);
-        if(value > 32767.9999)
-            throw new Exception("Valor Fuera de Rango");
-        
-        return value;
+    public String octToDouble(String number)
+    {        
+        return String.valueOf(change(check(number), 8));
     }
     
-    public int hexToInt() throws Exception
-    {
-        int value = (int) change(16);
-        if(value > 32767)
-            throw new Exception("Valor Fuera de Rango");
-        
-        return value;
+    public String hexToInt(String number)
+    {        
+        return String.valueOf(Integer.parseInt(check(number),16));
     }
     
-    public int octToInt() throws Exception
-    {
-        int value = (int) change(8);
-        if(value > 32767)
-            throw new Exception("Valor Fuera de Rango");
-        
-        return value;
+    public String octToInt(String number)
+    {        
+        return String.valueOf(Integer.parseInt(check(number),8));
     }
 }

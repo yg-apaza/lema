@@ -359,25 +359,10 @@ public class Main
             Object result = p.parse();
             
             Nodo raiz = p.getRaiz();
-            AST ast = new AST(raiz);
+            AST ast = new AST(raiz, errores);
             
             ast.verificar();
-            ArrayList<String> errores = ast.getErrores();
-            ArrayList<String> warnings = ast.getWarnings();
-            
-            System.out.println("WARNINGS:");
-            for(String w : warnings)
-                System.out.println(w);
-            
-            System.out.println("ERRORES:");
-            if(errores.isEmpty())
-                System.out.println("No se encontraron errores");
-            else
-            {
-                for (String e : errores)
-                    System.out.println(e);
-            }
-            
+                        
             System.out.println("TABLA DE SIMBOLOS");
             System.out.flush();
             System.out.println(ast.getTabla());
