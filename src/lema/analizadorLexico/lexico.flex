@@ -156,9 +156,7 @@ WHITE = [ \t\r\n]
 {L}+({L}|{D})*                  { return symbol(sym.id,         (new Nodo(sym.id, yytext(), yyline, yycolumn, null, true)) );       }
 
 /* ERROR */
-.                               { 
-                                    ArrayList<String> err = new ArrayList<>();
-                                    err.add(yytext());
-                                    err.add(String.valueOf(yyline));
-                                    err.add(String.valueOf(yycolumn));
-                                    e.insertarError(0, 0, err);         }
+.                               { String[] datos = {yytext(),
+                                                    String.valueOf(yyline),
+                                                    String.valueOf(yycolumn)};
+                                  e.insertarError(0, 0, datos);         }
