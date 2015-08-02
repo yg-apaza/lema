@@ -372,19 +372,22 @@ public class Main
                     ast.verificar();
                     
                     ArrayList<String> eSemantico = errores.getError(2);
-
+                    ArrayList<String> wSemantico = errores.getError(3);
                     for (String eSemantico1 : eSemantico)
                     {
                         System.out.println(eSemantico1);
                         System.out.flush();
                     }
-                    System.out.println();
+                    for (String w : wSemantico)
+                    {
+                        System.out.println(w);
+                        System.out.flush();
+                    }
                     if(eSemantico.isEmpty())
                         System.out.println("Finalizado: Análisis Semántico realizado con éxito");
                     else
                         System.out.println("Finalizado: Se encontraron " + eSemantico.size() + " error(es)");
-                    System.out.println("ARBOL DE SINTAXIS ABSTRACTA");
-                    System.out.flush();
+
                     System.out.println(ast);
                     System.out.flush();
                 }

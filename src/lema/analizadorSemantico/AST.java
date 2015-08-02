@@ -718,7 +718,7 @@ public class AST
                         {
                             if(!(tiposOp.get(i) == 2 || tiposOp.get(i) == 3))
                             {
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.ELEMENTO_NO_CORRECTO, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.FILA_NO_CORRECTO, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                                 return -1;
                             }
                         }

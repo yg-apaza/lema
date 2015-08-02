@@ -40,6 +40,7 @@ public class Mistake
     public static final int ID_NO_DECLARADO = 16;
     public static final int FUNCION_NO_DEFINIDA = 17;
     public static final int NO_VARIABLE = 18;
+    public static final int FILA_NO_CORRECTO = 19;
 
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
@@ -76,7 +77,8 @@ public class Mistake
         "Error Semántico: Elemento $ de la matriz/vector no es correcto. Lin: $ Col: $",
         "Error Semántico: Identificador '$' no declarado. Lin: $ Col: $",
         "Error Semántico: La función '$' no está definida. Lin: $ Col: $",
-        "Error Semántico: Variable '$' no puede ser asginado a una constante. Lin: $ Col: $"
+        "Error Semántico: Variable '$' no puede ser asignado a una constante. Lin: $ Col: $",
+        "Error Semántico: Fila $ de la matriz/vector no es correcto. Lin: $ Col: $"
     };
     
     private final String[] listaWarnings =
@@ -140,6 +142,8 @@ public class Mistake
                 return errorSintactico;
             case 2:
                 return errorSemantico;
+            case 3:
+                return warnings;
         }
         return (new ArrayList <>());
     }    

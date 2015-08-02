@@ -1,4 +1,4 @@
-const entero a[3][4] = {1,2,a};
+const entero a[3][4] = {{3, a}};
 
 principal()
 {
