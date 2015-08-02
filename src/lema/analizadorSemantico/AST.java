@@ -176,7 +176,7 @@ public class AST
                         try
                         {
                             if(!TypeCheck.compatibilidad1[e][r][4])
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(4).getLinea()+1),String.valueOf(nodo.getHijos().get(4).getColumna())}));
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(2).getColumna())}));
                         }
                         catch(ArrayIndexOutOfBoundsException ex)
                         {

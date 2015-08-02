@@ -11,8 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 
 public class Main
@@ -282,11 +280,13 @@ public class Main
         {
             System.out.println("Error: Archivo incorrecto");
             ex.printStackTrace();
+            System.out.println("Finalizado");
         }
         catch (IOException ex)
         {
             System.out.println("Error:");
             ex.printStackTrace();
+            System.out.println("Finalizado");
         }
         finally
         {
@@ -298,6 +298,7 @@ public class Main
             {
                 System.out.println("Error:");
                 ex.printStackTrace();
+                System.out.println("Finalizado");
             }
         }
     }
@@ -313,39 +314,39 @@ public class Main
         {
             parser p = new parser(new Lexico(new FileReader(file), errores), errores);
             Object result = p.parse();
+
+            ArrayList<String> eLexico = errores.getError(0);
+            ArrayList<String> eSintactico = errores.getError(1);
+
+            if(eLexico.isEmpty())
+            {
+                for (String eSintactico1 : eSintactico)
+                {
+                    System.out.println(eSintactico1);
+                    System.out.flush();
+                }
+                System.out.println();
+                if(eSintactico.isEmpty())
+                    System.out.println("Finalizado: Análisis Sintactico realizado con éxito");
+                else
+                    System.out.println("Finalizado: Se encontraron " + eSintactico.size() + " error(es)");
+                System.out.flush();
+            }
+            else
+                System.out.println("Error Lexico: Se encontraron errores durante el análisis léxico");
         }
         catch (FileNotFoundException ex)
         {
             System.out.println("Error: Archivo incorrecto");
             ex.printStackTrace();
+            System.out.println("Finalizado");
         }
         catch (Exception ex)
         {
             System.out.println("Error:");
             ex.printStackTrace();
+            System.out.println("Finalizado");
         }
-        
-        ArrayList<String> eLexico = errores.getError(0);
-        ArrayList<String> eSintactico = errores.getError(1);
-        
-        if(eLexico.isEmpty())
-        {
-            for (String eSintactico1 : eSintactico)
-            {
-                System.out.println(eSintactico1);
-                System.out.flush();
-            }
-            System.out.println();
-            if(eSintactico.isEmpty())
-                System.out.println("Finalizado: Análisis Sintactico realizado con éxito");
-            else
-                System.out.println("Finalizado: Se encontraron " + eSintactico.size() + " error(es)");
-            System.out.flush();
-            System.out.println();
-            System.out.flush();
-        }
-        else
-            System.out.println("Error Lexico: Se encontraron errores durante el análisis léxico");
     }
    
     public static void ASemantico(String file)
@@ -368,7 +369,7 @@ public class Main
                 {
                     Nodo raiz = p.getRaiz();
                     AST ast = new AST(raiz, errores);
-
+                    
                     ast.verificar();
                     
                     ArrayList<String> eSemantico = errores.getError(2);
@@ -398,15 +399,16 @@ public class Main
         }
         catch (FileNotFoundException ex)
         {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: Archivo incorrecto");
+            ex.printStackTrace();
+            System.out.println("Finalizado");
         }
         catch (Exception ex)
         {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error:");
+            ex.printStackTrace();
+            System.out.println("Finalizado");
         }
-        
-        System.out.println();
-        System.out.flush();
     }
    
     public static void Compilar(String file)

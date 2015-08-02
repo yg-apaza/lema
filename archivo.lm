@@ -1,12 +1,4 @@
-const entero a[3][4] = {{3, a}};
-
 principal()
 {
+	entero a = {1,2,34};
 }
-
-/*
-entero funcion(entero a)
-{
-
-}
-*/
