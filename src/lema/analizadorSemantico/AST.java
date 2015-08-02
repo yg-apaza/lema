@@ -224,7 +224,7 @@ public class AST
                     try
                     {
                         if(!TypeCheck.compatibilidad1[e][r][4])
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(4).getLinea()+1),String.valueOf(nodo.getHijos().get(4).getColumna())}));
                         else
                         {
                             if(indice1 && v.getDimension1() != nodo.getHijos().get(4).getHijos().size())
@@ -692,7 +692,7 @@ public class AST
                         {
                             if(!(tiposOp.get(i) == 2 || tiposOp.get(i) == 3))
                             {
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.RETORNO_NO_COINCIDE, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.ELEMENTO_NO_CORRECTO, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                                 return -1;
                             }
                         }
