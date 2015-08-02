@@ -93,7 +93,7 @@ public class Nodo
         
     public String toString() 
     {
-        return imprimir(this,0,0,-1,this.getValor()) + "\n";
+        return imprimir(this,0,0,-1,this.getValor());
     }
     
     private String imprimir(Nodo nodo, int ancho, int largo, int u, String padre)
