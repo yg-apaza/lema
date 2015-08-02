@@ -1,11 +1,4 @@
 principal()
 {
-	entero a = 0xA.B;
+	entero a = {1,2,34};
 }
-
-/*
-entero funcion(entero a)
-{
-
-}
-*/
