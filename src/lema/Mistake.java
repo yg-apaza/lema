@@ -5,20 +5,18 @@ import java.util.ArrayList;
 
 public class Mistake
 {
-    private ArrayList<String> errorLexico;
-    private ArrayList<String> errorSintactico;
-    private ArrayList<String> errorSemantico;
+    private final ArrayList<String> errorLexico;
+    private final ArrayList<String> errorSintactico;
+    private final ArrayList<String> errorSemantico;
+    private final ArrayList<String> warnings;
     
+    public static final int LEXICO = 0;
+    public static final int SINTACTICO = 1;
+    public static final int SEMANTICO = 2;
     
-    private final String [] listaLexico =
-    {
-        "Error Lexico: Token '$' no reconocido. Lin: $ Col: $"
-    };
+    public static final int TOKEN_INVALIDO = 0;
     
-    private final String [] listaSintactico =
-    {
-        "Error Sintactico: $. Lin: $ Col: $"
-    };
+    public static final int ERROR_SINTACTICO = 0;
     
     public static final int ID_DECLARADO = 0;
     public static final int NO_TAMANIO_CERO = 1;
@@ -34,13 +32,22 @@ public class Mistake
     public static final int ARGUMENTO_NO_MATRIZ = 11;
     public static final int ARGUMENTO_NO_COINCIDE = 12;
     public static final int ARGUMENTO_MATRIZ = 13;
-    /*public static final int = 14;
-    public static final int = 15;
-    public static final int = 16;
-    public static final int = 17;    
-    public static final int = 18;
+    public static final int TIPO_NO_COMPATIBLE = 14;
+    public static final int FUNCION_NO_EXISTE = 15;
+    public static final int INDICE_NO_ENTERO = 16;
+    public static final int ID_NO_MATRIZ = 17;    
+    public static final int ELEMENTO_NO_CORRECTO = 18;
     public static final int ID_NO_DECLARADO = 19;
-      */      
+    
+    private final String [] listaLexico =
+    {
+        "Error Lexico: Token '$' no reconocido. Lin: $ Col: $"
+    };
+    
+    private final String [] listaSintactico =
+    {
+        "Error Sintactico: $. Lin: $ Col: $"
+    };
     
     private final String [] listaSemantico =
     {
@@ -58,41 +65,48 @@ public class Mistake
         "Error Semántico: Argumento $ de la función '$' debe ser una matriz/vector. Lin: $ Col:$",
         "Error Semántico: Argumento $ de la función '$' no coincide con el prototipo. Lin: $ Col: $",
         "Error Semántico: Argumento $ de la función '$' no debe ser una matriz/vector. Lin: $ Col: $",
-        "14Error Semántico: Tipo de dato asignado a la variable '$' no es compatible. Lin: $ Col: $",
-        "15Error Semántico: La función '$' no existe. Lin: $ Col: $",
-        "16Error Semántico: Índice $ de la matriz/vector '$' no es entero. Lin: $ Col: $",
-        "17Error Semántico: El identificador '$' no es una matriz/vector. Lin: $ Col: $",
-        "18Error Semántico: Elemento $ de la matriz/vector no es correcto. Lin: $ Col: $",
+        "Error Semántico: Tipo de dato asignado a la variable '$' no es compatible. Lin: $ Col: $",
+        "Error Semántico: La función '$' no existe. Lin: $ Col: $",
+        "Error Semántico: Índice $ de la matriz/vector '$' no es entero. Lin: $ Col: $",
+        "Error Semántico: El identificador '$' no es una matriz/vector. Lin: $ Col: $",
+        "Error Semántico: Elemento $ de la matriz/vector no es correcto. Lin: $ Col: $",
         "Error Semántico: Identificador '$' no declarado. Lin: $ Col: $"
+    };
+    
+    private final String[] listaWarnings =
+    {
+        
     };
     
     public Mistake()
     {
-        errorLexico     = new ArrayList<String>();
-        errorSintactico = new ArrayList<String>();
-        errorSemantico  = new ArrayList<String>();
+        errorLexico     = new ArrayList <>();
+        errorSintactico = new ArrayList <>();
+        errorSemantico  = new ArrayList <>();
+        warnings        = new ArrayList <>();
     }
     
     public void insertarError(int tipo, int codigo, String[] datos)
     {
-        String err = "";
         switch(tipo)
         {
             case 0:
-                err = unir(listaLexico[codigo], datos);
-                errorLexico.add(err);
+                errorLexico.add(unir(listaLexico[codigo], datos));
             break;
                 
             case 1:
-                err = unir(listaSintactico[codigo], datos);
-                errorSintactico.add(err);
+                errorSintactico.add(unir(listaSintactico[codigo], datos));
             break;
             
             case 2:
-                err = unir(listaSemantico[codigo], datos);
-                errorSemantico.add(err);
+                errorSemantico.add(unir(listaSemantico[codigo], datos));
             break;
         }
+    }
+    
+    public void insertarWarning(int codigo, String[] datos)
+    {
+        warnings.add(unir(listaWarnings[codigo], datos));
     }
     
     public String unir(String error, String[] datos)
@@ -103,7 +117,6 @@ public class Mistake
         {
             index = error.indexOf("$", index + 1);
             error = error.substring(0, index) + dato + error.substring(index+1);
-            System.out.println(error);
         }
         
         return error;
@@ -120,6 +133,8 @@ public class Mistake
             case 2:
                 return errorSemantico;
         }
-        return (new ArrayList<String>());
+        return (new ArrayList <>());
     }
+    
+    
 }

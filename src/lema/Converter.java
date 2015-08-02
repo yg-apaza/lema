@@ -1,14 +1,13 @@
-/*Kef*/
 package lema;
 
 public class Converter
 {     
-    private String check(String number)
+    private static String check(String number)
     {
         return (number.contains("x"))?number.substring(2):number.substring(1);
     }
        
-    private double change(String number, int base)
+    private static double change(String number, int base)
     {        
         double value = 0.0;
         int point = (number.contains("."))?number.indexOf("."):number.length();
@@ -32,22 +31,22 @@ public class Converter
         return value;
     }
     
-    public String hexToDouble(String number)
+    public static String hexToDouble(String number)
     {       
         return String.valueOf(change(check(number), 16));
     }
     
-    public String octToDouble(String number)
+    public static String octToDouble(String number)
     {        
         return String.valueOf(change(check(number), 8));
     }
     
-    public String hexToInt(String number)
+    public static String hexToInt(String number)
     {        
         return String.valueOf(Integer.parseInt(check(number),16));
     }
     
-    public String octToInt(String number)
+    public static String octToInt(String number)
     {        
         return String.valueOf(Integer.parseInt(check(number),8));
     }

@@ -304,6 +304,7 @@ public class Main
     
     public static void ASintactico(String file)
     {
+        errores = new Mistake();
         System.out.println("ANALIZADOR SINTACTICO");
         System.out.flush();
         System.out.println("------------------------------------------------------------");
@@ -323,6 +324,7 @@ public class Main
             System.out.println("Error:");
             ex.printStackTrace();
         }
+        
         ArrayList<String> eLexico = errores.getError(0);
         ArrayList<String> eSintactico = errores.getError(1);
         
@@ -348,6 +350,7 @@ public class Main
    
     public static void ASemantico(String file)
     {
+        errores = new Mistake();
         System.out.println("ANALIZADOR SEMANTICO");
         System.out.flush();
         System.out.println("------------------------------------------------------------");
@@ -355,24 +358,41 @@ public class Main
         
         try
         {
-            parser p = new parser(new Lexico(new FileReader(file), errores));
+            parser p = new parser(new Lexico(new FileReader(file), errores), errores);
             Object result = p.parse();
-            
-            Nodo raiz = p.getRaiz();
-            AST ast = new AST(raiz, errores);
-            
-            ast.verificar();
-                        
-            System.out.println("TABLA DE SIMBOLOS");
-            System.out.flush();
-            System.out.println(ast.getTabla());
-            System.out.flush();
-            
-            System.out.println("ARBOL DE SINTAXIS ABSTRACTA");
-            System.out.flush();
-            System.out.println(ast);
-            System.out.flush();
-            
+            ArrayList<String> eLexico = errores.getError(0);
+            ArrayList<String> eSintactico = errores.getError(1);
+            if(eLexico.isEmpty())
+            {
+                if(eSintactico.isEmpty())
+                {
+                    Nodo raiz = p.getRaiz();
+                    AST ast = new AST(raiz, errores);
+
+                    ast.verificar();
+                    
+                    ArrayList<String> eSemantico = errores.getError(2);
+
+                    for (String eSemantico1 : eSemantico)
+                    {
+                        System.out.println(eSemantico1);
+                        System.out.flush();
+                    }
+                    System.out.println();
+                    if(eSemantico.isEmpty())
+                        System.out.println("Finalizado: Análisis Semántico realizado con éxito");
+                    else
+                        System.out.println("Finalizado: Se encontraron " + eSemantico.size() + " error(es)");
+                    System.out.println("ARBOL DE SINTAXIS ABSTRACTA");
+                    System.out.flush();
+                    System.out.println(ast);
+                    System.out.flush();
+                }
+                else
+                    System.out.println("Error Sintactico: Se encontraron errores durante el análisis sintáctico");
+            }
+            else
+                System.out.println("Error Lexico: Se encontraron errores durante el análisis léxico");
         }
         catch (FileNotFoundException ex)
         {

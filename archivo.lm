@@ -1,10 +1,5 @@
 real fun(entero);
 principal()
 {
-	$
-	entero a_sd;
-	entero a[2];
-	entero b[4];
-	b = {{1,2,3,4}}*4;
-	asdf;
+	entero b[4][3] = {4, 5};
 }
