@@ -1,5 +1,6 @@
 real fun(entero);
 principal()
 {
-	entero a[4] = {4,5, 5,7};
+	entero a[4] = {4,9,{4,5}};
+	real b[2][3] = {{1,2},{1,2}};
 }
