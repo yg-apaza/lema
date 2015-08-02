@@ -2,7 +2,7 @@ package lema.analizadorSemantico;
 
 public class accion
 {
-    /** Valor asignado para denotar al Nodo 'PROGRAMA' */
+    /** Valor asignado para denotar al Nodo 'PROGRAMA' */ //
     public static final int programa = 0;
     
     /** Valor asignado para denotar al Nodo 'CABECERA' */
