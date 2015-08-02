@@ -1,4 +1,3 @@
-/*Kef*/
 package lema.analizadorSemantico;
 
 import java.util.ArrayList;
@@ -229,13 +228,13 @@ public class AST
                         else
                         {
                             if(indice1 && v.getDimension1() != nodo.getHijos().get(4).getHijos().size())
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.FILAS_NO_COINCIDE, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                errores.insertarWarning(Mistake.FILAS_NO_COINCIDE, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                             if(indice1 && indice2)
                                 for(int i = 0; i < nodo.getHijos().get(4).getHijos().size(); i++)
                                 {
                                     ArrayList<Nodo> elementosMat2 = nodo.getHijos().get(4).getHijos().get(i).getHijos();
                                     if(v.getDimension2() != elementosMat2.size())
-                                        errores.insertarError(Mistake.SEMANTICO, Mistake.COLUMNAS_INCORRECTAS, (new String[] {String.valueOf(i), v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                        errores.insertarWarning(Mistake.COLUMNAS_INCORRECTAS, (new String[] {String.valueOf(i), v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
                         }
 
@@ -300,7 +299,7 @@ public class AST
                                     nodo.getHijos().get(4).setHijos(enlace);
                                     
                                     if(v.getDimension2() != elementosMat.size())
-                                        errores.insertarError(Mistake.SEMANTICO, Mistake.NUM_ELEMENTOS_INCORRECTOS, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                        errores.insertarWarning(Mistake.NUM_ELEMENTOS_INCORRECTOS, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
                                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                 }
@@ -325,12 +324,12 @@ public class AST
                                 if(d2)
                                 {
                                     if(v.getDimension1() != elementosMat.size())
-                                        errores.insertarError(Mistake.SEMANTICO, Mistake.FILAS_NO_COINCIDE, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                        errores.insertarWarning(Mistake.FILAS_NO_COINCIDE, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     for(int i = 0; i < elementosMat.size(); i++)
                                     {
                                         ArrayList<Nodo> elementosMat2 = elementosMat.get(i).getHijos();
                                         if(v.getDimension2() != elementosMat2.size())
-                                            errores.insertarError(Mistake.SEMANTICO, Mistake.COLUMNAS_INCORRECTAS, (new String[] {v.getId(),String.valueOf(i),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                            errores.insertarWarning(Mistake.COLUMNAS_INCORRECTAS, (new String[] {v.getId(),String.valueOf(i),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                                     }
                                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
                                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));

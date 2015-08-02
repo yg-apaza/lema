@@ -1,4 +1,3 @@
-/*Kef*/
 package lema;
 
 import java.util.ArrayList;
@@ -10,34 +9,40 @@ public class Mistake
     private final ArrayList<String> errorSemantico;
     private final ArrayList<String> warnings;
     
+    /* Errores Generales */
     public static final int LEXICO = 0;
     public static final int SINTACTICO = 1;
     public static final int SEMANTICO = 2;
     
+    /* Errores del Análisis Léxico */
     public static final int TOKEN_INVALIDO = 0;
     
+    /* Errores del Análisis Sintáctico */
     public static final int ERROR_SINTACTICO = 0;
     
+    /* Errores del Análisis Semántico */
     public static final int ID_DECLARADO = 0;
     public static final int NO_TAMANIO_CERO = 1;
     public static final int DATOS_DISTINTOS = 2;
-    public static final int NUM_ELEMENTOS_INCORRECTOS = 3;
-    public static final int MATRIZ_NO_FILA = 4;
-    public static final int SOLO_MATRIZ = 5;
-    public static final int FILAS_NO_COINCIDE = 6;
-    public static final int COLUMNAS_INCORRECTAS = 7;    
-    public static final int NO_PROTOTIPO = 8;
-    public static final int RETORNO_NO_COINCIDE = 9;
-    public static final int ARGUMENTO_NUM_NO_COINCIDE = 10;
-    public static final int ARGUMENTO_NO_MATRIZ = 11;
-    public static final int ARGUMENTO_NO_COINCIDE = 12;
-    public static final int ARGUMENTO_MATRIZ = 13;
-    public static final int TIPO_NO_COMPATIBLE = 14;
-    public static final int FUNCION_NO_EXISTE = 15;
-    public static final int INDICE_NO_ENTERO = 16;
-    public static final int ID_NO_MATRIZ = 17;    
-    public static final int ELEMENTO_NO_CORRECTO = 18;
-    public static final int ID_NO_DECLARADO = 19;
+    public static final int MATRIZ_NO_FILA = 3;
+    public static final int SOLO_MATRIZ = 4;        
+    public static final int NO_PROTOTIPO = 5;
+    public static final int RETORNO_NO_COINCIDE = 6;
+    public static final int ARGUMENTO_NUM_NO_COINCIDE = 7;
+    public static final int ARGUMENTO_NO_MATRIZ = 8;
+    public static final int ARGUMENTO_NO_COINCIDE = 9;
+    public static final int ARGUMENTO_MATRIZ = 10;
+    public static final int TIPO_NO_COMPATIBLE = 11;
+    public static final int FUNCION_NO_EXISTE = 12;
+    public static final int INDICE_NO_ENTERO = 13;
+    public static final int ID_NO_MATRIZ = 14;    
+    public static final int ELEMENTO_NO_CORRECTO = 15;
+    public static final int ID_NO_DECLARADO = 16;
+    
+    /* Warnings */
+    public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
+    public static final int FILAS_NO_COINCIDE = 1;
+    public static final int COLUMNAS_INCORRECTAS = 2;
     
     private final String [] listaLexico =
     {
@@ -54,11 +59,8 @@ public class Mistake
         "Error Semántico: Identificado '$' ya se encuentra declarado. Lin: $ Col: $",
         "Error Semántico: No se puede inicializar matrices/vectores con tamaño 0. Lin: $ Col $",
         "Error Semántico: Datos introducidos en la matriz/vector $ distintos. Lin: $ Col $",
-        "Warning Semántico: Número de elementos introducidos a la matriz/vector '$' incorrecto. Lin: $ Col: $",
         "Error Semántico: La matriz/vector '$' no debe poseer 1 fila. Lin: $ Col: $",
-        "Error Semántico: Solo se permite matrices/vectores unidimensionales o bidimensionales. Lin: $ Col: $",
-        "Warning Semántico: Número de filas de la matriz/vector '$' no coincide con las inicializadas. Lin: $ Col: $",
-        "Warning Semántico: Número de columnas de la fila $ de la matriz/vector '$' incorrecto. Lin: $ Col: $",
+        "Error Semántico: Solo se permite matrices/vectores unidimensionales o bidimensionales. Lin: $ Col: $",        
         "Error Semántico: No hay un prototipo declarado para la función '$'. Lin: $ Col: $",
         "Error Semántico: Tipo de dato de retorno de la función '$' no coincide con su prototipo. Lin $ Col: $",
         "Error Semántico: Número de argumentos de la función '$' no coincide con su prototipo. Lin: $ Col: $",
@@ -75,7 +77,9 @@ public class Mistake
     
     private final String[] listaWarnings =
     {
-        
+        "Warning Semántico: Número de elementos introducidos a la matriz/vector '$' incorrecto. Lin: $ Col: $",
+        "Warning Semántico: Número de filas de la matriz/vector '$' no coincide con las inicializadas. Lin: $ Col: $",
+        "Warning Semántico: Número de columnas de la fila $ de la matriz/vector '$' incorrecto. Lin: $ Col: $"
     };
     
     public Mistake()
@@ -134,7 +138,5 @@ public class Mistake
                 return errorSemantico;
         }
         return (new ArrayList <>());
-    }
-    
-    
+    }    
 }
