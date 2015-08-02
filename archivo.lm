@@ -1,6 +1,23 @@
-real fun(entero);
+real fun(entero [6], entero);
 principal()
 {
-	entero a[4] = {4,9,{4,5}};
+	entero a[4] = {3,9,5};
 	real b[2][3] = {{1,2},{1,2}};
+	
+	entero c;
+	c = a;
+	
+	ki(a,5);
+	
 }
+
+real fun(entero a, real c)
+{
+}
+
+/*
+
+	LLamada de funciones
+	Inicializaciones con llamadas de funciones
+
+*/
