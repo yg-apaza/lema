@@ -429,8 +429,7 @@ public class AST
                                             else
                                                 aux.setId(arg.get(i).getHijos().get(1).getValor());
                                         }
-                                    }
-                                        
+                                    }                                        
                                 }
                                 
                                 if(flag)
@@ -440,8 +439,7 @@ public class AST
                                     for (AtributoVariable argumento : f.getArgumentos())
                                         if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
                                             errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {argumento.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
-                                }
-                                
+                                }                                
                             }
                         }
                     }

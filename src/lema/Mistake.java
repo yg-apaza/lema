@@ -57,7 +57,7 @@ public class Mistake
     
     private final String [] listaSemantico =
     {
-        "Error Semántico: Identificado '$' ya se encuentra declarado. Lin: $ Col: $",
+        "Error Semántico: Identificador '$' ya se encuentra declarado. Lin: $ Col: $",
         "Error Semántico: No se puede inicializar matrices/vectores con tamaño 0. Lin: $ Col $",
         "Error Semántico: Datos introducidos en la matriz/vector $ distintos. Lin: $ Col $",
         "Error Semántico: La matriz/vector '$' no debe poseer 1 fila. Lin: $ Col: $",
