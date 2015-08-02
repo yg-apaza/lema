@@ -38,6 +38,7 @@ public class Mistake
     public static final int ID_NO_MATRIZ = 14;    
     public static final int ELEMENTO_NO_CORRECTO = 15;
     public static final int ID_NO_DECLARADO = 16;
+    public static final int FUNCION_NO_DEFINIDA = 17;
     
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
@@ -72,7 +73,8 @@ public class Mistake
         "Error Semántico: Índice $ de la matriz/vector '$' no es entero. Lin: $ Col: $",
         "Error Semántico: El identificador '$' no es una matriz/vector. Lin: $ Col: $",
         "Error Semántico: Elemento $ de la matriz/vector no es correcto. Lin: $ Col: $",
-        "Error Semántico: Identificador '$' no declarado. Lin: $ Col: $"
+        "Error Semántico: Identificador '$' no declarado. Lin: $ Col: $",
+        "Error Semántico: La función '$' no está definida. Lin: $ Col: $"
     };
     
     private final String[] listaWarnings =

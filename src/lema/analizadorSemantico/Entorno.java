@@ -100,7 +100,25 @@ public class Entorno
         
         if (found != null)
             return found;
-        return null;   
+        return null;
+    }
+    
+    public ArrayList<AtributoFuncion> getFunciones()
+    {
+        ArrayList<AtributoFuncion> funciones = new ArrayList<AtributoFuncion>();
+        Set <String> keys = raiz.tabla.keySet();
+        AtributoFuncion found = null;
+        for(String key : keys)
+        {
+            try
+            {
+                found = (AtributoFuncion)(raiz.tabla.get(key));
+            }
+            catch(ClassCastException ex){}
+            if (found != null)
+                funciones.add(found);
+        }
+        return funciones;
     }
 
     public void insertarBloque()

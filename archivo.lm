@@ -1,6 +1,10 @@
-real fun(entero);
+entero fun(entero);
+
 principal()
 {
-	entero a[4] = {4,9,{4,5}};
-	real b[2][3] = {{1,2},{1,2}};
+	entero a = fun();
+}
+
+entero fun(entero a)
+{
 }
