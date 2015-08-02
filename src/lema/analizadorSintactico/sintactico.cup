@@ -8,9 +8,30 @@ import lema.Mistake;
 
 parser code
 {:
+    /** Nodo raíz que almacena la estructura del programa a ejecutar */
     public Nodo raiz;
-    public Mistake errores;
-    public parser(java_cup.runtime.Scanner s, Mistake errores) {super(s); this.errores = errores;}
+    
+    /** Variable encargada de guardar errores sintácticos */
+    public Mistake e;
+
+    /**
+        * Constructor de clase parser.
+        *
+        * @param    s  analizador léxico.
+        * @param    e  errores encontrados por el compilador.    
+    */    
+    public parser(java_cup.runtime.Scanner s, Mistake e) 
+    {
+        super(s); 
+        this.e = e;
+    }
+    
+    /**
+        * Función que almacena en el atributo e los errores sintácticos.
+        *
+        * @param    message mensaje de error sintáctico.
+        * @param    info    token del error sintáctico.    
+    */ 
     public void report_error(String message, Object info)
     {   
         StringBuilder m = new StringBuilder("Error");
@@ -21,25 +42,33 @@ parser code
 
             if (s.left >= 0)
                 if (s.right >= 0)
-                    errores.insertarError(1, 0, (new String[]{message, String.valueOf(s.left + 1), String.valueOf(s.right)}));
+                    e.insertarError(1, 0, (new String[]{message, String.valueOf(s.left + 1), String.valueOf(s.right)}));
         }
     }
 
+    /**
+        * Función que se ejecuta cuando ocurre un error sintáctico.
+        *
+        * @param    message mensaje de error sintáctico.
+        * @param    info    token del error sintáctico.   
+        * @see void report_error(String, Object)
+    */ 
     public void report_fatal_error(String message, Object info)
     {
         report_error(message, info);
     }
-
+    
+    /** Función devuelve la raíz que almacena la estructura del programa a ejecutar. */ 
     public Nodo getRaiz()
     {
         return raiz;
     }
 :};
 
-
 /* DECLARACION DE TERMINALES */
 
-terminal Nodo pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
+terminal Nodo 
+pr_const, pr_vacio, pr_entero, pr_real, pr_cadena, 
 par_ab, par_ce, cor_ab, cor_ce, ll_ab, ll_ce, 
 mas, menos, prod, div, mod, transp, inv, incr, decr, 
 ident, dif, menor, mayor, menor_igual, mayor_igual, y, o, neg, igual, 
@@ -53,41 +82,36 @@ pr_si, pr_sino, pr_mientras, pr_hacer, pr_para, pr_selector, pr_saltar, pr_caso,
 punto_coma, coma,
 id, premas, premenos;
 
-
-
-
 /* DECLARACION DE NO TERMINALES */
 
-non terminal Nodo PROGRAMA, 
+non terminal Nodo 
+PROGRAMA, 
 PROGRAMAPRINCIPAL,
-
 EXPRESION, EXPGEN,
 SENTENCIA,
-
 DECLARACIONFUNCION,
 DECSIMPLE, DECVECT, DECMAT, 
-
 DECCON,
 DECCAD,
 DEFINICIONPROTOTIPO,
-
 ASIGNACION, LLAMADAFUNCION, 
 CONDICIONALHACERMIENTRAS, CONDICIONALMIENTRAS, CONDICIONALPARA, CONDICIONALSI, 
 SENTSELECTOR, SENTDEFECTO,
 SENTCASO, 
-
 ESCRITURA, LECTURA, 
 MATRIZ,
 INDICE, INI, ACT,
 CONDICIONAL, 
-
 OPERANDOENTERO,
 OPERADORFUNCION, OPERADORCOND, 
 OPERANDO,
 TIPONUMERO, TIPOVARIABLEFUNCION;
 
-non terminal ArrayList<Nodo> BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, DECLARACION,  DECLARACIONCON, DECENTERO, DECREAL, DECALL, ARGUMENTO,
-PARAMETROBINARIO, PARAMETROUNARIO, DECCADALL, DECCONALL, PARAMETROPROTOTIPO, NSENTENCIA, CONTROLADOR, NCASO, DEFINICIONFUNCION, DECLARACIONFUNCIONCABECERA, PARAMETRO;
+non terminal ArrayList <Nodo> 
+BLOQUE, DEFINICIONVARIABLE, DEFINICIONVARIABLECAB, 
+DECLARACION, DECLARACIONCON, DECENTERO, DECREAL, DECALL, DECCADALL, DECCONALL,
+ARGUMENTO, NSENTENCIA, CONTROLADOR, NCASO, 
+DEFINICIONFUNCION, DECLARACIONFUNCIONCABECERA, PARAMETRO, PARAMETROBINARIO, PARAMETROUNARIO, PARAMETROPROTOTIPO;
 
 /* PRECEDENCIA */
 
@@ -100,26 +124,22 @@ precedence left transp, inv;
 precedence right incr, decr, neg;
 precedence right premas, premenos;
 
-
 precedence nonassoc pr_const; 
 precedence nonassoc pr_vacio; 
 precedence nonassoc pr_entero; 
 precedence nonassoc pr_real; 
 precedence nonassoc pr_cadena; 
- 
 precedence nonassoc par_ab; 
 precedence nonassoc par_ce; 
 precedence nonassoc cor_ab; 
 precedence nonassoc cor_ce;
 precedence nonassoc ll_ab; 
-precedence nonassoc ll_ce; 
- 
+precedence nonassoc ll_ce;  
 precedence nonassoc pr_suma; 
 precedence nonassoc pr_resta; 
 precedence nonassoc pr_prod; 
 precedence nonassoc pr_transp; 
-precedence nonassoc pr_inv; 
- 
+precedence nonassoc pr_inv;  
 precedence nonassoc igual; 
 precedence nonassoc a_suma; 
 precedence nonassoc a_resta; 
@@ -127,8 +147,7 @@ precedence nonassoc a_prod;
 precedence nonassoc a_div; 
 precedence nonassoc a_mod; 
 precedence nonassoc sig_int; 
-precedence nonassoc sig_pun; 
- 
+precedence nonassoc sig_pun;  
 precedence nonassoc octa_e; 
 precedence nonassoc octa_r; 
 precedence nonassoc hexa_e; 
@@ -136,7 +155,6 @@ precedence nonassoc hexa_r;
 precedence nonassoc numero; 
 precedence nonassoc real; 
 precedence nonassoc cadena; 
-
 precedence nonassoc pr_leer; 
 precedence nonassoc pr_mostrar; 
 precedence nonassoc punto_coma; 
@@ -153,9 +171,9 @@ precedence nonassoc pr_caso;
 precedence nonassoc pr_default; 
 precedence nonassoc pr_principal; 
 precedence nonassoc id; 
- 
-start with PROGRAMA;
 
+
+start with PROGRAMA;
 
 PROGRAMA ::= DEFINICIONVARIABLECAB:c PROGRAMAPRINCIPAL:p
 {:
@@ -495,6 +513,7 @@ DECLARACIONCON ::= pr_const:c pr_real:t id:i igual hexa_r:v punto_coma:f
 DECLARACIONFUNCION ::= DECLARACIONFUNCIONCABECERA:dc BLOQUE:b
 {:
     dc.addAll(b);
+
     RESULT = new Nodo(accion.funcion, accion.acciones[accion.funcion], bleft, bright, dc, false);
 :};
 
@@ -641,6 +660,7 @@ DECVECT ::= id:i INDICE:i1
     hijos.add(i);
     hijos.add(new Nodo(sym.numero, "1", i1left, i1right, (new ArrayList<Nodo> ()), true));
     hijos.add(i1);
+
     RESULT = new Nodo(accion.declaracionMat, accion.acciones[accion.declaracionMat], i1left, i1right, hijos, false);
 :};
 
@@ -1175,12 +1195,14 @@ EXPRESION ::= OPERADORCOND:op
 EXPRESION ::= par_ab EXPRESION:e par_ce:f 
 {:
     e.setColumna(fright+1);
+
     RESULT = e;
 :};
 
 EXPRESION ::= par_ab OPERANDO:o par_ce:f 
 {:
     o.setColumna(fright+1);
+
     RESULT = o;
 :};
 
@@ -1195,6 +1217,7 @@ ARGUMENTO ::= EXPGEN:e
 ARGUMENTO ::= EXPGEN:e coma ARGUMENTO:a
 {:
     a.add(0, e);
+
     RESULT = a;
 :};
 
@@ -1664,6 +1687,7 @@ ESCRITURA ::= pr_mostrar:i par_ab EXPGEN:e par_ce punto_coma:f
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(e);
+
     RESULT = new Nodo(accion.escritura, accion.acciones[accion.escritura], ileft, fright, hijos, false);
 :};
 
@@ -1671,6 +1695,7 @@ ESCRITURA ::= pr_mostrar:i par_ab cadena:c par_ce punto_coma:f
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     hijos.add(c);
+
     RESULT = new Nodo(accion.escritura, accion.acciones[accion.escritura], ileft, fright, hijos, false);
 :};
 

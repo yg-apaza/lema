@@ -20,6 +20,7 @@ public class Main
     private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
+        
         if(args.length == 0)
             System.out.println("Debe ingresar un archivo");
         else

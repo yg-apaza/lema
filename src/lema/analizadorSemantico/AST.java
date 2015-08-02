@@ -43,7 +43,7 @@ public class AST
 
                         for(int i = 0; i < elementosMat.size(); i++)
                         {
-                            if(elementosMat.get(i).getCodigo() == accion.elemMat)
+                            if(elementosMat.get(i).getCodigo() == accion.elemMat && !nodo.getHijos().get(i).esTerminal())
                             {
                                 elementosMat.get(i).setCodigo(accion.elemVec);
                                 elementosMat.get(i).setValor(accion.acciones[accion.elemVec]);
@@ -71,7 +71,7 @@ public class AST
                 case accion.elemVec:
                     for(int i = 0; i < nodo.getHijos().size(); i++)
                     {
-                        if(nodo.getHijos().get(i).getCodigo() == accion.elemMat)
+                        if(nodo.getHijos().get(i).getCodigo() == accion.elemMat && !nodo.getHijos().get(i).esTerminal())
                         {
                             nodo.getHijos().get(i).setCodigo(accion.elemVec);
                             nodo.getHijos().get(i).setValor(accion.acciones[accion.elemVec]);
