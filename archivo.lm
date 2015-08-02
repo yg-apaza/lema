@@ -1,4 +1,9 @@
+entero fun();
 principal()
 {
-	a[3][4] = 5;
+	entero a[4][5];
+	a[1][1] = 3;
 }
+
+entero fun()
+{}

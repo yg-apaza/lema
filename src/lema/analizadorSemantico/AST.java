@@ -3,7 +3,6 @@ package lema.analizadorSemantico;
 import java.util.ArrayList;
 import lema.Mistake;
 import lema.analizadorLexico.sym;
-import lema.Converter;
 
 public class AST
 {
@@ -130,6 +129,8 @@ public class AST
             ArrayList<Nodo> elementosMat;
             int e = -1;
             int r = -1;
+            boolean indice1;
+            boolean indice2;
             switch(nodo.getCodigo())
             {
                 case accion.declaracionSim:
@@ -203,10 +204,10 @@ public class AST
                 
                     
                 case accion.declaracionMatIni:
-                    boolean indice1 = ( nodo.getHijos().get(2).getCodigo() == sym.numero ||
+                    indice1 =           ( nodo.getHijos().get(2).getCodigo() == sym.numero ||
                                         nodo.getHijos().get(2).getCodigo() == sym.octa_e ||
                                         nodo.getHijos().get(2).getCodigo() == sym.hexa_e );
-                    boolean indice2 = ( nodo.getHijos().get(3).getCodigo() == sym.numero ||
+                    indice2 = ( nodo.getHijos().get(3).getCodigo() == sym.numero ||
                                         nodo.getHijos().get(3).getCodigo() == sym.octa_e ||
                                         nodo.getHijos().get(3).getCodigo() == sym.hexa_e );
                     
@@ -321,21 +322,21 @@ public class AST
 
                 
                 case accion.declaracionConsMat:
-                    boolean indice1C = ( nodo.getHijos().get(2).getCodigo() == sym.numero ||
-                                         nodo.getHijos().get(2).getCodigo() == sym.octa_e ||
-                                         nodo.getHijos().get(2).getCodigo() == sym.hexa_e  );
-                    boolean indice2C = ( nodo.getHijos().get(3).getCodigo() == sym.numero ||
-                                         nodo.getHijos().get(3).getCodigo() == sym.octa_e ||
-                                         nodo.getHijos().get(3).getCodigo() == sym.hexa_e  );
+                    indice1 = ( nodo.getHijos().get(2).getCodigo() == sym.numero ||
+                                nodo.getHijos().get(2).getCodigo() == sym.octa_e ||
+                                nodo.getHijos().get(2).getCodigo() == sym.hexa_e );
+                    indice2 = ( nodo.getHijos().get(3).getCodigo() == sym.numero ||
+                                nodo.getHijos().get(3).getCodigo() == sym.octa_e ||
+                                nodo.getHijos().get(3).getCodigo() == sym.hexa_e );
                     
-                    if(indice1C || indice2C)
+                    if(indice1 || indice2)
                     {
                         v = new AtributoVariable(
                                                     nodo.getHijos().get(0).getValor(),
                                                     nodo.getHijos().get(1).getValor(),
                                                     true,
-                                                    indice1C?Integer.parseInt(nodo.getHijos().get(2).getValor()):-1,
-                                                    indice2C?Integer.parseInt(nodo.getHijos().get(3).getValor()):-1,
+                                                    indice1?Integer.parseInt(nodo.getHijos().get(2).getValor()):-1,
+                                                    indice2?Integer.parseInt(nodo.getHijos().get(3).getValor()):-1,
                                                     true
                                                 );
                     }
@@ -377,9 +378,9 @@ public class AST
                                 errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(4).getLinea()+1),String.valueOf(nodo.getHijos().get(4).getColumna())}));
                             else
                             {
-                                if(indice1C && v.getDimension1() != nodo.getHijos().get(4).getHijos().size())
+                                if(indice1 && v.getDimension1() != nodo.getHijos().get(4).getHijos().size())
                                     errores.insertarWarning(Mistake.FILAS_NO_COINCIDE, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
-                                if(indice1C && indice2C)
+                                if(indice1 && indice2)
                                     for(int i = 0; i < nodo.getHijos().get(4).getHijos().size(); i++)
                                     {
                                         ArrayList<Nodo> elementosMat2 = nodo.getHijos().get(4).getHijos().get(i).getHijos();
@@ -410,13 +411,26 @@ public class AST
                         else
                         {
                             ArrayList<Nodo> datosMatriz = param.get(i).getHijos();
-                            argumentos.add(new AtributoVariable (
-                                                                    datosMatriz.get(0).getValor(),
-                                                                    "", true,
-                                                                    Integer.parseInt(datosMatriz.get(1).getValor()),
-                                                                    Integer.parseInt(datosMatriz.get(2).getValor()),
-                                                                    false
-                                                                ));
+                            indice1 = ( datosMatriz.get(1).getCodigo() == sym.numero ||
+                                        datosMatriz.get(1).getCodigo() == sym.octa_e ||
+                                        datosMatriz.get(1).getCodigo() == sym.hexa_e );
+                            indice2 = ( datosMatriz.get(2).getCodigo() == sym.numero ||
+                                        datosMatriz.get(2).getCodigo() == sym.octa_e ||
+                                        datosMatriz.get(2).getCodigo() == sym.hexa_e );
+                            if(indice1 && indice2 && datosMatriz.get(1).esTerminal() && datosMatriz.get(2).esTerminal())
+                                argumentos.add(new AtributoVariable (
+                                                                        datosMatriz.get(0).getValor(),
+                                                                        "", true,
+                                                                        Integer.parseInt(datosMatriz.get(1).getValor()),
+                                                                        Integer.parseInt(datosMatriz.get(2).getValor()),
+                                                                        false
+                                                                    ));
+                            else
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_INDICE, 
+                                        (new String[]{  String.valueOf(i),
+                                                        String.valueOf(nodo.getHijos().get(1).getValor()),
+                                                        String.valueOf(nodo.getHijos().get(2).getHijos().get(i).getLinea() + 1),
+                                                        String.valueOf(nodo.getHijos().get(2).getHijos().get(i).getColumna())}));
                         }
                     }
                         
@@ -505,56 +519,59 @@ public class AST
                
                 case accion.asignacion:
                     AtributoVariable t;
-                    if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-                    else
+                    if(nodo.getHijos().get(0).esTerminal())
                     {
-                        // Suponiendo que el nodo es un ID
-                        if(t.esMatriz())
-                        {
-                            switch(t.getTipo())
-                            {
-                                case "entero":
-                                    e = 2;
-                                break;
-                                    
-                                case "real":
-                                    e = 3;
-                                break;
-                                    
-                                case "cadena":
-                                    e = -1;
-                                break;
-                            }
-                        }
+                        if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                         else
                         {
-                            switch(t.getTipo())
+                            // Suponiendo que el nodo es un ID
+                            if(t.esMatriz())
                             {
-                                case "entero":
-                                    e = 0;
-                                break;
-                                    
-                                case "real":
-                                    e = 1;
-                                break;
-                                    
-                                case "cadena":
-                                    e = 4;
-                                break;
-                            }
-                        }
-                        
-                        r = verificarExp(nodo.getHijos().get(1), t.esConstante());
-                        try
-                        {
-                            if(!TypeCheck.compatibilidad1[e][r][4])
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                                switch(t.getTipo())
+                                {
+                                    case "entero":
+                                        e = 2;
+                                    break;
 
-                        }
-                        catch(ArrayIndexOutOfBoundsException ex)
-                        {
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                                    case "real":
+                                        e = 3;
+                                    break;
+
+                                    case "cadena":
+                                        e = -1;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                switch(t.getTipo())
+                                {
+                                    case "entero":
+                                        e = 0;
+                                    break;
+
+                                    case "real":
+                                        e = 1;
+                                    break;
+
+                                    case "cadena":
+                                        e = 4;
+                                    break;
+                                }
+                            }
+
+                            r = verificarExp(nodo.getHijos().get(1), t.esConstante());
+                            try
+                            {
+                                if(!TypeCheck.compatibilidad1[e][r][4])
+                                    errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+
+                            }
+                            catch(ArrayIndexOutOfBoundsException ex)
+                            {
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                            }
                         }
                     }
                 break;

@@ -41,6 +41,7 @@ public class Mistake
     public static final int FUNCION_NO_DEFINIDA = 17;
     public static final int NO_VARIABLE = 18;
     public static final int FILA_NO_CORRECTO = 19;
+    public static final int ARGUMENTO_INDICE = 20;
 
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
@@ -78,7 +79,8 @@ public class Mistake
         "Error Semántico: Identificador '$' no declarado. Lin: $ Col: $",
         "Error Semántico: La función '$' no está definida. Lin: $ Col: $",
         "Error Semántico: Variable '$' no puede ser asignado a una constante. Lin: $ Col: $",
-        "Error Semántico: Fila $ de la matriz/vector no es correcto. Lin: $ Col: $"
+        "Error Semántico: Fila $ de la matriz/vector no es correcto. Lin: $ Col: $",
+        "Error Semántico: Indice del argumento $ de la función $ debe ser un número. Lin: $ Col: $"
     };
     
     private final String[] listaWarnings =
