@@ -1,10 +1,12 @@
-entero fun(entero);
+const entero a[3][4] = {1,2,a};
 
 principal()
 {
-	entero a = fun();
 }
 
-entero fun(entero a)
+/*
+entero funcion(entero a)
 {
+
 }
+*/

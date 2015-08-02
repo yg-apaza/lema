@@ -155,6 +155,34 @@ public class AST
                                             );
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
+                    else
+                    {
+                        switch(v.getTipo())
+                        {
+                            case "entero":
+                                e = 0;
+                            break;
+
+                            case "real":
+                                e = 1;
+                            break;
+
+                            case "cadena":
+                                e = 4;
+                            break;
+                        }
+
+                        r = verificarExp(nodo.getHijos().get(2), v.esConstante());
+                        try
+                        {
+                            if(!TypeCheck.compatibilidad1[e][r][4])
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(4).getLinea()+1),String.valueOf(nodo.getHijos().get(4).getColumna())}));
+                        }
+                        catch(ArrayIndexOutOfBoundsException ex)
+                        {
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                        }
+                    }
                 break;
 
                 
@@ -170,16 +198,17 @@ public class AST
                     
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
+                    
                 break;
                 
                     
                 case accion.declaracionMatIni:
                     boolean indice1 = ( nodo.getHijos().get(2).getCodigo() == sym.numero ||
                                         nodo.getHijos().get(2).getCodigo() == sym.octa_e ||
-                                        nodo.getHijos().get(2).getCodigo() == sym.hexa_e);
+                                        nodo.getHijos().get(2).getCodigo() == sym.hexa_e );
                     boolean indice2 = ( nodo.getHijos().get(3).getCodigo() == sym.numero ||
                                         nodo.getHijos().get(3).getCodigo() == sym.octa_e ||
-                                        nodo.getHijos().get(3).getCodigo() == sym.hexa_e);
+                                        nodo.getHijos().get(3).getCodigo() == sym.hexa_e );
                     
                     if(indice1 || indice2)
                     {
@@ -223,7 +252,7 @@ public class AST
                             break;
                         }
 
-                        r = verificarExp(nodo.getHijos().get(4));
+                        r = verificarExp(nodo.getHijos().get(4), v.esConstante());
                         try
                         {
                             if(!TypeCheck.compatibilidad1[e][r][4])
@@ -313,7 +342,7 @@ public class AST
                             break;
                         }
 
-                        r = verificarExp(nodo.getHijos().get(4));
+                        r = verificarExp(nodo.getHijos().get(4), v.esConstante());
                         try
                         {
                             if(!TypeCheck.compatibilidad1[e][r][4])
@@ -488,7 +517,7 @@ public class AST
                             }
                         }
                         
-                        r = verificarExp(nodo.getHijos().get(1));
+                        r = verificarExp(nodo.getHijos().get(1), t.esConstante());
                         try
                         {
                             if(!TypeCheck.compatibilidad1[e][r][4])
@@ -499,7 +528,6 @@ public class AST
                         {
                             errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                         }
-                        
                     }
                 break;
                     
@@ -524,7 +552,7 @@ public class AST
         }
     }
     
-    public int verificarExp(Nodo exp)
+    public int verificarExp(Nodo exp, boolean constante)
     {
         ArrayList <Integer> tiposOp = new ArrayList <>();
         int r = -1;
@@ -532,11 +560,11 @@ public class AST
         {
             if(exp.getCodigo() != accion.llamadaFuncion && exp.getCodigo() != accion.accesoMat)
                 for(int i = 0; i < exp.getHijos().size(); i++)
-                    tiposOp.add(verificarExp(exp.getHijos().get(i)));
+                    tiposOp.add(verificarExp(exp.getHijos().get(i), constante));
             
             if(exp.getCodigo() == accion.accesoMat)
                 for(int i = 1; i < exp.getHijos().size(); i++)
-                    tiposOp.add(verificarExp(exp.getHijos().get(i)));
+                    tiposOp.add(verificarExp(exp.getHijos().get(i), constante));
             
             switch(exp.getCodigo())
             {
@@ -714,7 +742,7 @@ public class AST
                         {
                             if(!(tiposOp.get(i) == 0 || tiposOp.get(i) == 1))
                             {
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.RETORNO_NO_COINCIDE, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.ELEMENTO_NO_CORRECTO, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                                 return -1;
                             }
                         }
@@ -749,40 +777,45 @@ public class AST
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_NO_DECLARADO, (new String[] {exp.getValor(),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                     else
                     {
-                        if(t.esMatriz())
+                        if(!constante)
                         {
-                            switch(t.getTipo())
+                            if(t.esMatriz())
                             {
-                                case "entero":
-                                    r = 2;
-                                break;
-                                    
-                                case "real":
-                                    r = 3;
-                                break;
-                                    
-                                case "cadena":
-                                    r = -1;
-                                break;
+                                switch(t.getTipo())
+                                {
+                                    case "entero":
+                                        r = 2;
+                                    break;
+
+                                    case "real":
+                                        r = 3;
+                                    break;
+
+                                    case "cadena":
+                                        r = -1;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                switch(t.getTipo())
+                                {
+                                    case "entero":
+                                        r = 0;
+                                    break;
+
+                                    case "real":
+                                        r = 1;
+                                    break;
+
+                                    case "cadena":
+                                        r = 4;
+                                    break;
+                                }
                             }
                         }
                         else
-                        {
-                            switch(t.getTipo())
-                            {
-                                case "entero":
-                                    r = 0;
-                                break;
-                                    
-                                case "real":
-                                    r = 1;
-                                break;
-                                    
-                                case "cadena":
-                                    r = 4;
-                                break;
-                            }
-                        }
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.NO_VARIABLE, (new String[] {t.getId(),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                     }
                 break;
             }
