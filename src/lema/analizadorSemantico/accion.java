@@ -2,85 +2,178 @@ package lema.analizadorSemantico;
 
 public class accion
 {
-    public static final int programa = 0;               // Usado
+    /** Valor asignado para denotar al Nodo 'PROGRAMA' */
+    public static final int programa = 0;
     
-    public static final int cabecera = 1;               // Usado
-    public static final int programaPrincipal = 2;      // Usado
-    public static final int defFuncion = 3;             // Usado
+    /** Valor asignado para denotar al Nodo 'CABECERA' */
+    public static final int cabecera = 1;
     
-    public static final int bloque = 4;                 // Usado
-    public static final int finBloque = 5;		// Usado
+    /** Valor asignado para denotar al Nodo 'PROGRAMA PRINCIPAL' */
+    public static final int programaPrincipal = 2;
     
-    public static final int declaracionConsSim = 6;     // Usado
-    public static final int declaracionConsMat = 7; 	// Usado
+    /** Valor asignado para denotar al Nodo 'DEFINICIÓN FUNCIONES' */
+    public static final int defFuncion = 3;
     
-    public static final int declaracionProt = 8;        // Usado
-    public static final int parametroProt = 9;         	// Usado     
-    public static final int parametroProtMat = 10;      // Usado
+    /** Valor asignado para denotar al Nodo 'BLOQUE' */
+    public static final int bloque = 4;                
     
-    public static final int declaracionVar = 11;        // Usado
+    /** Valor asignado para denotar al Nodo 'FIN DE BLOQUE' */
+    public static final int finBloque = 5;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION CONSTANTE SIMPLE' */
+    public static final int declaracionConsSim = 6;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION CONSTANTE MATRIZ' */
+    public static final int declaracionConsMat = 7;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION PROTOTIPO' */
+    public static final int declaracionProt = 8; 
+    
+    /** Valor asignado para denotar al Nodo 'PARAMETRO PROTOTIPO' */
+    public static final int parametroProt = 9;
+    
+    /** Valor asignado para denotar al Nodo 'PARAMETRO PROTOTIPO MATRIZ' */
+    public static final int parametroProtMat = 10;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACIONES DE VARIABLES' */
+    public static final int declaracionVar = 11; 
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION SIMPLE SIN INI' */
+    public static final int declaracionSim = 12;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION MATRIZ SIN INI' */
+    public static final int declaracionMat = 13;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION SIMPLE CON INI' */
+    public static final int declaracionSimIni = 14;
+    
+    /** Valor asignado para denotar al Nodo 'DECLARACION MATRIZ CON INI' */
+    public static final int declaracionMatIni = 15;
+    
+    /** Valor asignado para denotar al Nodo 'ACCESO A MATRIZ' */
+    public static final int accesoMat = 16;
+    
+    /** Valor asignado para denotar al Nodo 'ASIGNACION' */
+    public static final int asignacion = 17;
+    
+    /** Valor asignado para denotar al Nodo 'HACER MIENTRAS' */
+    public static final int hacerMientras = 18;
+    
+    /** Valor asignado para denotar al Nodo 'MIENTRAS' */
+    public static final int mientras = 19;
+    
+    /** Valor asignado para denotar al Nodo 'PARA' */
+    public static final int para = 20; 
+    
+    /** Valor asignado para denotar al Nodo 'SI' */
+    public static final int si = 21;
+    
+    /** Valor asignado para denotar al Nodo 'SELECTOR' */
+    public static final int selector = 22;
+    
+    /** Valor asignado para denotar al Nodo 'LLAMADA FUNCION */
+    public static final int llamadaFuncion = 23; 
+    
+    /** Valor asignado para denotar al Nodo 'ESCRITURA' */
+    public static final int escritura = 24;
+    
+    /** Valor asignado para denotar al Nodo 'LECTURA' */
+    public static final int lectura = 25;
+    
+    /** Valor asignado para denotar al Nodo 'RETORNAR' */
+    public static final int retornar = 26;
+    
+    /** Valor asignado para denotar al Nodo 'SUMA' */
+    public static final int suma = 27; 
+    
+    /** Valor asignado para denotar al Nodo 'RESTA' */
+    public static final int resta = 28;
+    
+    /** Valor asignado para denotar al Nodo 'PRODUCTO' */
+    public static final int producto = 29;
+    
+    /** Valor asignado para denotar al Nodo 'DIVISION' */
+    public static final int division = 30; 
+    
+    /** Valor asignado para denotar al Nodo 'MODULO' */
+    public static final int modulo = 31;
+    
+    /** Valor asignado para denotar al Nodo 'MAYOR' */
+    public static final int mayor = 32;
+    
+    /** Valor asignado para denotar al Nodo 'MAYOR IGUAL' */
+    public static final int mayor_igual = 33;
+    
+    /** Valor asignado para denotar al Nodo 'MENOR' */
+    public static final int menor = 34;
+    
+    /** Valor asignado para denotar al Nodo 'MENOR IGUAL' */
+    public static final int menor_igual = 35;
+    
+    /** Valor asignado para denotar al Nodo 'DISYUNCION' */
+    public static final int disyuncion = 36;
+    
+    /** Valor asignado para denotar al Nodo 'CONJUNCION' */
+    public static final int conjuncion = 37;
+    
+    /** Valor asignado para denotar al Nodo 'IDENTICO' */
+    public static final int identico = 38; 
+    
+    /** Valor asignado para denotar al Nodo 'DIFERENTE' */
+    public static final int diferente = 39;   
+    
+    /** Valor asignado para denotar al Nodo 'NEGACION' */
+    public static final int negacion = 40;
+    
+    /** Valor asignado para denotar al Nodo 'INVERSA' */
+    public static final int inversa = 41;
+    
+    /** Valor asignado para denotar al Nodo 'TRANSPUESTA' */
+    public static final int transpuesta = 42;
+    
+    /** Valor asignado para denotar al Nodo 'NEGATIVIDAD' */
+    public static final int negatividad = 43;
+    
+    /** Valor asignado para denotar al Nodo 'OPERACION CONDICIONAL' */
+    public static final int operacionCond = 44;
+    
+    /** Valor asignado para denotar al Nodo 'ARGUMENTO' */
+    public static final int argumento = 45;               
+    
+    /** Valor asignado para denotar al Nodo 'ELEMENTO MATRIZ' */
+    public static final int elemMat = 46;
+    
+    /** Valor asignado para denotar al Nodo 'ELEMENTO VECTOR' */
+    public static final int elemVec = 47;
+    
+    /** Valor asignado para denotar al Nodo 'FUNCION' */
+    public static final int funcion = 48;
+    
+    /** Valor asignado para denotar al Nodo 'PARAMETRO FUNCION' */
+    public static final int parametroFun = 49;
+    
+    /** Valor asignado para denotar al Nodo 'PARAMETRO FUNCION SIMPLE' */
+    public static final int parametroFunSim = 50;
+    
+    /** Valor asignado para denotar al Nodo 'PARAMETRO FUNCION MATRIZ' */
+    public static final int parametroFunMat = 51;  
+    
+    /** Valor asignado para denotar al Nodo 'FIN DE FUNCION' */
+    public static final int finFuncion = 52;   
 	
-    public static final int declaracionSim = 12;        // Usado
-    public static final int declaracionMat = 13;        // Usado
+    /** Valor asignado para denotar al Nodo 'CASOS' */
+    public static final int casos = 53;
     
-    public static final int declaracionSimIni = 14;     // Usado
-    public static final int declaracionMatIni = 15;     // Usado
+    /** Valor asignado para denotar al Nodo 'CASO' */
+    public static final int caso = 54;
     
-    public static final int accesoMat = 16;             // Usado
-      
-    public static final int asignacion = 17;            // Usado
-	
-    public static final int hacerMientras = 18;         // Usado
-    public static final int mientras = 19;              // Usado
-    public static final int para = 20;                  // Usado
-    public static final int si = 21;                    // Usado
-    public static final int selector = 22;              // Usado
-    public static final int llamadaFuncion = 23;        // Usado
-    public static final int escritura = 24;             // Usado
-    public static final int lectura = 25;               // Usado
-    public static final int retornar = 26;              // Usado
+    /** Valor asignado para denotar al Nodo 'POR DEFECTO' */
+    public static final int pordefecto = 55;           
     
-    public static final int suma = 27;                  // Usado
-    public static final int resta = 28;                 // Usado
-    public static final int producto = 29;              // Usado
-    public static final int division = 30;              // Usado    
-    public static final int modulo = 31;                // Usado
+    /** Valor asignado para denotar al Nodo 'SALTAR' */
+    public static final int saltar = 56;          
     
-    public static final int mayor = 32;                 // Usado
-    public static final int mayor_igual = 33;           // Usado
-    public static final int menor = 34;                 // Usado
-    public static final int menor_igual = 35;           // Usado
-    
-    public static final int disyuncion = 36;            // Usado
-    public static final int conjuncion = 37;            // Usado
-    public static final int identico = 38;              // Usado
-    public static final int diferente = 39;             // Usado   
-    public static final int negacion = 40;              // Usado
-	
-    public static final int inversa = 41;               // Usado
-    public static final int transpuesta = 42;           // Usado
-    
-    public static final int negatividad = 43;           // Usado
-    
-    public static final int operacionCond = 44;         // Usado
-    
-    public static final int argumento = 45;             // Usado     
-    public static final int elemMat = 46;               // Usado
-    public static final int elemVec = 47;               // Usado
-
-    
-    public static final int funcion = 48;               // Usado
-    public static final int parametroFun = 49;          // Usado
-    public static final int parametroFunSim = 50;       // Usado
-    public static final int parametroFunMat = 51;       // Usado   
-    public static final int finFuncion = 52;            // Usado
-	
-    public static final int casos = 53;                 // Usado
-    public static final int caso = 54;                  // Usado
-    public static final int pordefecto = 55;            // Usado
-    public static final int saltar = 56;                // Usado
-    
-    
+    /** Arreglo asignado para almacenar todas las etiquetas que puede tener de un Nodo */
     public static final String[] acciones = new String[]
     {
         "PROGRAMA",    
@@ -139,7 +232,6 @@ public class accion
         "CASOS",
         "CASO",
         "POR DEFECTO",
-        "SALTAR",
-        "ELEMENTO VECTOR"
+        "SALTAR"
     };
 }
