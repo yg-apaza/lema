@@ -288,7 +288,35 @@ public class AST
                                                 true
                                             );
                     if(!tablaSimbolos.putIdentificador(v.getId(), v))
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
+                    else
+                    {
+                        switch(v.getTipo())
+                        {
+                            case "entero":
+                                e = 0;
+                            break;
+
+                            case "real":
+                                e = 1;
+                            break;
+
+                            case "cadena":
+                                e = 4;
+                            break;
+                        }
+
+                        r = verificarExp(nodo.getHijos().get(2), v.esConstante());
+                        try
+                        {
+                            if(!TypeCheck.compatibilidad1[e][r][4])
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(2).getColumna())}));
+                        }
+                        catch(ArrayIndexOutOfBoundsException ex)
+                        {
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                        }
+                    }
                 break;
 
                 
@@ -481,7 +509,7 @@ public class AST
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                     else
                     {
-                        // Suponiendo que el nodo es un ID                       
+                        // Suponiendo que el nodo es un ID
                         if(t.esMatriz())
                         {
                             switch(t.getTipo())

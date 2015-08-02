@@ -173,7 +173,7 @@ public class accion
     /** Valor asignado para denotar al Nodo 'SALTAR' */
     public static final int saltar = 56;          
     
-    /** Arreglo asignado para almacenar todas las etiquetas que puede tener de un Nodo */
+    /** Arreglo asignado para almacenar todas las etiquetas que puede tener un Nodo */
     public static final String[] acciones = new String[]
     {
         "PROGRAMA",    

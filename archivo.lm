@@ -1,4 +1,4 @@
 principal()
 {
-	entero a = {0x35};
+	a[3][4] = 5;
 }
