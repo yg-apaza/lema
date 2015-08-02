@@ -1,4 +1,4 @@
 principal()
 {
-	entero a = {1,2,34};
+	entero a = {0x35};
 }
