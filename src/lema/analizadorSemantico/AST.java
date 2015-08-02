@@ -693,14 +693,14 @@ public class AST
                         {
                             if(!(tiposOp.get(i) == 2 || tiposOp.get(i) == 3))
                             {
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.RETORNO_NO_COINCIDE, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.ELEMENTO_NO_CORRECTO, (new String[] {String.valueOf(i),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                                 return -1;
                             }
                         }
                         r = 3;
                     }
                 break;
-                    
+                
                 case accion.elemVec:
                     ArrayList<Nodo> elementosVec = exp.getHijos();
                     /** Los elementos contenidos por la matriz son simples o vectores, TRUE Vectores, FALSE Simples*/
