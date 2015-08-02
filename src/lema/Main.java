@@ -387,9 +387,8 @@ public class Main
                         System.out.println("Finalizado: Análisis Semántico realizado con éxito");
                     else
                         System.out.println("Finalizado: Se encontraron " + eSemantico.size() + " error(es)");
-
+                    
                     System.out.println(ast);
-                    System.out.flush();
                 }
                 else
                     System.out.println("Error Sintactico: Se encontraron errores durante el análisis sintáctico");
