@@ -1,6 +1,6 @@
 principal()
 {
-	entero a = {0xA};
+	entero a = 0xA.B;
 }
 
 /*

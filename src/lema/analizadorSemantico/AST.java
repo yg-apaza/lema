@@ -706,7 +706,7 @@ public class AST
                     boolean noVacio = true;
                     for(int i = 0; i < elementosMat.size(); i++)
                     {
-                            if(elementosMat.get(i).getCodigo() == accion.elemVec && elementosMat.get(i).getHijos().isEmpty())
+                            if(elementosMat.get(i).getCodigo() == accion.elemVec && elementosMat.get(i).getHijos().isEmpty() && !elementosMat.get(i).esTerminal())
                             {
                                errores.insertarError(Mistake.SEMANTICO, Mistake.NO_TAMANIO_CERO, (new String[] {String.valueOf(elementosMat.get(i).getLinea()+1),String.valueOf(elementosMat.get(i).getColumna())}));
                                noVacio = false;
