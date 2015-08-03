@@ -44,6 +44,7 @@ public class Mistake
     public static final int ARGUMENTO_INDICE = 20;
     public static final int ACCESO_NO_COMPATIBLE = 21;
     public static final int INDICE_CONSTANTE = 22;
+    public static final int CONSTANTE_NO_MODIFICAR = 23;
 
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
@@ -85,6 +86,7 @@ public class Mistake
         "Error Semántico: Uno de los índices del argumento $ de la función '$' debe ser un número. Lin: $ Col: $",
         "Error Semántico: Tipo de dato asignado al acceso en la matriz '$' no es compatible",
         "Error Semántico: Indices de la matriz constante '$' deben ser números. Lin: $ Col: $",
+        "Error Semántico: Tipo de dato constante '$' no puede ser modificado. Lin: $ Col: $"
     };
     
     private final String[] listaWarnings =
