@@ -82,7 +82,7 @@ public class Mistake
         "Error Semántico: La función '$' no está definida. Lin: $ Col: $",
         "Error Semántico: Variable '$' no puede ser asignado a una constante. Lin: $ Col: $",
         "Error Semántico: Fila $ de la matriz/vector no es correcto. Lin: $ Col: $",
-        "Error Semántico: Indice del argumento $ de la función $ debe ser un número. Lin: $ Col: $",
+        "Error Semántico: Uno de los índices del argumento $ de la función '$' debe ser un número. Lin: $ Col: $",
         "Error Semántico: Tipo de dato asignado al acceso en la matriz '$' no es compatible",
         "Error Semántico: Indices de la matriz constante '$' deben ser números. Lin: $ Col: $",
     };

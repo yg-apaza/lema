@@ -334,7 +334,10 @@ public class Main
                 System.out.flush();
             }
             else
+            {
                 System.out.println("Error Lexico: Se encontraron errores durante el análisis léxico");
+                System.out.println("Finalizado");
+            }
         }
         catch (FileNotFoundException ex)
         {
@@ -393,10 +396,16 @@ public class Main
                     System.out.println(ast);
                 }
                 else
+                {
                     System.out.println("Error Sintactico: Se encontraron errores durante el análisis sintáctico");
+                    System.out.println("Finalizado");
+                }
             }
             else
+            {
                 System.out.println("Error Lexico: Se encontraron errores durante el análisis léxico");
+                System.out.println("Finalizado");
+            }
         }
         catch (FileNotFoundException ex)
         {

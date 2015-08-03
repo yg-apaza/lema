@@ -1241,7 +1241,11 @@ public class TypeCheck
             }
         }
     ;
-    /** Dimension: 0 - unarios, 1 - binarios, 2 - ternarios */
+    /** 
+     * @param operandos Operandos cuya compatibilidad será evaluada
+     * @param op    Código de la operación
+     * @param dimension Dimension de la operación: 0 - unarios, 1 - binarios, 2 - ternarios
+     * @return  El tipo de dato con el que es compatible (0 entero, 1 real, 2 entero[], 3 real[], 4 cadena)*/
     public int tipoCompatible(ArrayList<Integer> operandos, int op, int dimension)
     {
         try

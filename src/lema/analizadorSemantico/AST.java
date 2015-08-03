@@ -131,6 +131,7 @@ public class AST
             int r = -1;
             boolean indice1;
             boolean indice2;
+            boolean flag;
             switch(nodo.getCodigo())
             {
                 case accion.declaracionSim:
@@ -463,6 +464,7 @@ public class AST
                 case accion.declaracionProt:
                     ArrayList <AtributoVariable> argumentos = new ArrayList <>();
                     ArrayList <Nodo> param = nodo.getHijos().get(2).getHijos();
+                    flag = true;
                     for(int i = 0; i < param.size(); i++)
                     {
                         if(param.get(i).esTerminal())
@@ -488,22 +490,28 @@ public class AST
                                                                         false
                                                                     ));
                             else
+                            {
+                                flag = false;
                                 errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_INDICE, 
                                         (new String[]{  String.valueOf(i),
                                                         String.valueOf(nodo.getHijos().get(1).getValor()),
                                                         String.valueOf(nodo.getHijos().get(2).getHijos().get(i).getLinea() + 1),
                                                         String.valueOf(nodo.getHijos().get(2).getHijos().get(i).getColumna())}));
+                                
+                            }
                         }
                     }
-                        
-                    f = new AtributoFuncion (
-                                                nodo.getHijos().get(0).getValor(),
-                                                nodo.getHijos().get(1).getValor(),
-                                                argumentos,
-                                                false
-                                            );
-                    if(!tablaSimbolos.putFuncion(f.getId(), f))
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                    if(flag)
+                    {
+                        f = new AtributoFuncion (
+                                                    nodo.getHijos().get(0).getValor(),
+                                                    nodo.getHijos().get(1).getValor(),
+                                                    argumentos,
+                                                    false
+                                                );
+                        if(!tablaSimbolos.putFuncion(f.getId(), f))
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                    }
                 break;
                 
                 
@@ -521,7 +529,7 @@ public class AST
                             else
                             {
                                 ArrayList<Nodo> arg = nodo.getHijos().get(2).getHijos();
-                                boolean flag = true;
+                                flag = true;
                                 for(int i = 0; i < f.getArgumentos().size(); i++)
                                 {
                                     AtributoVariable aux = f.getArgumentos().get(i);
@@ -534,15 +542,20 @@ public class AST
                                         }
                                         else
                                         {
-                                            if(!(aux.getTipo().equals(arg.get(i).getHijos().get(0).getValor()) &&
-                                                (aux.getDimension1() == Integer.parseInt(arg.get(i).getHijos().get(2).getValor())) && 
-                                                (aux.getDimension2() == Integer.parseInt(arg.get(i).getHijos().get(3).getValor()))))
+                                            if(arg.get(i).getHijos().get(2).esTerminal() && arg.get(i).getHijos().get(3).esTerminal())
                                             {
-                                                errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NO_COINCIDE, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(arg.get(i).getHijos().get(1).getLinea()+1),String.valueOf(arg.get(i).getHijos().get(1).getColumna())}));
-                                                flag = false;
+                                                if(!(aux.getTipo().equals(arg.get(i).getHijos().get(0).getValor()) &&
+                                                    (aux.getDimension1() == Integer.parseInt(arg.get(i).getHijos().get(2).getValor())) && 
+                                                    (aux.getDimension2() == Integer.parseInt(arg.get(i).getHijos().get(3).getValor()))))
+                                                {
+                                                    errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NO_COINCIDE, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(arg.get(i).getHijos().get(1).getLinea()+1),String.valueOf(arg.get(i).getHijos().get(1).getColumna())}));
+                                                    flag = false;
+                                                }
+                                                else
+                                                    aux.setId(arg.get(i).getHijos().get(1).getValor());
                                             }
-                                            else
-                                                aux.setId(arg.get(i).getHijos().get(1).getValor());
+                                            else // Joven
+                                                errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_INDICE, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(arg.get(i).getHijos().get(1).getLinea()+1),String.valueOf(arg.get(i).getHijos().get(1).getColumna())}));
                                         }
                                     }
                                     else
