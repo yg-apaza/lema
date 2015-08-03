@@ -173,6 +173,10 @@ public class accion
     /** Valor asignado para denotar al Nodo 'SALTAR' */
     public static final int saltar = 56;          
     
+    public static final int finPara = 57;
+    
+    public static final int condicion = 58;
+    
     /** Arreglo asignado para almacenar todas las etiquetas que puede tener un Nodo */
     public static final String[] acciones = new String[]
     {
@@ -232,6 +236,8 @@ public class accion
         "CASOS",
         "CASO",
         "POR DEFECTO",
-        "SALTAR"
+        "SALTAR",
+        "FIN DE SENTENCIA PARA",
+        "CONDICION"
     };
 }

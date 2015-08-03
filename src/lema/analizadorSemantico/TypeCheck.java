@@ -1273,7 +1273,6 @@ public class TypeCheck
         }
         catch(ArrayIndexOutOfBoundsException ex)
         {
-            System.out.println("EXCEPCION");
             return -1;
         }
         

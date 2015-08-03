@@ -695,6 +695,56 @@ public class AST
                     }
                 break;
                     
+                
+                case accion.si:
+                    e = 1;
+                    r = verificarExp(nodo.getHijos().get(0), false);
+                    try
+                    {
+                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+
+                    }
+                    catch(ArrayIndexOutOfBoundsException ex)
+                    { // Joven
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    }
+                break;
+                
+                case accion.hacerMientras:
+                    e = 1;
+                    r = verificarExp(nodo.getHijos().get(0), false);
+                    try
+                    {
+                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+
+                    }
+                    catch(ArrayIndexOutOfBoundsException ex)
+                    { // Joven
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    }
+                break;
+                
+                
+                case accion.para:
+                    tablaSimbolos.insertarBloque();
+                    e = 1;
+                    r = verificarExp(nodo.getHijos().get(1), false);
+                    try
+                    {
+                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
+                    }
+                    catch(ArrayIndexOutOfBoundsException ex)
+                    { // Joven
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
+                    }
+                break;
+                
+                case accion.finPara:
+                    tablaSimbolos.salirBloque();
+                break;
                     
                 case accion.finFuncion:
                     tablaSimbolos.salirBloque();
@@ -830,7 +880,7 @@ public class AST
                 case accion.accesoMat:
                     AtributoVariable t;
                     if((t = tablaSimbolos.buscarVariable(exp.getHijos().get(0).getValor())) == null)
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {exp.getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.ID_NO_DECLARADO, (new String[] {exp.getHijos().get(0).getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
                     else
                     {
                         if(t.esMatriz())

@@ -1,10 +1,23 @@
-entero fun(real[4][4]);
-entero x = 4;
-entero a[3] = {1};
+entero a[1] = {1,2,3};
+entero b[3] = {4,5,6};
+entero c = 4;
+entero fun (entero);
 principal()
 {
-	a[4] = a;
+	si(4)
+	{
+	}
+	
+	mientras(34){}
+	
+	hacer{}mientras(3>4);
+	para(entero i = 1; i < 4; i = a[3])
+	{
+		
+	}
+	
+	para(entero i = 2; i < 8; i++)
+	{
+		
+	}
 }
-
-entero fun(real b[4][4])
-{}

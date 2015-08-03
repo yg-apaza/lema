@@ -1527,7 +1527,11 @@ CONDICIONAL ::= par_ab EXPRESION:e par_ce:f
 CONDICIONALHACERMIENTRAS ::= pr_hacer:i BLOQUE:b pr_mientras CONDICIONAL:c punto_coma 
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.addAll(b);
 
     RESULT = new Nodo(accion.hacerMientras, accion.acciones[accion.hacerMientras], ileft, 1, hijos, false);
@@ -1536,7 +1540,11 @@ CONDICIONALHACERMIENTRAS ::= pr_hacer:i BLOQUE:b pr_mientras CONDICIONAL:c punto
 CONDICIONALHACERMIENTRAS ::= pr_hacer:i SENTENCIA:s pr_mientras:f CONDICIONAL:c punto_coma 
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);    
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion); 
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
     sent.add(s);
@@ -1549,7 +1557,11 @@ CONDICIONALHACERMIENTRAS ::= pr_hacer:i SENTENCIA:s pr_mientras:f CONDICIONAL:c 
 CONDICIONALMIENTRAS ::= pr_mientras:i CONDICIONAL:c BLOQUE:b 
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.addAll(b);
 
     RESULT = new Nodo(accion.mientras, accion.acciones[accion.mientras], ileft, 1, hijos, false);
@@ -1558,7 +1570,11 @@ CONDICIONALMIENTRAS ::= pr_mientras:i CONDICIONAL:c BLOQUE:b
 CONDICIONALMIENTRAS ::= pr_mientras:i CONDICIONAL:c SENTENCIA:s
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);    
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion); 
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
     sent.add(s);
@@ -1571,7 +1587,7 @@ CONDICIONALMIENTRAS ::= pr_mientras:i CONDICIONAL:c SENTENCIA:s
 CONDICIONALPARA ::= pr_para:i CONTROLADOR:c BLOQUE:b
 {:
     c.addAll(b);
-
+    c.add(new Nodo(accion.finPara, accion.acciones[accion.finPara], 1, 1, (new ArrayList<Nodo>()), false));
     RESULT = new Nodo(accion.para, accion.acciones[accion.para], ileft, 1, c, false);
 :};
 
@@ -1582,14 +1598,18 @@ CONDICIONALPARA ::= pr_para:i CONTROLADOR:c SENTENCIA:s
     sent.add(s);
     c.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], sleft, 1, sent, false));
     c.add(new Nodo(accion.finBloque, accion.acciones[accion.finBloque], sleft, 1, (new ArrayList<Nodo>()), false));
-
+    c.add(new Nodo(accion.finPara, accion.acciones[accion.finPara], 1, 1, (new ArrayList<Nodo>()), false));
     RESULT = new Nodo(accion.para, accion.acciones[accion.para], ileft, 1, c, false);
 :};
 
 CONDICIONALSI ::= pr_si:i CONDICIONAL:c BLOQUE:b
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.addAll(b);    
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     hijos.add(new Nodo(accion.bloque, accion.acciones[accion.bloque], -1, -1, (new ArrayList<Nodo>()), false));
@@ -1601,7 +1621,11 @@ CONDICIONALSI ::= pr_si:i CONDICIONAL:c BLOQUE:b
 CONDICIONALSI ::= pr_si:i CONDICIONAL:c BLOQUE:b1 pr_sino BLOQUE:b2
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.addAll(b1);
     hijos.addAll(b2);
     
@@ -1611,7 +1635,11 @@ CONDICIONALSI ::= pr_si:i CONDICIONAL:c BLOQUE:b1 pr_sino BLOQUE:b2
 CONDICIONALSI ::= pr_si:i CONDICIONAL:c SENTENCIA:s
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
     sent.add(s);
@@ -1627,7 +1655,11 @@ CONDICIONALSI ::= pr_si:i CONDICIONAL:c SENTENCIA:s
 CONDICIONALSI ::= pr_si:i CONDICIONAL:c BLOQUE:b pr_sino SENTENCIA:s
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.addAll(b);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
@@ -1641,7 +1673,11 @@ CONDICIONALSI ::= pr_si:i CONDICIONAL:c BLOQUE:b pr_sino SENTENCIA:s
 CONDICIONALSI ::= pr_si:i CONDICIONAL:c SENTENCIA:s pr_sino BLOQUE:b
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
     sent.add(s);
@@ -1655,7 +1691,11 @@ CONDICIONALSI ::= pr_si:i CONDICIONAL:c SENTENCIA:s pr_sino BLOQUE:b
 CONDICIONALSI ::= pr_si:i CONDICIONAL:c SENTENCIA:s1 pr_sino SENTENCIA:s2
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
-    hijos.add(c);
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(c);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    hijos.add(condicion);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent1 = new ArrayList<Nodo>();
     sent1.add(s1);
@@ -1676,7 +1716,12 @@ CONTROLADOR ::= par_ab INI:ini punto_coma:f1 EXPGEN:e punto_coma:f2 ACT:a par_ce
     ini.setColumna(f1right);
     ctrl.add(ini);
     e.setColumna(f2right);
-    ctrl.add(e);
+    
+    ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
+    hijosCondicion.add(e);
+    // Joven
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    ctrl.add(condicion);
     a.setColumna(f3right);
     ctrl.add(a);
 
@@ -1884,6 +1929,7 @@ PARAMETROUNARIO ::= par_ab EXPGEN:e1 par_ce
 SENTSELECTOR ::= pr_selector:i CONDICIONAL:c ll_ab NCASO:nc SENTDEFECTO:df ll_ce
 {:
     ArrayList<Nodo> hijos = new ArrayList<Nodo> ();
+    
     hijos.add(c);
     Nodo casos = new Nodo(accion.casos, accion.acciones[accion.casos], ncleft, 1, nc, false);
     hijos.add(casos);
