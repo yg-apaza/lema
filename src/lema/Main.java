@@ -12,13 +12,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java_cup.runtime.Symbol;
+import lema.generadorCodigo.Archivo;
+import lema.generadorCodigo.Compilador;
+import lema.generadorCodigo.GeneradorIR;
 
 public class Main
 {
     private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
-        
         if(args.length == 0)
             System.out.println("Debe ingresar un archivo");
         else

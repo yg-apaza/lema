@@ -14,12 +14,12 @@ public class Archivo {
     BufferedWriter bw;
     PrintWriter wr; 
     
-    Archivo(String nomArchivo){
+    public Archivo(String nomArchivo){
         setRuta(nomArchivo);
     }
     public void setRuta(String nomArchivo)
     {
-        ruta = "d:/" + nomArchivo + ".txt";
+        ruta = "d:/" + nomArchivo + ".ll";
     }
     
     public void crearArchivoIR() throws IOException{

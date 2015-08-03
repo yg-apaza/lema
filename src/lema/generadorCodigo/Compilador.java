@@ -1,33 +1,9 @@
 package lema.generadorCodigo;
 
-import java.io.IOException;
-
 public class Compilador {   
     
-    public void iniciarmain() throws IOException
-    {
-        Archivo arc = new Archivo("pruebaIR");
-        arc.crearArchivoIR();
-        //arc.escrbirIR();
-        arc.escrbirIR(declararVariable("var", "2", 0, false, 2));
-        
-        arc.escrbirIR(declarar_fun_cabecera(0, "foo",new String[]{"r","t","s","r"}, new int[]{1,0,1,0}));
-
-        arc.escrbirIR(declarar_fun_fin(0, "resultado", false));
-
-        arc.escrbirIR(llamar_principal());
-        arc.escrbirIR(si_iniciar("7"));
-        arc.escrbirIR(llamar_esuma("2","3","s"));
-        arc.escrbirIR(llamar_rsuma("2","3","s"));
-        arc.escrbirIR(llamar_eproducto("2","3","s"));
-        arc.escrbirIR(llamar_rmodulo("2","3","s"));
-        arc.escrbirIR(si_saltar_continuar("7"));
-        arc.escrbirIR(si_continuar("7"));
-        
-        arc.escrbirIR(terminar_principal());
-        arc.leer();
-    }
     
+
     //Principal
     
     public String _iniPrincipal = "define i32 @main() nounwind readnone optsize {\n";
