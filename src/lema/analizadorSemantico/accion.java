@@ -225,7 +225,7 @@ public class accion
         "TRANSPUESTA",
         "NEGATIVIDAD",
         "OPERACION CONDICIONAL",
-        "ARGUMENTO",        
+        "ARGUMENTO",
         "ELEMENTO MATRIZ",
         "ELEMENTO VECTOR",
         "FUNCION",

@@ -676,13 +676,39 @@ public class AST
                                         e = -1;
                                     break;
                                 }
-
+                                
                                 r = verificarExp(nodo.getHijos().get(1), t.esConstante());
                                 try
                                 {
                                     if(!TypeCheck.compatibilidad1[e][r][4])
                                         errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-
+                                    else
+                                    {
+                                        e = 1;
+                                        r = verificarExp(nodo.getHijos().get(0).getHijos().get(1), false);
+                                        try
+                                        {
+                                            if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getColumna())}));
+                                            else
+                                            {
+                                                r = verificarExp(nodo.getHijos().get(0).getHijos().get(2), false);
+                                                try
+                                                {
+                                                    if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                                        errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getColumna())}));
+                                                }
+                                                catch(ArrayIndexOutOfBoundsException ex)
+                                                { // Joven
+                                                    errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getColumna())}));
+                                                }
+                                            }
+                                        }
+                                        catch(ArrayIndexOutOfBoundsException ex)
+                                        { // Joven
+                                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getColumna())}));
+                                        }
+                                    }
                                 }
                                 catch(ArrayIndexOutOfBoundsException ex)
                                 {
@@ -703,7 +729,6 @@ public class AST
                     {
                         if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
                             errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-
                     }
                     catch(ArrayIndexOutOfBoundsException ex)
                     { // Joven
@@ -711,6 +736,19 @@ public class AST
                     }
                 break;
                 
+                case accion.selector:
+                    e = 1;
+                    r = verificarExp(nodo.getHijos().get(0), false);
+                    try
+                    {
+                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_FUNCION, (new String[] {"selector", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    }
+                    catch(ArrayIndexOutOfBoundsException ex)
+                    { // Joven
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_FUNCION, (new String[] {"selector", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    }
+                break;
                 
                 case accion.para:
                     tablaSimbolos.insertarBloque();
@@ -754,6 +792,66 @@ public class AST
                     tablaSimbolos.salirBloque();
                 break;
                     
+                case accion.llamadaFuncion:
+                    if((f = tablaSimbolos.buscarFuncion(nodo.getHijos().get(0).getValor())) == null)
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.FUNCION_NO_EXISTE, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    else
+                    {
+                        ArrayList<AtributoVariable> argumentosFun = f.getArgumentos();
+                        ArrayList<Nodo> argumentosExs = nodo.getHijos().get(1).getHijos();
+                        if(argumentosFun.size() != argumentosExs.size())
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NUM_NO_COINCIDE, (new String[] {f.getId(), String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                        else
+                        {
+                            for(int i = 0; i < argumentosFun.size(); i++)
+                            {
+                                if(!argumentosFun.get(i).esMatriz())
+                                {
+                                    switch(argumentosFun.get(i).getTipo())
+                                    {
+                                        case "entero":
+                                            e = 0;
+                                        break;
+                                        case "real":
+                                            e = 1;
+                                        break;
+                                        case "cadena":
+                                            e = 4;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    switch(argumentosFun.get(i).getTipo())
+                                    {
+                                        case "entero":
+                                            e = 2;
+                                        break;
+                                        case "real":
+                                            e = 3;
+                                        break;
+                                        case "cadena":
+                                            e = -1;
+                                        break;
+                                    }
+                                }
+                                r = verificarExp(argumentosExs.get(i), false);
+                                
+                                try
+                                {
+                                    if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                        errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NO_COINCIDE, (new String[] {String.valueOf(i), f.getId(), String.valueOf(argumentosExs.get(i).getLinea() + 1),String.valueOf(argumentosExs.get(i).getColumna())}));
+
+                                }
+                                catch(ArrayIndexOutOfBoundsException ex)
+                                { // Joven
+                                    errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NO_COINCIDE, (new String[] {String.valueOf(i), f.getId(), String.valueOf(argumentosExs.get(i).getLinea() + 1),String.valueOf(argumentosExs.get(i).getColumna())}));
+                                }
+                            }
+                        }
+                    }
+                        
+                break;
                     
                 case accion.declaracionVar:
                     tablaSimbolos.insertarBloque();
@@ -860,9 +958,7 @@ public class AST
                 
                 case accion.llamadaFuncion:
                     AtributoFuncion f;
-                    if((f = tablaSimbolos.buscarFuncion(exp.getHijos().get(0).getValor())) == null)
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.FUNCION_NO_EXISTE, (new String[] {exp.getHijos().get(0).getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
-                    else
+                    if((f = tablaSimbolos.buscarFuncion(exp.getHijos().get(0).getValor())) != null)
                     {
                         switch(f.getTipoRetorno())
                         {

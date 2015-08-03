@@ -1,8 +1,17 @@
-entero a[1] = {1,2,3};
+entero a[2] = {1,2};
 entero b[3] = {4,5,6};
 entero c = 4;
-entero fun (entero);
+real fun(real, entero[4][5], entero);
 principal()
 {
-	mostrar(f);
+	selector(!a)
+	{
+		caso 2:
+			a[4][5] = fun(c,b,c);
+	}
+}
+
+real fun(real x, entero y[4][5], entero z)
+{
+	
 }
