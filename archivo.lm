@@ -4,20 +4,5 @@ entero c = 4;
 entero fun (entero);
 principal()
 {
-	si(4)
-	{
-	}
-	
-	mientras(34){}
-	
-	hacer{}mientras(3>4);
-	para(entero i = 1; i < 4; i = a[3])
-	{
-		
-	}
-	
-	para(entero i = 2; i < 8; i++)
-	{
-		
-	}
+	mostrar(f);
 }

@@ -696,22 +696,7 @@ public class AST
                 break;
                     
                 
-                case accion.si:
-                    e = 1;
-                    r = verificarExp(nodo.getHijos().get(0), false);
-                    try
-                    {
-                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-
-                    }
-                    catch(ArrayIndexOutOfBoundsException ex)
-                    { // Joven
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-                    }
-                break;
-                
-                case accion.hacerMientras:
+                case accion.condicion:
                     e = 1;
                     r = verificarExp(nodo.getHijos().get(0), false);
                     try
@@ -729,23 +714,42 @@ public class AST
                 
                 case accion.para:
                     tablaSimbolos.insertarBloque();
-                    e = 1;
-                    r = verificarExp(nodo.getHijos().get(1), false);
-                    try
-                    {
-                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
-                    }
-                    catch(ArrayIndexOutOfBoundsException ex)
-                    { // Joven
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
-                    }
                 break;
                 
                 case accion.finPara:
                     tablaSimbolos.salirBloque();
                 break;
+                
+                case accion.lectura:
+                    if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_NO_DECLARADO, (new String[] {nodo.getHijos().get(0).getValor(), String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    {
+                        e = 1;
+                        if(!t.esConstante())
+                        {
+                            r = verificarExp(nodo.getHijos().get(0), t.esConstante());
+                            try
+                            {
+                                if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                    errores.insertarError(Mistake.SEMANTICO, Mistake.VARIABLE_NO_FUNCION, (new String[] {t.getId(), "leer", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+
+                            }
+                            catch(ArrayIndexOutOfBoundsException ex)
+                            { // Joven
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.VARIABLE_NO_FUNCION, (new String[] {t.getId(), "leer", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                            }
+                        }
+                        else
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONSTANTE_NO_MODIFICAR, (new String[] {t.getId(), String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                    }
+                break;
                     
+                case accion.escritura:
+                    r = verificarExp(nodo.getHijos().get(0), false);
+                    if(r == -1) // Joven
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_FUNCION, (new String[] {"mostrar", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                break;
+                
                 case accion.finFuncion:
                     tablaSimbolos.salirBloque();
                 break;

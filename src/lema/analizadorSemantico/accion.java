@@ -168,10 +168,10 @@ public class accion
     public static final int caso = 54;
     
     /** Valor asignado para denotar al Nodo 'POR DEFECTO' */
-    public static final int pordefecto = 55;           
+    public static final int pordefecto = 55;
     
     /** Valor asignado para denotar al Nodo 'SALTAR' */
-    public static final int saltar = 56;          
+    public static final int saltar = 56;
     
     public static final int finPara = 57;
     

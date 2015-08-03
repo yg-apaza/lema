@@ -46,7 +46,8 @@ public class Mistake
     public static final int INDICE_CONSTANTE = 22;
     public static final int CONSTANTE_NO_MODIFICAR = 23;
     public static final int CONDICION_NO_COMPATIBLE = 24;
-
+    public static final int VARIABLE_NO_FUNCION = 25;
+    public static final int TIPO_NO_FUNCION = 26;
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
     public static final int FILAS_NO_COINCIDE = 1;
@@ -88,7 +89,9 @@ public class Mistake
         "Error Semántico: Tipo de dato asignado al acceso en la matriz '$' no es compatible",
         "Error Semántico: Indices de la matriz constante '$' deben ser números. Lin: $ Col: $",
         "Error Semántico: Tipo de dato constante '$' no puede ser modificado. Lin: $ Col: $",
-        "Error Semántico: Tipo de dato condicional no es compatible. Lin: $ Col: $"
+        "Error Semántico: Tipo de dato condicional no es compatible. Lin: $ Col: $",
+        "Error Semántico: Variable '$' no es compatible con la función '$'. Lin: $ Col: $",
+        "Error Semántico: Tipo de dato no es compatible con la función '$'. Lin: $ Col: $ "
     };
     
     private final String[] listaWarnings =
