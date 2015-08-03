@@ -250,7 +250,8 @@ public class AST
                     
                 case accion.declaracionMatIni:
                     
-                    v = new AtributoVariable(
+                    v = new AtributoVariable
+                        (
                             nodo.getHijos().get(0).getValor(),
                             nodo.getHijos().get(1).getValor(),
                             true,
