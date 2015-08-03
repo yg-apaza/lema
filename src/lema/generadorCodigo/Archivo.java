@@ -44,11 +44,11 @@ public class Archivo {
         try{
             wr.close();
             bw.close();  
+            wr = null;
         }catch(IOException e){};
     }
     public void reescrbirIR(String codigo){
-        if(wr == null)
-            abrir();
+        abrir();
         wr.write(codigo);//escribimos en el archivo
     }
     public void escrbirIR(String codigo){

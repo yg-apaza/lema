@@ -696,22 +696,7 @@ public class AST
                 break;
                     
                 
-                case accion.si:
-                    e = 1;
-                    r = verificarExp(nodo.getHijos().get(0), false);
-                    try
-                    {
-                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-
-                    }
-                    catch(ArrayIndexOutOfBoundsException ex)
-                    { // Joven
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
-                    }
-                break;
-                
-                case accion.hacerMientras:
+                case accion.condicion:
                     e = 1;
                     r = verificarExp(nodo.getHijos().get(0), false);
                     try
@@ -729,17 +714,6 @@ public class AST
                 
                 case accion.para:
                     tablaSimbolos.insertarBloque();
-                    e = 1;
-                    r = verificarExp(nodo.getHijos().get(1), false);
-                    try
-                    {
-                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
-                    }
-                    catch(ArrayIndexOutOfBoundsException ex)
-                    { // Joven
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
-                    }
                 break;
                 
                 case accion.finPara:

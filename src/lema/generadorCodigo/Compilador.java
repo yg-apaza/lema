@@ -9,6 +9,12 @@ public class Compilador {
         Archivo arc = new Archivo("pruebaIR");
         arc.crearArchivoIR();
         //arc.escrbirIR();
+        arc.escrbirIR(declararVariable("var", "2", 0, false, 2));
+        
+        arc.escrbirIR(declarar_fun_cabecera(0, "foo",new String[]{"r","t","s","r"}, new int[]{1,0,1,0}));
+
+        arc.escrbirIR(declarar_fun_fin(0, "resultado", false));
+
         arc.escrbirIR(llamar_principal());
         arc.escrbirIR(si_iniciar("7"));
         arc.escrbirIR(llamar_esuma("2","3","s"));
@@ -18,34 +24,28 @@ public class Compilador {
         arc.escrbirIR(si_saltar_continuar("7"));
         arc.escrbirIR(si_continuar("7"));
         
-
-        
         arc.escrbirIR(terminar_principal());
         arc.leer();
-        
     }
     
     //Principal
     
-    public String _cabeceraDefecto = "; ModuleID = 'p.c'\n" +
-                                    "target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32-n8:16:32-S128\"\n" +
-                                    "target triple = \"i386-pc-linux-gnu\"";
     public String _iniPrincipal = "define i32 @main() nounwind readnone optsize {\n";
     public String _terPrincipal = "ret i32 0\n" +
                                   "}";
     
     //Declaracion de constantes
-    public String _ecdeclarar = "@$ = constant i32 $";
-    public String _rcdeclarar = "@$ = constant double $";
+    public String _ecdeclarar = "@$ = constant i32 $\n";
+    public String _rcdeclarar = "@$ = constant double $\n";
     //Declaracion de variables
-    public String _evdeclarar = "@$ = global i32 $";
-    public String _rvdeclarar = "@$ = global double $";
+    public String _evdeclarar = "@$ = global i32 $\n";
+    public String _rvdeclarar = "@$ = global double $\n";
     //Declaracion de matrices constantes
-    public String _emcdeclarar = "@$ = constant <$ x i32> $";
-    public String _rmcdeclarar = "@$ = constant <$ x double> $";
+    public String _emcdeclarar = "@$ = constant <$ x i32> $\n";
+    public String _rmcdeclarar = "@$ = constant <$ x double> $\n";
     //Declaracion de matrices variables
-    public String _emvdeclarar = "@$ = global <$ x i32> $";
-    public String _rmvdeclarar = "@$ = global <$ x double> $";
+    public String _emvdeclarar = "@$ = global <$ x i32> $\n";
+    public String _rmvdeclarar = "@$ = global <$ x double> $\n";
     
     //Imprimir 
     public String _str_ie = "@.str_ie = private unnamed_addr constant [3 x i8] c\"%d\\00\", align 1\n";
@@ -161,20 +161,22 @@ public class Compilador {
     
     // Iniciar programa
     public String llamar_principal(){
-        return _cabeceraDefecto + _iniPrincipal;
+        return _iniPrincipal;
     }
     public String terminar_principal(){
         return _terPrincipal;
     }
    
-    public String declarar_fun_cabecera(int type, String nom, String arg){ //type = 0 entero 1 real 2 entero -1 otros
+    public String declarar_fun_cabecera(int type, String nom, String []arg, int [] tipos){ //type = 0 entero 1 real 2 entero -1 otros
         String r = "";
         switch(type){
             case 0:
-                r = unir(_fun_declarar_cabecera , new String []{ "i32", nom, arg} );
+                r = llenar2(arg,tipos);
+                r = unir(_fun_declarar_cabecera , new String []{ "i32", nom, r} );
                 break;
             case 1:
-                r = unir(_fun_declarar_cabecera , new String []{ "double", nom, arg} );
+                r = llenar2(arg,tipos);
+                r = unir(_fun_declarar_cabecera , new String []{ "double", nom, r} );
                 break;
         }
         return r;
@@ -206,31 +208,31 @@ public class Compilador {
         switch(tipo){
             case 0:
                 if(var_con)
-                    unir(_evdeclarar, new String[]{nom, val});
+                    dec = unir(_evdeclarar, new String[]{nom, val});
                 else
-                    unir(_ecdeclarar, new String[]{nom, val});
+                    dec = unir(_ecdeclarar, new String[]{nom, val});
                 break;
             case 1:
                 if(var_con)
-                    unir(_rvdeclarar, new String[]{nom, val});
+                    dec = unir(_rvdeclarar, new String[]{nom, val});
                 else
-                    unir(_rcdeclarar, new String[]{nom, val});
+                    dec = unir(_rcdeclarar, new String[]{nom, val});
                 break;
             case 2:
-                llenar(val,"i32",tam);
+                val = llenar(val,"i32");
                 String te = ""+tam;
                 if(var_con)
-                    unir(_emcdeclarar, new String[]{nom, te, val});
+                    dec = unir(_emcdeclarar, new String[]{nom, te, val});
                 else
-                    unir(_emvdeclarar, new String[]{nom, te, val});
+                    dec = unir(_emvdeclarar, new String[]{nom, te, val});
                 break;
             case 3:
-                llenar(val,"double",tam);
+                val = llenar(val,"double");
                 String tr = ""+tam;
                 if(var_con)
-                    unir(_rmcdeclarar, new String[]{nom, tr, val});
+                    dec = unir(_rmcdeclarar, new String[]{nom, tr, val});
                 else
-                    unir(_rmvdeclarar, new String[]{nom, tr, val});
+                    dec = unir(_rmvdeclarar, new String[]{nom, tr, val});
                 break;
         }
         return dec;
@@ -407,12 +409,32 @@ public class Compilador {
         }
         return error;
     }
-    private String llenar(String error, String tipo, int tam){
+    private String llenar2(String[] datos, int[] tipos){
+        String error="";
         int index = -1;
-        error = tipo + error;
-        for (int i = 0; i < tam; i++) {
+        String coma = "";
+        int i = 0;
+        int tipo;
+        for (String dato : datos) {
+            tipo = tipos[i];
+            if(tipo == 0)
+                error = error + coma + " i32 %"+dato ;
+            else if(tipo == 1)
+                error = error + coma + " double %"+dato;
+            coma = ",";
+            i++;
+        }
+        return error;
+    }
+    private String llenar(String error, String tipo){
+        if(error.length() == 0)
+            return error;
+        int index = -1;
+        error = tipo + " " + error;
+        index = error.indexOf(",", index + 1);
+        while(index != -1) {
+            error = error.substring(0, index) + "," + tipo + " "+ error.substring(index+1);
             index = error.indexOf(",", index + 1);
-            error = error.substring(0, index) + "," + tipo + error.substring(index+1);
         }
         return error;
     }
