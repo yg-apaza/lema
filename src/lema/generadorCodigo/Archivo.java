@@ -14,12 +14,12 @@ public class Archivo {
     BufferedWriter bw;
     PrintWriter wr; 
     
-    Archivo(String nomArchivo){
+    public Archivo(String nomArchivo){
         setRuta(nomArchivo);
     }
     public void setRuta(String nomArchivo)
     {
-        ruta = "d:/" + nomArchivo + ".txt";
+        ruta = "d:/" + nomArchivo + ".ll";
     }
     
     public void crearArchivoIR() throws IOException{
@@ -44,11 +44,11 @@ public class Archivo {
         try{
             wr.close();
             bw.close();  
+            wr = null;
         }catch(IOException e){};
     }
     public void reescrbirIR(String codigo){
-        if(wr == null)
-            abrir();
+        abrir();
         wr.write(codigo);//escribimos en el archivo
     }
     public void escrbirIR(String codigo){

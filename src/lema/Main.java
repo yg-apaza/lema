@@ -12,14 +12,69 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java_cup.runtime.Symbol;
+import lema.generadorCodigo.Archivo;
+import lema.generadorCodigo.Compilador;
+import lema.generadorCodigo.GeneradorIR;
 
 public class Main
 {
     private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
+        GeneradorIR r = new GeneradorIR();
+        Archivo arc = new Archivo("pruebaIR");
+        arc.crearArchivoIR();
+        //arc.escrbirIR();
+        String var1 = "var1";
+        String val1 = "2";
+        int tipo = 0; //entero
         
-        if(args.length == 0)
+        String var2 = "var2";
+        String val2 = "";
+        
+        String t1 = "temp1";
+        String t2 = "temp2";
+        
+        String rep = "rpta";
+        //Crear var
+        arc.escrbirIR(r.declararVariable(var1, val1, tipo, true, 1));
+        arc.escrbirIR(r.declararVariable(var2, val2, tipo, true, 1));
+        arc.escrbirIR(r.llamar_principal());
+        
+        //CArgar var
+        arc.escrbirIR(r.cargarVariable(t1, var1, tipo));
+        arc.escrbirIR(r.cargarVariable(t2, var2, tipo));
+        
+        
+        arc.escrbirIR(r.llamar_suma(t1, t2, rep, 0, 1, 1));
+        arc.escrbirIR(r.imprimir(rep, 0, null));
+        
+        arc.escrbirIR(r.terminar_principal());
+        
+        arc.escrbirIR(r.finalizar());
+        arc.leer();
+        /*
+        GeneradorIR r = new GeneradorIR();
+        Archivo arc = new Archivo("pruebaIR");
+        arc.crearArchivoIR();
+        //arc.escrbirIR();
+        arc.escrbirIR(r.declararVariable("var", "2", 0, false, 2));
+        
+        arc.escrbirIR(r.declarar_fun_cabecera(0, "foo",new String[]{"r","t","s","r"}, new int[]{1,0,1,0}));
+
+        arc.escrbirIR(r.declarar_fun_fin(0, "resultado", false));
+
+        arc.escrbirIR(r.llamar_principal());
+        arc.escrbirIR(r.si_iniciar("7"));
+        arc.escrbirIR(r.llamar_suma("a","3","s",0,1,0));
+        arc.escrbirIR(r.llamar_suma("c","f","s",1,1,0));
+        
+        arc.escrbirIR(r.si_saltar_continuar("7"));
+        arc.escrbirIR(r.si_continuar("7"));
+        
+        arc.escrbirIR(r.terminar_principal());
+        arc.leer();*/
+        /*if(args.length == 0)
             System.out.println("Debe ingresar un archivo");
         else
         {
@@ -43,7 +98,7 @@ public class Main
                         break;
                 }
             }
-        }
+        }*/
     }
     
     public static void ALexico(String file)
