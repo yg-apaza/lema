@@ -21,29 +21,7 @@ public class Main
     private static Mistake errores = new Mistake();
     public static void main(String[] args) throws Exception
     {
-        
-        
-        GeneradorIR r = new GeneradorIR();
-        Archivo arc = new Archivo("pruebaIR");
-        arc.crearArchivoIR();
-        //arc.escrbirIR();
-        arc.escrbirIR(r.declararVariable("var", "2", 0, false, 2));
-        
-        arc.escrbirIR(r.declarar_fun_cabecera(0, "foo",new String[]{"r","t","s","r"}, new int[]{1,0,1,0}));
-
-        arc.escrbirIR(r.declarar_fun_fin(0, "resultado", false));
-
-        arc.escrbirIR(r.llamar_principal());
-        arc.escrbirIR(r.si_iniciar("7"));
-        arc.escrbirIR(r.llamar_suma("a","3","s",0,1,0));
-        arc.escrbirIR(r.llamar_suma("c","f","s",1,1,0));
-        
-        arc.escrbirIR(r.si_saltar_continuar("7"));
-        arc.escrbirIR(r.si_continuar("7"));
-        
-        arc.escrbirIR(r.terminar_principal());
-        arc.leer();
-        /*if(args.length == 0)
+        if(args.length == 0)
             System.out.println("Debe ingresar un archivo");
         else
         {
@@ -67,7 +45,7 @@ public class Main
                         break;
                 }
             }
-        }*/
+        }
     }
     
     public static void ALexico(String file)
