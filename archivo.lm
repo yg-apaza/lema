@@ -1,8 +1,8 @@
+const	entero b[a][b] = {1,2,3};
 entero fun();
 principal()
 {
-	entero a[4][5];
-	a[1][1] = 3;
+	entero b[a][b] = {1,2,3};
 }
 
 entero fun()

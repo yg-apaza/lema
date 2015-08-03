@@ -42,6 +42,8 @@ public class Mistake
     public static final int NO_VARIABLE = 18;
     public static final int FILA_NO_CORRECTO = 19;
     public static final int ARGUMENTO_INDICE = 20;
+    public static final int ACCESO_NO_COMPATIBLE = 21;
+    public static final int INDICE_CONSTANTE = 22;
 
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
@@ -73,14 +75,16 @@ public class Mistake
         "Error Semántico: Argumento $ de la función '$' no debe ser una matriz/vector. Lin: $ Col: $",
         "Error Semántico: Tipo de dato asignado a la variable '$' no es compatible. Lin: $ Col: $",
         "Error Semántico: La función '$' no existe. Lin: $ Col: $",
-        "Error Semántico: Índice $ de la matriz/vector '$' no es entero. Lin: $ Col: $",
+        "Error Semántico: Índice $ de la matriz/vector '$' no es un número. Lin: $ Col: $",
         "Error Semántico: El identificador '$' no es una matriz/vector. Lin: $ Col: $",
         "Error Semántico: Elemento $ de la matriz/vector no es correcto. Lin: $ Col: $",
         "Error Semántico: Identificador '$' no declarado. Lin: $ Col: $",
         "Error Semántico: La función '$' no está definida. Lin: $ Col: $",
         "Error Semántico: Variable '$' no puede ser asignado a una constante. Lin: $ Col: $",
         "Error Semántico: Fila $ de la matriz/vector no es correcto. Lin: $ Col: $",
-        "Error Semántico: Indice del argumento $ de la función $ debe ser un número. Lin: $ Col: $"
+        "Error Semántico: Indice del argumento $ de la función $ debe ser un número. Lin: $ Col: $",
+        "Error Semántico: Tipo de dato asignado al acceso en la matriz '$' no es compatible",
+        "Error Semántico: Indices de la matriz constante '$' deben ser números. Lin: $ Col: $",
     };
     
     private final String[] listaWarnings =
