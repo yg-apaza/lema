@@ -1,4 +1,4 @@
-package prueba;
+package lema.generadorCodigo;
 
 import java.io.IOException;
 
