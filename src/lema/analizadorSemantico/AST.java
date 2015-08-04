@@ -582,17 +582,11 @@ public class AST
                                 {
                                     f.setDefinido(true);
                                     tablaSimbolos.insertarBloque();
-                                    if(retorna(nodo.getHijos().get(4)))
-                                    {
-                                        for(AtributoVariable argumento : f.getArgumentos())
-                                            if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
-                                                errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {argumento.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
-                                    }
-                                    else
-                                    {
-                                        // Joven
+                                    for(AtributoVariable argumento : f.getArgumentos())
+                                        if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
+                                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {argumento.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                    if(!retorna(nodo.getHijos().get(4), getTipo(f.getTipoRetorno(), false)))
                                         errores.insertarError(Mistake.SEMANTICO, Mistake.NO_RETORNO_FUNCION, (new String[] {f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
-                                    }
                                 }
                             }
                         }
@@ -1145,22 +1139,61 @@ public class AST
         return r;
     }
     
-    public boolean retorna(Nodo nodo)
+    private boolean retorna(Nodo nodo, int tipo)
     {
         if(!nodo.esTerminal())
         {
             switch(nodo.getCodigo())
             {
                 case accion.retornar:
-                    return true;
+                    int r = verificarExp(nodo.getHijos().get(0), false);
+                    boolean flag = true;
+                    try
+                    {
+                        if(!TypeCheck.compatibilidad1[tipo][r][4])
+                        {
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.RETORNO_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                            flag = false;    
+                        }
+                    }
+                    catch(ArrayIndexOutOfBoundsException ex)
+                    {
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.RETORNO_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                        flag = false;
+                    }
+                    if(flag) return true;
             }
-                
             for(int i = 0; i < nodo.getHijos().size(); i++)
-                if(retorna(nodo.getHijos().get(i))) return true;
+                if(retorna(nodo.getHijos().get(i), tipo)) return true;
         }
         return false;
     }
-        
+    
+    private int getTipo(String tipo, boolean matriz)
+    {
+        if(matriz)
+            switch(tipo)
+            {
+                case "entero":
+                    return 2;
+                case "real":
+                    return 3;
+                case "cadena":
+                    return -1;
+            }
+        else
+            switch(tipo)
+            {
+                case "entero":
+                    return 0;
+                case "real":
+                    return 1;
+                case "cadena":
+                    return 4;
+            }
+        return -1;
+    }
+    
     public Entorno getTabla()
     {
         return tablaSimbolos;

@@ -4,22 +4,9 @@ entero c = 4;
 real fun(real, entero[4][5], entero);
 principal()
 {
-	selector(!a)
-	{
-		caso 2:
-			a[4][5] = fun(c,b,c);
-	}
 }
 
 real fun(real x, entero y[4][5], entero z)
 {
-	si(a > 3)
-	{
-		a = 4+5;
-	}
-	sino
-	{
-		mientras(2+3)
-			retornar 4;
-	}
+			retornar y;
 }
