@@ -4559,8 +4559,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.addAll(b);
 
@@ -4590,8 +4589,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion); 
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
@@ -4622,8 +4620,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.addAll(b);
 
@@ -4650,8 +4647,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion); 
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
@@ -4730,8 +4726,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.addAll(b);    
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
@@ -4764,8 +4759,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.addAll(b1);
     hijos.addAll(b2);
@@ -4793,8 +4787,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
@@ -4831,8 +4824,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.addAll(b);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
@@ -4867,8 +4859,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent = new ArrayList<Nodo>();
@@ -4903,8 +4894,7 @@ class CUP$parser$actions {
     ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(c);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], cleft, cright, hijosCondicion, false);
     hijos.add(condicion);
     hijos.add(new Nodo(accion.declaracionVar, accion.acciones[accion.declaracionVar], -1, -1, (new ArrayList<Nodo>()), false));
     ArrayList<Nodo> sent1 = new ArrayList<Nodo>();
@@ -4953,8 +4943,7 @@ class CUP$parser$actions {
     
     ArrayList<Nodo> hijosCondicion = new ArrayList<Nodo>();
     hijosCondicion.add(e);
-    // Joven
-    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], 1, 1, hijosCondicion, false);
+    Nodo condicion = new Nodo(accion.condicion, accion.acciones[accion.condicion], eleft, eright, hijosCondicion, false);
     ctrl.add(condicion);
     a.setColumna(f3right);
     ctrl.add(a);

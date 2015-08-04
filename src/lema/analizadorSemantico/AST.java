@@ -33,7 +33,7 @@ public class AST
                 case accion.elemMat:
                     ArrayList<Nodo> elementosMat = nodo.getHijos();
                     if(elementosMat.isEmpty())
-                        nodo.getHijos().add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), (new ArrayList <>()), false));
+                        nodo.getHijos().add(new Nodo(accion.elemVec, accion.acciones[accion.elemVec], nodo.getLinea(), nodo.getColumna(), (new ArrayList <Nodo>()), false));
                     else
                     {
                         /** Los elementos contenidos por la matriz son simples o vectores, TRUE Matrices, FALSE Simples*/
@@ -209,12 +209,12 @@ public class AST
                         r = verificarExp(nodo.getHijos().get(2), v.esConstante());
                         try
                         {
-                            if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                            if(!TypeCheck.compatibilidad1[e][r][4]) 
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(2).getColumna())}));
                         }
                         catch(ArrayIndexOutOfBoundsException ex)
-                        {   // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                        {   
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(2).getColumna())}));
                         }
                     }
 
@@ -223,12 +223,12 @@ public class AST
                         r = verificarExp(nodo.getHijos().get(3), v.esConstante());
                         try
                         {
-                            if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                            if(!TypeCheck.compatibilidad1[e][r][4]) 
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getHijos().get(3).getLinea()+1),String.valueOf(nodo.getHijos().get(3).getColumna())}));
                         }
                         catch(ArrayIndexOutOfBoundsException ex)
-                        {   // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                        {  
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getHijos().get(3).getLinea()+1),String.valueOf(nodo.getHijos().get(3).getColumna())}));
                         }
                     }
                     
@@ -273,12 +273,12 @@ public class AST
                         r = verificarExp(nodo.getHijos().get(2), v.esConstante());
                         try
                         {
-                            if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                            if(!TypeCheck.compatibilidad1[e][r][4]) 
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(2).getColumna())}));
                         }
                         catch(ArrayIndexOutOfBoundsException ex)
-                        {   // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                        { 
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", v.getId(), String.valueOf(nodo.getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(2).getColumna())}));
                         }
                     }
 
@@ -287,12 +287,12 @@ public class AST
                         r = verificarExp(nodo.getHijos().get(3), v.esConstante());
                         try
                         {
-                            if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                            if(!TypeCheck.compatibilidad1[e][r][4])
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getHijos().get(3).getLinea()+1),String.valueOf(nodo.getHijos().get(3).getColumna())}));
                         }
                         catch(ArrayIndexOutOfBoundsException ex)
-                        {   // Joven
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                        {   
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", v.getId(), String.valueOf(nodo.getHijos().get(3).getLinea()+1),String.valueOf(nodo.getHijos().get(3).getColumna())}));
                         }
                     }
                     
@@ -401,8 +401,8 @@ public class AST
                             }
                         }
                     }
-                    else // Joven
-                        errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_CONSTANTE, (new String[] {nodo.getHijos().get(1).getValor(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                    else 
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_CONSTANTE, (new String[] {nodo.getHijos().get(1).getValor(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                 break;
                 
                     
@@ -499,7 +499,7 @@ public class AST
                                                 else
                                                     aux.setId(arg.get(i).getHijos().get(1).getValor());
                                             }
-                                            else // Joven
+                                            else 
                                                 errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_INDICE, (new String[] {String.valueOf(i+1),f.getId(),String.valueOf(arg.get(i).getHijos().get(1).getLinea()+1),String.valueOf(arg.get(i).getHijos().get(1).getColumna())}));
                                         }
                                     }
@@ -563,7 +563,7 @@ public class AST
                                     errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                                 }
                             }
-                            else     // Joven
+                            else
                                 errores.insertarError(Mistake.SEMANTICO, Mistake.CONSTANTE_NO_MODIFICAR, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                         }
                     }
@@ -587,24 +587,24 @@ public class AST
                                         r = verificarExp(nodo.getHijos().get(0).getHijos().get(1), false);
                                         try
                                         {
-                                            if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                            if(!TypeCheck.compatibilidad1[e][r][4])
                                                 errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getColumna())}));
                                             else
                                             {
                                                 r = verificarExp(nodo.getHijos().get(0).getHijos().get(2), false);
                                                 try
                                                 {
-                                                    if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                                    if(!TypeCheck.compatibilidad1[e][r][4]) 
                                                         errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getColumna())}));
                                                 }
                                                 catch(ArrayIndexOutOfBoundsException ex)
-                                                { // Joven
+                                                {
                                                     errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"1", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(2).getColumna())}));
                                                 }
                                             }
                                         }
                                         catch(ArrayIndexOutOfBoundsException ex)
-                                        { // Joven
+                                        { 
                                             errores.insertarError(Mistake.SEMANTICO, Mistake.INDICE_NO_ENTERO, (new String[] {"0", t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(1).getColumna())}));
                                         }
                                     }
@@ -614,8 +614,8 @@ public class AST
                                     errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                                 }
                             }
-                            else     // Joven
-                                errores.insertarError(Mistake.SEMANTICO, Mistake.CONSTANTE_NO_MODIFICAR, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                            else
+                                errores.insertarError(Mistake.SEMANTICO, Mistake.CONSTANTE_NO_MODIFICAR, (new String[] {t.getId(),String.valueOf(nodo.getHijos().get(0).getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getHijos().get(0).getColumna())}));
                         }
                     }
                 break;
@@ -626,11 +626,11 @@ public class AST
                     r = verificarExp(nodo.getHijos().get(0), false);
                     try
                     {
-                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                        if(!TypeCheck.compatibilidad1[e][r][4])
                             errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                     }
                     catch(ArrayIndexOutOfBoundsException ex)
-                    { // Joven
+                    { 
                         errores.insertarError(Mistake.SEMANTICO, Mistake.CONDICION_NO_COMPATIBLE, (new String[] {String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                     }
                 break;
@@ -640,11 +640,11 @@ public class AST
                     r = verificarExp(nodo.getHijos().get(0), false);
                     try
                     {
-                        if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                        if(!TypeCheck.compatibilidad1[e][r][4])
                             errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_FUNCION, (new String[] {"selector", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                     }
                     catch(ArrayIndexOutOfBoundsException ex)
-                    { // Joven
+                    {
                         errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_FUNCION, (new String[] {"selector", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                     }
                 break;
@@ -667,12 +667,12 @@ public class AST
                             r = verificarExp(nodo.getHijos().get(0), t.esConstante());
                             try
                             {
-                                if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                if(!TypeCheck.compatibilidad1[e][r][4])
                                     errores.insertarError(Mistake.SEMANTICO, Mistake.VARIABLE_NO_FUNCION, (new String[] {t.getId(), "leer", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
 
                             }
                             catch(ArrayIndexOutOfBoundsException ex)
-                            { // Joven
+                            { 
                                 errores.insertarError(Mistake.SEMANTICO, Mistake.VARIABLE_NO_FUNCION, (new String[] {t.getId(), "leer", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                             }
                         }
@@ -683,7 +683,7 @@ public class AST
                     
                 case accion.escritura:
                     r = verificarExp(nodo.getHijos().get(0), false);
-                    if(r == -1) // Joven
+                    if(r == -1) 
                         errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_FUNCION, (new String[] {"mostrar", String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                 break;
                 
@@ -709,12 +709,12 @@ public class AST
                                 
                                 try
                                 {
-                                    if(!TypeCheck.compatibilidad1[e][r][4]) // Joven
+                                    if(!TypeCheck.compatibilidad1[e][r][4]) 
                                         errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NO_COINCIDE, (new String[] {String.valueOf(i), f.getId(), String.valueOf(argumentosExs.get(i).getLinea() + 1),String.valueOf(argumentosExs.get(i).getColumna())}));
 
                                 }
                                 catch(ArrayIndexOutOfBoundsException ex)
-                                { // Joven
+                                { 
                                     errores.insertarError(Mistake.SEMANTICO, Mistake.ARGUMENTO_NO_COINCIDE, (new String[] {String.valueOf(i), f.getId(), String.valueOf(argumentosExs.get(i).getLinea() + 1),String.valueOf(argumentosExs.get(i).getColumna())}));
                                 }
                             }
