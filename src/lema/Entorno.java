@@ -1,6 +1,8 @@
-package lema.analizadorSemantico;
+package lema;
 
 import java.util.*;
+import lema.analizadorSemantico.AtributoFuncion;
+import lema.analizadorSemantico.AtributoVariable;
 
 public class Entorno
 {
@@ -38,7 +40,7 @@ public class Entorno
     
     public Entorno()
     {
-        raiz = new EntornoNodo(new HashMap(), null, null);
+        raiz = new EntornoNodo(new HashMap(), null, (new ArrayList<EntornoNodo>()));
         actual = raiz;
     }
 
@@ -120,12 +122,40 @@ public class Entorno
         }
         return funciones;
     }
+    
+    public ArrayList<AtributoVariable> getVariables()
+    {
+        return getVariables(raiz);
+    }
+    
+    private ArrayList<AtributoVariable> getVariables(EntornoNodo e)
+    {
+        ArrayList<AtributoVariable> variables = new ArrayList<>();
+        
+        for(int i = 0; i < e.bloques.size(); i++)
+            variables.addAll(getVariables(e.bloques.get(i)));
+        
+        Set <String> keys = e.tabla.keySet();
+        AtributoVariable found = null;
+        for(String key : keys)
+        {
+            try
+            {
+                found = (AtributoVariable)(e.tabla.get(key));
+            }
+            catch(ClassCastException ex){}
+            if (found != null)
+                variables.add(0, found);
+        }
+        
+        return variables;
+    }
 
     public void insertarBloque()
     {
         if(actual.bloques == null)
             actual.bloques = new ArrayList<EntornoNodo>();
-        EntornoNodo nuevo = new EntornoNodo(new HashMap(), actual, null);
+        EntornoNodo nuevo = new EntornoNodo(new HashMap(), actual, new ArrayList<EntornoNodo>());
         actual.bloques.add(nuevo);
         actual = nuevo;
     }

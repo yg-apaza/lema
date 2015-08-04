@@ -199,9 +199,433 @@ public class IRCabecera {
                             "  %1 = fsub double -0.000000e+00, %a\n" +
                             "  ret double %1\n" +
                             "}\n";//36
-    //public String ="";
+    //MATRICES
+    public String _mat_def = "declare noalias i8* @malloc(i32) nounwind optsize\n";
+    public String _mat_rreservar = "define noalias double** @_mat_rreservar(double** nocapture %A, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = shl i32 %fil, 2\n" +
+                            "  %2 = tail call noalias i8* @malloc(i32 %1) nounwind optsize\n" +
+                            "  %3 = bitcast i8* %2 to double**\n" +
+                            "  %4 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %4, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %0\n" +
+                            "  %5 = shl i32 %col, 3\n" +
+                            "  br label %6\n" +
+                            "\n" +
+                            "; <label>:6                                       ; preds = %6, %.lr.ph\n" +
+                            "  %i.01 = phi i32 [ 0, %.lr.ph ], [ %10, %6 ]\n" +
+                            "  %7 = tail call noalias i8* @malloc(i32 %5) nounwind optsize\n" +
+                            "  %8 = bitcast i8* %7 to double*\n" +
+                            "  %9 = getelementptr inbounds double** %3, i32 %i.01\n" +
+                            "  store double* %8, double** %9, align 4, !tbaa !0\n" +
+                            "  %10 = add nsw i32 %i.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %10, %fil\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %6\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %6, %0\n" +
+                            "  ret double** %3\n" +
+                            "}\n";
+    public String _mat_ereservar = "define noalias i32** @_mat_ereservar(i32** nocapture %A, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = shl i32 %fil, 2\n" +
+                            "  %2 = tail call noalias i8* @malloc(i32 %1) nounwind optsize\n" +
+                            "  %3 = bitcast i8* %2 to i32**\n" +
+                            "  %4 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %4, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %0\n" +
+                            "  %5 = shl i32 %col, 2\n" +
+                            "  br label %6\n" +
+                            "\n" +
+                            "; <label>:6                                       ; preds = %6, %.lr.ph\n" +
+                            "  %i.01 = phi i32 [ 0, %.lr.ph ], [ %10, %6 ]\n" +
+                            "  %7 = tail call noalias i8* @malloc(i32 %5) nounwind optsize\n" +
+                            "  %8 = bitcast i8* %7 to i32*\n" +
+                            "  %9 = getelementptr inbounds i32** %3, i32 %i.01\n" +
+                            "  store i32* %8, i32** %9, align 4, !tbaa !0\n" +
+                            "  %10 = add nsw i32 %i.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %10, %fil\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %6\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %6, %0\n" +
+                            "  ret i32** %3\n" +
+                            "}\n";
     
-    public static boolean[] cabecera = {false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
+    public String _mat_ent_a_real = "define noalias double** @_mat_ent_a_real(i32** nocapture %A, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = tail call double** @_mat_rreservar(double** undef, i32 %fil, i32 %col) optsize\n" +
+                            "  %2 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %2, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %3 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %14, %._crit_edge ]\n" +
+                            "  br i1 %3, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %4 = getelementptr inbounds i32** %A, i32 %i.02\n" +
+                            "  %5 = load i32** %4, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds double** %1, i32 %i.02\n" +
+                            "  %7 = load double** %6, align 4, !tbaa !0\n" +
+                            "  br label %8\n" +
+                            "\n" +
+                            "; <label>:8                                       ; preds = %8, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %13, %8 ]\n" +
+                            "  %9 = getelementptr inbounds i32* %5, i32 %j.01\n" +
+                            "  %10 = load i32* %9, align 4, !tbaa !3\n" +
+                            "  %11 = sitofp i32 %10 to double\n" +
+                            "  %12 = getelementptr inbounds double* %7, i32 %j.01\n" +
+                            "  store double %11, double* %12, align 4, !tbaa !4\n" +
+                            "  %13 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %13, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %8\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %8, %.preheader\n" +
+                            "  %14 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %14, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret double** %1\n" +
+                            "}\n";
+    public String _mat_real_a_ent = "define noalias i32** @_mat_real_a_ent(double** nocapture %A, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = tail call i32** @_mat_ereservar(i32** undef, i32 %fil, i32 %col) optsize\n" +
+                            "  %2 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %2, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %3 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %14, %._crit_edge ]\n" +
+                            "  br i1 %3, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %4 = getelementptr inbounds double** %A, i32 %i.02\n" +
+                            "  %5 = load double** %4, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds i32** %1, i32 %i.02\n" +
+                            "  %7 = load i32** %6, align 4, !tbaa !0\n" +
+                            "  br label %8\n" +
+                            "\n" +
+                            "; <label>:8                                       ; preds = %8, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %13, %8 ]\n" +
+                            "  %9 = getelementptr inbounds double* %5, i32 %j.01\n" +
+                            "  %10 = load double* %9, align 4, !tbaa !4\n" +
+                            "  %11 = fptosi double %10 to i32\n" +
+                            "  %12 = getelementptr inbounds i32* %7, i32 %j.01\n" +
+                            "  store i32 %11, i32* %12, align 4, !tbaa !3\n" +
+                            "  %13 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %13, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %8\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %8, %.preheader\n" +
+                            "  %14 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %14, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret i32** %1\n" +
+                            "}\n";
+    public String _mat_rponer = "define double** @_mat_rponer(double** %A, i32 %fil, i32 %col, i32 %val) nounwind optsize {\n" +
+                            "  %1 = sitofp i32 %val to double\n" +
+                            "  %2 = getelementptr inbounds double** %A, i32 %fil\n" +
+                            "  %3 = load double** %2, align 4, !tbaa !0\n" +
+                            "  %4 = getelementptr inbounds double* %3, i32 %col\n" +
+                            "  store double %1, double* %4, align 4, !tbaa !4\n" +
+                            "  ret double** %A\n" +
+                            "}\n";
+    public String _mat_eponer = "define i32** @_mat_eponer(i32** %A, i32 %fil, i32 %col, i32 %val) nounwind optsize {\n" +
+                            "  %1 = getelementptr inbounds i32** %A, i32 %fil\n" +
+                            "  %2 = load i32** %1, align 4, !tbaa !0\n" +
+                            "  %3 = getelementptr inbounds i32* %2, i32 %col\n" +
+                            "  store i32 %val, i32* %3, align 4, !tbaa !3\n" +
+                            "  ret i32** %A\n" +
+                            "}\n";
+    public String _mat_rsuma = "define noalias double** @_mat_rsuma(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = tail call double** @_mat_rreservar(double** undef, i32 %fil, i32 %col) optsize\n" +
+                            "  %2 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %2, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %3 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %18, %._crit_edge ]\n" +
+                            "  br i1 %3, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %4 = getelementptr inbounds double** %A, i32 %i.02\n" +
+                            "  %5 = load double** %4, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds double** %B, i32 %i.02\n" +
+                            "  %7 = load double** %6, align 4, !tbaa !0\n" +
+                            "  %8 = getelementptr inbounds double** %1, i32 %i.02\n" +
+                            "  %9 = load double** %8, align 4, !tbaa !0\n" +
+                            "  br label %10\n" +
+                            "\n" +
+                            "; <label>:10                                      ; preds = %10, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %17, %10 ]\n" +
+                            "  %11 = getelementptr inbounds double* %5, i32 %j.01\n" +
+                            "  %12 = load double* %11, align 4, !tbaa !4\n" +
+                            "  %13 = getelementptr inbounds double* %7, i32 %j.01\n" +
+                            "  %14 = load double* %13, align 4, !tbaa !4\n" +
+                            "  %15 = fadd double %12, %14\n" +
+                            "  %16 = getelementptr inbounds double* %9, i32 %j.01\n" +
+                            "  store double %15, double* %16, align 4, !tbaa !4\n" +
+                            "  %17 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %17, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %10\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %10, %.preheader\n" +
+                            "  %18 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %18, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret double** %1\n" +
+                            "}\n";
+    public String _mat_esuma = "define noalias i32** @_mat_esuma(i32** nocapture %A, i32** nocapture %B, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = tail call i32** @_mat_ereservar(i32** undef, i32 %fil, i32 %col) optsize\n" +
+                            "  %2 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %2, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %3 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %18, %._crit_edge ]\n" +
+                            "  br i1 %3, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %4 = getelementptr inbounds i32** %A, i32 %i.02\n" +
+                            "  %5 = load i32** %4, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds i32** %B, i32 %i.02\n" +
+                            "  %7 = load i32** %6, align 4, !tbaa !0\n" +
+                            "  %8 = getelementptr inbounds i32** %1, i32 %i.02\n" +
+                            "  %9 = load i32** %8, align 4, !tbaa !0\n" +
+                            "  br label %10\n" +
+                            "\n" +
+                            "; <label>:10                                      ; preds = %10, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %17, %10 ]\n" +
+                            "  %11 = getelementptr inbounds i32* %5, i32 %j.01\n" +
+                            "  %12 = load i32* %11, align 4, !tbaa !3\n" +
+                            "  %13 = getelementptr inbounds i32* %7, i32 %j.01\n" +
+                            "  %14 = load i32* %13, align 4, !tbaa !3\n" +
+                            "  %15 = add nsw i32 %14, %12\n" +
+                            "  %16 = getelementptr inbounds i32* %9, i32 %j.01\n" +
+                            "  store i32 %15, i32* %16, align 4, !tbaa !3\n" +
+                            "  %17 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %17, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %10\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %10, %.preheader\n" +
+                            "  %18 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %18, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret i32** %1\n" +
+                            "}\n";
+    public String _mat_rresta = "define noalias double** @_mat_rresta(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = tail call double** @_mat_rreservar(double** undef, i32 %fil, i32 %col) optsize\n" +
+                            "  %2 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %2, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %3 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %18, %._crit_edge ]\n" +
+                            "  br i1 %3, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %4 = getelementptr inbounds double** %A, i32 %i.02\n" +
+                            "  %5 = load double** %4, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds double** %B, i32 %i.02\n" +
+                            "  %7 = load double** %6, align 4, !tbaa !0\n" +
+                            "  %8 = getelementptr inbounds double** %1, i32 %i.02\n" +
+                            "  %9 = load double** %8, align 4, !tbaa !0\n" +
+                            "  br label %10\n" +
+                            "\n" +
+                            "; <label>:10                                      ; preds = %10, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %17, %10 ]\n" +
+                            "  %11 = getelementptr inbounds double* %5, i32 %j.01\n" +
+                            "  %12 = load double* %11, align 4, !tbaa !4\n" +
+                            "  %13 = getelementptr inbounds double* %7, i32 %j.01\n" +
+                            "  %14 = load double* %13, align 4, !tbaa !4\n" +
+                            "  %15 = fsub double %12, %14\n" +
+                            "  %16 = getelementptr inbounds double* %9, i32 %j.01\n" +
+                            "  store double %15, double* %16, align 4, !tbaa !4\n" +
+                            "  %17 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %17, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %10\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %10, %.preheader\n" +
+                            "  %18 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %18, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret double** %1\n" +
+                            "}\n";
+    public String _mat_eresta = "define noalias i32** @_mat_eresta(i32** nocapture %A, i32** nocapture %B, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = tail call i32** @_mat_ereservar(i32** undef, i32 %fil, i32 %col) optsize\n" +
+                            "  %2 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %2, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %3 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %18, %._crit_edge ]\n" +
+                            "  br i1 %3, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %4 = getelementptr inbounds i32** %A, i32 %i.02\n" +
+                            "  %5 = load i32** %4, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds i32** %B, i32 %i.02\n" +
+                            "  %7 = load i32** %6, align 4, !tbaa !0\n" +
+                            "  %8 = getelementptr inbounds i32** %1, i32 %i.02\n" +
+                            "  %9 = load i32** %8, align 4, !tbaa !0\n" +
+                            "  br label %10\n" +
+                            "\n" +
+                            "; <label>:10                                      ; preds = %10, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %17, %10 ]\n" +
+                            "  %11 = getelementptr inbounds i32* %5, i32 %j.01\n" +
+                            "  %12 = load i32* %11, align 4, !tbaa !3\n" +
+                            "  %13 = getelementptr inbounds i32* %7, i32 %j.01\n" +
+                            "  %14 = load i32* %13, align 4, !tbaa !3\n" +
+                            "  %15 = sub nsw i32 %12, %14\n" +
+                            "  %16 = getelementptr inbounds i32* %9, i32 %j.01\n" +
+                            "  store i32 %15, i32* %16, align 4, !tbaa !3\n" +
+                            "  %17 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %17, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %10\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %10, %.preheader\n" +
+                            "  %18 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %18, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret i32** %1\n" +
+                            "}\n";
+    public String  _mat_rimprimir = "define double** @_mat_rimprimir(double** %A, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %1, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %2 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %10, %._crit_edge ]\n" +
+                            "  br i1 %2, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %3 = getelementptr inbounds double** %A, i32 %i.02\n" +
+                            "  br label %4\n" +
+                            "\n" +
+                            "; <label>:4                                       ; preds = %4, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %9, %4 ]\n" +
+                            "  %5 = load double** %3, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds double* %5, i32 %j.01\n" +
+                            "  %7 = load double* %6, align 4, !tbaa !4\n" +
+                            "  %8 = tail call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([5 x i8]* @.str_m_r, i32 0, i32 0), double %7) nounwind optsize\n" +
+                            "  %9 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %9, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %4\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %4, %.preheader\n" +
+                            "  %putchar = tail call i32 @putchar(i32 10) nounwind\n" +
+                            "  %10 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %10, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret double** %A\n" +
+                            "}\n";
+    public String  _mat_eimprimir = "define i32** @_mat_eimprimir(i32** %A, i32 %fil, i32 %col) nounwind optsize {\n" +
+                            "  %1 = icmp sgt i32 %fil, 0\n" +
+                            "  br i1 %1, label %.preheader.lr.ph, label %._crit_edge3\n" +
+                            "\n" +
+                            ".preheader.lr.ph:                                 ; preds = %0\n" +
+                            "  %2 = icmp sgt i32 %col, 0\n" +
+                            "  br label %.preheader\n" +
+                            "\n" +
+                            ".preheader:                                       ; preds = %._crit_edge, %.preheader.lr.ph\n" +
+                            "  %i.02 = phi i32 [ 0, %.preheader.lr.ph ], [ %10, %._crit_edge ]\n" +
+                            "  br i1 %2, label %.lr.ph, label %._crit_edge\n" +
+                            "\n" +
+                            ".lr.ph:                                           ; preds = %.preheader\n" +
+                            "  %3 = getelementptr inbounds i32** %A, i32 %i.02\n" +
+                            "  br label %4\n" +
+                            "\n" +
+                            "; <label>:4                                       ; preds = %4, %.lr.ph\n" +
+                            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %9, %4 ]\n" +
+                            "  %5 = load i32** %3, align 4, !tbaa !0\n" +
+                            "  %6 = getelementptr inbounds i32* %5, i32 %j.01\n" +
+                            "  %7 = load i32* %6, align 4, !tbaa !3\n" +
+                            "  %8 = tail call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([4 x i8]* @.str_m_e, i32 0, i32 0), i32 %7) nounwind optsize\n" +
+                            "  %9 = add nsw i32 %j.01, 1\n" +
+                            "  %exitcond = icmp eq i32 %9, %col\n" +
+                            "  br i1 %exitcond, label %._crit_edge, label %4\n" +
+                            "\n" +
+                            "._crit_edge:                                      ; preds = %4, %.preheader\n" +
+                            "  %putchar = tail call i32 @putchar(i32 10) nounwind\n" +
+                            "  %10 = add nsw i32 %i.02, 1\n" +
+                            "  %exitcond4 = icmp eq i32 %10, %fil\n" +
+                            "  br i1 %exitcond4, label %._crit_edge3, label %.preheader\n" +
+                            "\n" +
+                            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+                            "  ret i32** %A\n" +
+                            "}\n" +
+                            "\n" +
+                            "define i32 @main() nounwind readnone optsize {\n" +
+                            "  ret i32 0\n" +
+                            "}\n";
+    
+    public String _mat_imprimir_cabecera_e = "@.str_m_e = private unnamed_addr constant [4 x i8] c\"%d \\00\", align 1\n";
+    public String _mat_imprimir_cabecera_r = "@.str_m_r = private unnamed_addr constant [5 x i8] c\"%lf \\00\", align 1\n";
+    public String _mat_default_pos = "declare i32 @putchar(i32)\n" +
+                                        "\n" +
+                                        "!0 = metadata !{metadata !\"any pointer\", metadata !1}\n" +
+                                        "!1 = metadata !{metadata !\"omnipotent char\", metadata !2}\n" +
+                                        "!2 = metadata !{metadata !\"Simple C/C++ TBAA\", null}\n" +
+                                        "!3 = metadata !{metadata !\"int\", metadata !1}\n" +
+                                        "!4 = metadata !{metadata !\"double\", metadata !1}\n";
+    
+    public String str_error = "@str_error = internal constant [31 x i8] c\"Error de dimension de matrices\\00\"\n";
+    public String _mat_comprobar = "define i32 @_mat_comprobar(i32 %a, i32 %b, i32 %c, i32 %d) nounwind optsize {\n" +
+                                    "  %1 = icmp eq i32 %a, %c\n" +
+                                    "  %2 = icmp eq i32 %b, %d\n" +
+                                    "  %3 = and i1 %1, %2\n" +
+                                    "  br i1 %3, label %5, label %4\n" +
+                                    "\n" +
+                                    "; <label>:4                                       ; preds = %0\n" +
+                                    "  %puts = tail call i32 @puts(i8* getelementptr inbounds ([31 x i8]* @str_error, i32 0, i32 0))\n" +
+                                    "  tail call void @exit(i32 0) noreturn nounwind optsize\n" +
+                                    "  unreachable\n" +
+                                    "\n" +
+                                    "; <label>:5                                       ; preds = %0\n" +
+                                    "  ret i32 1\n" +
+                                    "}\n" +
+                                    "declare void @exit(i32) noreturn nounwind optsize\n" +
+                                    "declare i32 @puts(i8* nocapture) nounwind\n";
+    
+    
+    
+    public static boolean[] cabecera = {false,false,false,false,false,false,false,false,false,false,
+                                        false,false,false,false,false,false,false,false,false,false,
+                                        false,false,false,false,false,false,false,false,false,false,
+                                        false,false,false,false,false,false,false,false,false,false,
+                                        false,false,false,false,false,false,false,false,false,false,
+                                        false,false,false,false, false, false,false,false};
 
     public void marcar(int pos){
         cabecera[pos] = true;
@@ -257,8 +681,42 @@ public class IRCabecera {
             case 35: return _rdiferente; //34
             case 36: return _rnegacion; //35
             case 37: return _rnegatividad; //36
+            case 38: return _mat_def;
+            case 39: return _mat_rreservar;
+            case 40: return _mat_ereservar;
+            case 41: return _mat_ent_a_real;
+            case 42: return _mat_real_a_ent;
+            case 43: return _mat_rponer;
+            case 44: return _mat_eponer;
+            case 45: return _mat_rsuma;
+            case 46: return _mat_esuma;
+            case 47: return _mat_rresta;
+            case 48: return _mat_eresta;
+            case 49: return _mat_rimprimir;
+            case 50: return _mat_eimprimir;
+            case 51: return _mat_imprimir_cabecera_e;
+            case 52: return _mat_imprimir_cabecera_r;
+            case 53: return _mat_default_pos;
+            case 54: return str_error;
+            case 55: return _mat_comprobar;
         }
         return tmp;
+    }
+    public void setAquitectura(){
+        
+    }
+    public String _arquitectura_32 = "target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32-n8:16:32-S128\"\n" +
+                                    "target triple = \"i386-pc-linux-gnu\"\n";
+    public String _arquitectura_64 = "\n";
+    public boolean arquitectura = true;
+    public void setArquitectura(boolean a){
+        arquitectura = a;
+    }
+    public String getArquitectura(){
+        if(arquitectura)
+            return _arquitectura_32;
+        else
+            return _arquitectura_64;
     }
     public String todaCabecera()
     {

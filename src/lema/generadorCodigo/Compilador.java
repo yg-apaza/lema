@@ -1,8 +1,16 @@
 package lema.generadorCodigo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import lema.analizadorLexico.sym;
 import lema.analizadorSemantico.AST;
+import lema.analizadorSemantico.AtributoVariable;
 import lema.analizadorSemantico.Nodo;
 import lema.analizadorSemantico.accion;
 
@@ -11,25 +19,125 @@ public class Compilador
     private AST arbol;
     private int expCounter = 0;
     private ArrayList<Nodo> asignaciones;
+    private String archivo;
+    private String ruta;
+    private GeneradorIR generador;
     
-    public Compilador(AST arbol)
+    
+    public Compilador(AST arbol, String ruta)
     {
         this.arbol = arbol;
-        asignaciones = new ArrayList<Nodo>();
+        archivo = "";
+        this.ruta = ruta;
+        asignaciones = new ArrayList<>();
+        generador = new GeneradorIR();
         recorrer(null, arbol.getRaiz());
-        System.out.println(asignaciones);
     }
     
-    public void recorrer(Nodo p, Nodo n)
+    public void compilar()
+    {
+        archivo += generador.arquitectura();
+        declararVars();
+        compilar(arbol.getRaiz());
+        
+        /** Generación de Código*/
+        File fll = new File(ruta + ".ll");
+        File fbc = new File(ruta + ".bc");
+        File fs  = new File(ruta + ".s");
+        PrintWriter out = null;
+        try
+        {
+            System.out.println("Generando archivo " + fll.getAbsolutePath() + " (Código Intermedio) ...");
+            out = new PrintWriter(fll);
+            out.print(archivo);
+            
+            Runtime r = Runtime.getRuntime();
+            Process p;
+            BufferedReader br;
+            String linea;
+            
+            System.out.println("Generando archivo " + fbc.getAbsolutePath() + " (ByteCode) ...");
+            p = r.exec("llvm-as " + fll.getAbsolutePath());
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((linea = br.readLine()) != null)
+                System.out.println(linea);
+            
+            System.out.println("Generando archivo " + fs.getAbsolutePath() + " (Código Assembler) ...");
+            p = r.exec("llc " + fbc.getAbsolutePath());
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((linea = br.readLine()) != null)
+                System.out.println(linea);
+            
+            System.out.println("Generando archivo " + ruta + " (Ejecutable) ...");
+            p = r.exec("gcc -o " + ruta + " " + fs.getAbsolutePath());
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((linea = br.readLine()) != null)
+                System.out.println(linea);
+            
+            System.out.println("Finalizado: Ejecutable generado. Compilación exitosa");
+            
+        }
+        catch (FileNotFoundException ex)
+        {
+            System.out.println("Imposible generar " + fll.getAbsolutePath());
+        }
+        catch (IOException ex)
+        {
+            System.out.println("Error de compilación");
+        }
+        finally
+        {
+            out.close();
+        }
+    }
+    
+    private void compilar(Nodo nodo)
+    {
+        if(!nodo.esTerminal())
+        {
+            switch(nodo.getCodigo())
+            {
+                case accion.declaracionSimIni:
+                    
+                break;
+            }
+            for(int i = 0; i < nodo.getHijos().size(); i++)
+                compilar(nodo.getHijos().get(i));
+        }
+    }
+    
+    private void declararVars()
+    {
+        // Declarar todas las variables
+        ArrayList <AtributoVariable> vars = arbol.getTabla().getVariables();
+        for(AtributoVariable v: vars)
+            archivo += (generador.declararVariable(v.getId(), "", getTipo(v.getTipo(), v.esMatriz()), v.esConstante()));
+        archivo += generador.llamar_principal();
+        archivo += generador.terminar_principal();
+    }
+    
+    private void recorrer(Nodo p, Nodo n)
     {
         if(!n.esTerminal())
         {
+            int pos = -1;
             switch(n.getCodigo())
             {
                 case accion.declaracionSimIni:
                     n.getHijos().set(2, extender(n.getHijos().get(2)));
-                    int i = p.getHijos().indexOf(n);
-                    p.getHijos().addAll((i == 0)?0:(i-1), asignaciones);
+                    pos = p.getHijos().indexOf(n);
+                    ordenar(asignaciones);
+                    p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
+                    
+                    asignaciones.clear();
+                break;
+                    
+                case accion.asignacion:
+                    n.getHijos().set(1, extender(n.getHijos().get(1)));
+                    pos = p.getHijos().indexOf(n);
+                    System.out.println("MAS ANTES " + asignaciones);
+                    ordenar(asignaciones);
+                    p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
                     
                     asignaciones.clear();
                 break;
@@ -70,7 +178,7 @@ public class Compilador
                     hijosAsig.add(new Nodo(sym.id, "_var" + expCounter, -1, -1, null, true));
                     nuevo.setHijos(operandos);
                     hijosAsig.add(nuevo);
-                    asignaciones.add(new Nodo(accion.asignacion, accion.acciones[accion.asignacion], -1, -1, hijosAsig, false));
+                    asignaciones.add(new Nodo(Codigo.asignacionC, Codigo.getNombre(Codigo.asignacionC), -1, -1, hijosAsig, false));
                     return (new Nodo(sym.id, "_var" + expCounter, -1, -1, null, true)); 
             }
         }
@@ -84,9 +192,50 @@ public class Compilador
                     return n;
             }
         }
-        
         return null;
-        
+    }
+    
+    private int getTipo(String tipo, boolean matriz)
+    {
+        if(matriz)
+            switch(tipo)
+            {
+                case "entero":
+                    return 2;
+                case "real":
+                    return 3;
+                case "cadena":
+                    return -1;
+            }
+        else
+            switch(tipo)
+            {
+                case "entero":
+                    return 0;
+                case "real":
+                    return 1;
+                case "cadena":
+                    return 4;
+            }
+        return -1;
+    }
+    
+    private void ordenar(ArrayList<Nodo> asigs)
+    {
+        NodoComparator c = new NodoComparator();
+        asigs.sort(c);
+    }
+    
+    public class NodoComparator implements Comparator<Nodo>
+    {
+        @Override
+        public int compare(Nodo a, Nodo b)
+        {
+            int ind1 = Integer.parseInt(a.getHijos().get(0).getValor().substring(a.getHijos().get(0).getValor().indexOf("r")+1));
+            int ind2 = Integer.parseInt(b.getHijos().get(0).getValor().substring(b.getHijos().get(0).getValor().indexOf("r")+1));
+            
+            return ind1 < ind2 ? -1 : ind1 == ind2 ? 0 : 1;
+        }
     }
     
 }

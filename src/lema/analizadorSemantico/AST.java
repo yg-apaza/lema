@@ -1,5 +1,6 @@
 package lema.analizadorSemantico;
 
+import lema.Entorno;
 import java.util.ArrayList;
 import lema.Mistake;
 import lema.analizadorLexico.sym;
@@ -37,7 +38,7 @@ public class AST
                     else
                     {
                         /** Los elementos contenidos por la matriz son simples o vectores, TRUE Matrices, FALSE Simples*/
-                        boolean flag = (accion.elemMat == elementosMat.get(0).getCodigo());
+                        boolean flag = (accion.elemMat == elementosMat.get(0).getCodigo() && !elementosMat.get(0).esTerminal());
                         boolean iguales = true;
 
                         for(int i = 0; i < elementosMat.size(); i++)
@@ -57,7 +58,6 @@ public class AST
                                 break;
                             }
                         }
-
                         if(iguales && !flag)
                         {
                             ArrayList<Nodo> enlace = new ArrayList<>();

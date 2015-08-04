@@ -1,6 +1,7 @@
+entero a;
+real b;
+entero c;
 principal()
 {
-	entero i;
-	entero c = (4)?(2):(-(-2));
-	
+	b = 3 +4*3*a;
 }

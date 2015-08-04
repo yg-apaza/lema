@@ -425,7 +425,7 @@ public class Main
     public static void Compilar(String file)
     {
         errores = new Mistake();
-        System.out.println("ANALIZADOR SEMANTICO");
+        System.out.println("COMPILACIÓN");
         System.out.flush();
         System.out.println("------------------------------------------------------------");
         System.out.flush();
@@ -444,15 +444,16 @@ public class Main
                     AST ast = new AST(raiz, errores);
                     
                     ast.verificar();
-                    System.out.println("PRE ARBOL");
-                    System.out.println(ast);
                     ArrayList<String> eSemantico = errores.getError(2);
                     ArrayList<String> wSemantico = errores.getError(3);
                     if(eSemantico.isEmpty())
                     {
-                        Compilador comp = new Compilador(ast);
-                        System.out.println("POST ARBOL");
-                        System.out.println(ast);
+                        /* COMPILADOR */
+                        String nombre = (file.substring(0, (file.indexOf(".") > -1)?file.indexOf("."):file.length()));                        
+                        Compilador comp = new Compilador(ast, nombre);
+                        comp.compilar();
+                        //System.out.println("POST ARBOL");
+                        //System.out.println(ast);
                     }
                     else
                     {
