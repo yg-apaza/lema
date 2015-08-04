@@ -2,42 +2,43 @@ package lema.generadorCodigo;
 
 public class GeneradorIR {
     public static final int _IMPRIMIR_CAB =0;
-    public static final int _STR_IE  =1;
-    public static final int _STR_IR =2;
-    public static final int _STR_PE =3;
-    public static final int _STR_PR =4;
-    public static final int _ENT_A_DOUBLE =5;
-    public static final int _DOUBLE_A_ENT =6;
-    public static final int _ESUMA =7;
-    public static final int _ERESTA =8;
-    public static final int _EDIVISION =9;
-    public static final int _EPRODUCTO =10;
-    public static final int _EMODULO =11;
-    public static final int _EMAYOR =12;
-    public static final int _EMENOR =13;
-    public static final int _EMAYOR_IGUAL =14;
-    public static final int _EMENOR_IGUAL =15;
-    public static final int _ECONJUNCION =16;
-    public static final int _EDISYUNCION =17;
-    public static final int _EIDENTICO =18;
-    public static final int _EDIFERENTE =19;
-    public static final int _ENEGACION =20;
-    public static final int _ENEGATIVIDAD =21;
-    public static final int _RSUMA =22;
-    public static final int _RRESTA =23;
-    public static final int _RDIVISION =24;
-    public static final int _RPRODUCTO =25;
-    public static final int _RMODULO =26;
-    public static final int _RMAYOR =27;
-    public static final int _RMENOR =28;
-    public static final int _RMAYOR_IGUAL =29;
-    public static final int _RMENOR_IGUAL =30;
-    public static final int _RCONJUNCION =31;
-    public static final int _RDISYUNCION =32;
-    public static final int _RIDENTICO =33;
-    public static final int _RDIFERENTE =34;
-    public static final int _RNEGACION =35;
-    public static final int _RNEGATIVIDAD =36;
+    public static final int _LEER_CAB =1;
+    public static final int _STR_IE  =2;
+    public static final int _STR_IR =3;
+    public static final int _STR_PE =4;
+    public static final int _STR_PR =5;
+    public static final int _ENT_A_DOUBLE =6;
+    public static final int _DOUBLE_A_ENT =7;
+    public static final int _ESUMA =8;
+    public static final int _ERESTA =9;
+    public static final int _EDIVISION =10;
+    public static final int _EPRODUCTO =11;
+    public static final int _EMODULO =12;
+    public static final int _EMAYOR =13;
+    public static final int _EMENOR =14;
+    public static final int _EMAYOR_IGUAL =15;
+    public static final int _EMENOR_IGUAL =16;
+    public static final int _ECONJUNCION =17;
+    public static final int _EDISYUNCION =18;
+    public static final int _EIDENTICO =19;
+    public static final int _EDIFERENTE =20;
+    public static final int _ENEGACION =21;
+    public static final int _ENEGATIVIDAD =22;
+    public static final int _RSUMA =23;
+    public static final int _RRESTA =24;
+    public static final int _RDIVISION =25;
+    public static final int _RPRODUCTO =26;
+    public static final int _RMODULO =27;
+    public static final int _RMAYOR =28;
+    public static final int _RMENOR =29;
+    public static final int _RMAYOR_IGUAL =30;
+    public static final int _RMENOR_IGUAL =31;
+    public static final int _RCONJUNCION =32;
+    public static final int _RDISYUNCION =33;
+    public static final int _RIDENTICO =34;
+    public static final int _RDIFERENTE =35;
+    public static final int _RNEGACION =36;
+    public static final int _RNEGATIVIDAD =37;
 
     
     
@@ -66,16 +67,18 @@ public class GeneradorIR {
     //Imprimir 
     public String _str_c = "@.str_c$ = private unnamed_addr constant [$ x i8] c\"$\\00\", align 1\n";  //$id $tamaño  $ = mensaje
     
-    public String _eimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([12 x i8]* @.str_pe, i32 0, i32 0), i32 %$) nounwind optsize\n";
-    public String _rimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([12 x i8]* @.str_pr, i32 0, i32 0), double %$) nounwind optsize\n";
+    public String _eimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([4 x i8]* @.str_pe, i32 0, i32 0), i32 %$) nounwind optsize\n";
+    public String _rimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([5 x i8]* @.str_pr, i32 0, i32 0), double %$) nounwind optsize\n";
     public String _cimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([$ x i8]* @.str_c$, i32 0, i32 0)) nounwind optsize"; //$ tamaño $id
     
     public String _eleer = "%$ = alloca i32, align 4\n" +
-                            "store i32 0, i32* %$, align 4, !tbaa !0\n" +
-                            "call i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8]* @.str_ie, i32 0, i32 0), i32* %$) nounwind optsize\n";
+                            "  call i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8]* @.str_ie, i32 0, i32 0), i32* %$) nounwind optsize\n" +
+                            "  %$ = load i32* %$, align 4\n";
+                           //t t t v
     public String _rleer = "%$ = alloca double, align 8\n" +
-                            "store double 0.000000e+00, double* %$, align 8, !tbaa !3\n" +
-                            "all i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8]* @.str_ir, i32 0, i32 0), double* %$) nounwind optsize\n";
+                            "  call i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([4 x i8]* @.str_ir, i32 0, i32 0), double* %$) nounwind optsize\n" +
+                            "  %$ = load double* %$, align 8\n";
+                            //t t t v
 
     //
     public String _inicializarZeros = "zeroinitializer";
@@ -100,8 +103,8 @@ public class GeneradorIR {
     
 
     //Operaciones de conversion
-    public String _ent_a_real = "%$ = tail call double @_ent_a_real(i32 $)";
-    public String _real_a_ent = "%$ = tail call i32 @_real_a_ent(double $)";
+    public String _ent_a_real = "%$ = tail call double @_ent_a_real(i32 $)\n";
+    public String _real_a_ent = "%$ = tail call i32 @_real_a_ent(double $)\n";
     
     //Operaciones aritmticas y logicas con retorno entero
     public String _esuma = "%$ = tail call i32 @_esuma(double $, double $)\n";
@@ -280,15 +283,17 @@ public class GeneradorIR {
         return r;
     }
     public String leer(String cadena, int tipo){
+        cabecera.marcar(_LEER_CAB);
         String r = "";
+        String tmp = "_"+cadena;
         switch(tipo){
             case 0: 
-                cabecera.marcar(1);
-                r = unir(_eleer, new String []{ cadena, cadena, cadena} );
+                cabecera.marcar(_STR_IE);
+                r = unir(_eleer, new String []{ tmp, tmp, cadena, tmp } ); //t t t v
                 break;
             case 1:
-                cabecera.marcar(2);
-                r = unir(_rleer, new String []{ cadena, cadena, cadena} );
+                cabecera.marcar(_STR_IR);
+                r = unir(_rleer, new String []{ tmp, tmp, cadena, tmp } ); //t t t v
                 break;
         }
         return r;
@@ -335,6 +340,7 @@ public class GeneradorIR {
     }
     public String llamar_suma(String operando1, String operando2, String resultado, int op, int val1, int val2){
         String temp = "";
+        
         switch(op){
             case 0:
                 cabecera.marcar(_ESUMA); // _esuma //7
@@ -547,15 +553,15 @@ public class GeneradorIR {
     // Generar llamada para operaciones
     public String operar_binario(String operacion, String operando1, String operando2, String resultado, int val1, int val2){ //op 0 entero 1 real 2 entero matriz 3 real matriz 4 cadena -1 otros //val 0 valor 1 variable
         if(val1==1)
-            operando1 = "$" + operando1;
+            operando1 = "%" + operando1;
         if(val2==1)
-            operando1 = "$" + operando2;
+            operando2 = "%" + operando2;
 
         return unir(operacion, new String []{ resultado, operando1, operando2} );
     }
     public String operar_unario(String operacion, String operando1, String resultado, int val1){ //op 0 entero 1 real 2 entero matriz 3 real matriz 4 cadena -1 otros //val 0 valor 1 variable
         if(val1==1)
-            operando1 = "$" + operando1;
+            operando1 = "%" + operando1;
 
         return unir(operacion, new String []{ resultado, operando1} );
     }

@@ -1,8 +1,8 @@
 package lema.generadorCodigo;
 
 public class Compilador {   
-    
-    
+   /*
+     
 
     //Principal
     
@@ -26,8 +26,8 @@ public class Compilador {
     //Imprimir 
     public String _str_ie = "@.str_ie = private unnamed_addr constant [3 x i8] c\"%d\\00\", align 1\n";
     public String _str_ir = "@.str_ir = private unnamed_addr constant [4 x i8] c\"%lf\\00\", align 1\n";
-    public String _str_pe = "@.str_pe = private unnamed_addr constant [12 x i8] c\"%i\\0A\\00\", align 1\n";
-    public String _str_pr = "@.str_pr = private unnamed_addr constant [12 x i8] c\"%F\\0A\\00\", align 1\n";     
+    public String _str_pe = "@.str_pe = private unnamed_addr constant [4 x i8] c\"%i\\0A\\00\", align 1\n";
+    public String _str_pr = "@.str_pr = private unnamed_addr constant [5 x i8] c\"%lf\\0A\\00\", align 1\n";     
             
     public String _eimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([12 x i8]* @.str_pe, i32 0, i32 0), i32 %$) nounwind optsize\n";
     public String _rimprimir = "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([12 x i8]* @.str_pr, i32 0, i32 0), double %$) nounwind optsize\n";
@@ -37,7 +37,7 @@ public class Compilador {
                             "call i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8]* @.str_ie, i32 0, i32 0), i32* %$) nounwind optsize\n";
     public String _rleer = "%$ = alloca double, align 8\n" +
                             "store double 0.000000e+00, double* %$, align 8, !tbaa !3\n" +
-                            "all i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8]* @.str_ir, i32 0, i32 0), double* %$) nounwind optsize\n";
+                            "call i32 (i8*, ...)* @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8]* @.str_ir, i32 0, i32 0), double* %$) nounwind optsize\n";
 
     //
     public String _inicializarZeros = "zeroinitializer";
@@ -414,4 +414,6 @@ public class Compilador {
         }
         return error;
     }
+    */ 
+   
 }
