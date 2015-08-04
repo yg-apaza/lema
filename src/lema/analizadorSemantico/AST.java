@@ -159,20 +159,7 @@ public class AST
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                     else
                     {
-                        switch(v.getTipo())
-                        {
-                            case "entero":
-                                e = 0;
-                            break;
-
-                            case "real":
-                                e = 1;
-                            break;
-
-                            case "cadena":
-                                e = 4;
-                            break;
-                        }
+                        e = getTipo(v.getTipo(), v.esMatriz());
 
                         r = verificarExp(nodo.getHijos().get(2), v.esConstante());
                         try
@@ -313,21 +300,7 @@ public class AST
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                     else
                     {
-                        switch(v.getTipo())
-                        {
-                            case "entero":
-                                e = 2;
-                            break;
-
-                            case "real":
-                                e = 3;
-                            break;
-
-                            case "cadena":
-                                e = -1;
-                            break;
-                        }
-
+                        e = getTipo(v.getTipo(), v.esMatriz());
                         r = verificarExp(nodo.getHijos().get(4), v.esConstante());
                         try
                         {
@@ -366,21 +339,7 @@ public class AST
                         errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(1).getLinea()+1),String.valueOf(nodo.getHijos().get(1).getColumna())}));
                     else
                     {
-                        switch(v.getTipo())
-                        {
-                            case "entero":
-                                e = 0;
-                            break;
-
-                            case "real":
-                                e = 1;
-                            break;
-
-                            case "cadena":
-                                e = 4;
-                            break;
-                        }
-
+                        e = getTipo(v.getTipo(), v.esMatriz());
                         r = verificarExp(nodo.getHijos().get(2), v.esConstante());
                         try
                         {
@@ -417,21 +376,7 @@ public class AST
                             errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
                         else
                         {
-                            switch(v.getTipo())
-                            {
-                                case "entero":
-                                    e = 2;
-                                break;
-
-                                case "real":
-                                    e = 3;
-                                break;
-
-                                case "cadena":
-                                    e = -1;
-                                break;
-                            }
-
+                            e = getTipo(v.getTipo(), v.esMatriz());
                             r = verificarExp(nodo.getHijos().get(4), v.esConstante());
                             try
                             {
@@ -605,41 +550,7 @@ public class AST
                             if(!t.esConstante())
                             {
                                 // El nodo es un ID
-                                if(t.esMatriz())
-                                {
-                                    switch(t.getTipo())
-                                    {
-                                        case "entero":
-                                            e = 2;
-                                        break;
-
-                                        case "real":
-                                            e = 3;
-                                        break;
-
-                                        case "cadena":
-                                            e = -1;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    switch(t.getTipo())
-                                    {
-                                        case "entero":
-                                            e = 0;
-                                        break;
-
-                                        case "real":
-                                            e = 1;
-                                        break;
-
-                                        case "cadena":
-                                            e = 4;
-                                        break;
-                                    }
-                                }
-
+                                e = getTipo(t.getTipo(), t.esMatriz());
                                 r = verificarExp(nodo.getHijos().get(1), t.esConstante());
                                 try
                                 {
@@ -664,21 +575,7 @@ public class AST
                         {
                             if(!t.esConstante())
                             {
-                                switch(t.getTipo())
-                                {
-                                    case "entero":
-                                        e = 0;
-                                    break;
-
-                                    case "real":
-                                        e = 1;
-                                    break;
-
-                                    case "cadena":
-                                        e = -1;
-                                    break;
-                                }
-                                
+                                e = getTipo(t.getTipo(), t.esMatriz());
                                 r = verificarExp(nodo.getHijos().get(1), t.esConstante());
                                 try
                                 {
@@ -807,36 +704,7 @@ public class AST
                         {
                             for(int i = 0; i < argumentosFun.size(); i++)
                             {
-                                if(!argumentosFun.get(i).esMatriz())
-                                {
-                                    switch(argumentosFun.get(i).getTipo())
-                                    {
-                                        case "entero":
-                                            e = 0;
-                                        break;
-                                        case "real":
-                                            e = 1;
-                                        break;
-                                        case "cadena":
-                                            e = 4;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    switch(argumentosFun.get(i).getTipo())
-                                    {
-                                        case "entero":
-                                            e = 2;
-                                        break;
-                                        case "real":
-                                            e = 3;
-                                        break;
-                                        case "cadena":
-                                            e = -1;
-                                        break;
-                                    }
-                                }
+                                e = getTipo(argumentosFun.get(i).getTipo(), argumentosFun.get(i).esMatriz());
                                 r = verificarExp(argumentosExs.get(i), false);
                                 
                                 try
@@ -961,22 +829,7 @@ public class AST
                 case accion.llamadaFuncion:
                     AtributoFuncion f;
                     if((f = tablaSimbolos.buscarFuncion(exp.getHijos().get(0).getValor())) != null)
-                    {
-                        switch(f.getTipoRetorno())
-                        {
-                            case "entero":
-                                r = 0;
-                            break;
-
-                            case "real":
-                                r = 1;
-                            break;
-
-                            case "cadena":
-                                r = 4;
-                            break;
-                        }
-                    }
+                        r = getTipo(f.getTipoRetorno(), false);
                 break;
                 
                 case accion.accesoMat:
@@ -995,21 +848,7 @@ public class AST
                                     return -1;
                                 }
                             }
-                            
-                            switch(t.getTipo())
-                            {
-                                case "entero":
-                                    r = 0;
-                                break;
-
-                                case "real":
-                                    r = 1;
-                                break;
-
-                                case "cadena":
-                                    r = 4;
-                                break;
-                            }
+                            r = getTipo(t.getTipo(), false);
                         }
                         else
                             errores.insertarError(Mistake.SEMANTICO, Mistake.ID_NO_MATRIZ, (new String[] {exp.getHijos().get(0).getValor(),String.valueOf(exp.getHijos().get(0).getLinea()+1),String.valueOf(exp.getHijos().get(0).getColumna())}));
@@ -1094,42 +933,7 @@ public class AST
                     else
                     {
                         if(!constante)
-                        {
-                            if(t.esMatriz())
-                            {
-                                switch(t.getTipo())
-                                {
-                                    case "entero":
-                                        r = 2;
-                                    break;
-
-                                    case "real":
-                                        r = 3;
-                                    break;
-
-                                    case "cadena":
-                                        r = -1;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                switch(t.getTipo())
-                                {
-                                    case "entero":
-                                        r = 0;
-                                    break;
-
-                                    case "real":
-                                        r = 1;
-                                    break;
-
-                                    case "cadena":
-                                        r = 4;
-                                    break;
-                                }
-                            }
-                        }
+                            r = getTipo(t.getTipo(), t.esMatriz());
                         else
                             errores.insertarError(Mistake.SEMANTICO, Mistake.NO_VARIABLE, (new String[] {t.getId(),String.valueOf(exp.getLinea()+1),String.valueOf(exp.getColumna())}));
                     }
