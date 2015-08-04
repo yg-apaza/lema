@@ -582,9 +582,17 @@ public class AST
                                 {
                                     f.setDefinido(true);
                                     tablaSimbolos.insertarBloque();
-                                    for (AtributoVariable argumento : f.getArgumentos())
-                                        if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
-                                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {argumento.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                    if(retorna(nodo.getHijos().get(4)))
+                                    {
+                                        for(AtributoVariable argumento : f.getArgumentos())
+                                            if(!tablaSimbolos.putIdentificador(argumento.getId(), argumento))
+                                                errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {argumento.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                    }
+                                    else
+                                    {
+                                        // Joven
+                                        errores.insertarError(Mistake.SEMANTICO, Mistake.NO_RETORNO_FUNCION, (new String[] {f.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                                    }
                                 }
                             }
                         }
@@ -1135,6 +1143,22 @@ public class AST
             }
         }
         return r;
+    }
+    
+    public boolean retorna(Nodo nodo)
+    {
+        if(!nodo.esTerminal())
+        {
+            switch(nodo.getCodigo())
+            {
+                case accion.retornar:
+                    return true;
+            }
+                
+            for(int i = 0; i < nodo.getHijos().size(); i++)
+                if(retorna(nodo.getHijos().get(i))) return true;
+        }
+        return false;
     }
         
     public Entorno getTabla()

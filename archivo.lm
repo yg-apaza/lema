@@ -13,5 +13,13 @@ principal()
 
 real fun(real x, entero y[4][5], entero z)
 {
-	
+	si(a > 3)
+	{
+		a = 4+5;
+	}
+	sino
+	{
+		mientras(2+3)
+			retornar 4;
+	}
 }
