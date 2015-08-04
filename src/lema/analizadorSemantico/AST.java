@@ -544,7 +544,7 @@ public class AST
                     if(nodo.getHijos().get(0).esTerminal())
                     {
                         if((t = tablaSimbolos.buscarVariable(nodo.getHijos().get(0).getValor())) == null)
-                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_DECLARADO, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
+                            errores.insertarError(Mistake.SEMANTICO, Mistake.ID_NO_DECLARADO, (new String[] {nodo.getHijos().get(0).getValor(),String.valueOf(nodo.getHijos().get(0).getLinea()+1),String.valueOf(nodo.getHijos().get(0).getColumna())}));
                         else
                         {
                             if(!t.esConstante())

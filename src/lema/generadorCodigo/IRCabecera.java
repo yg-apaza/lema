@@ -2,11 +2,12 @@ package lema.generadorCodigo;
 
 public class IRCabecera {
     //Imprimir
-    public String _imprimir_cab = "declare i32 @printf(i8* nocapture, ...) nounwind optsize\n"; //0
+    public String _imprimir_cab = "declare i32 @printf(i8* nocapture, ...) nounwind optsize\n"; 
+    public String _leer_cab = "declare i32 @__isoc99_scanf(i8*, ...) optsize\n";
     public String _str_ie = "@.str_ie = private unnamed_addr constant [3 x i8] c\"%d\\00\", align 1\n"; //1  //leer
     public String _str_ir = "@.str_ir = private unnamed_addr constant [4 x i8] c\"%lf\\00\", align 1\n"; //2 //leer
-    public String _str_pe = "@.str_pe = private unnamed_addr constant [12 x i8] c\"%i\\0A\\00\", align 1\n"; //3 //imprimir
-    public String _str_pr = "@.str_pr = private unnamed_addr constant [12 x i8] c\"%F\\0A\\00\", align 1\n";//4  //imprimir
+    public String _str_pe = "@.str_pe = private unnamed_addr constant [4 x i8] c\"%i\\0A\\00\", align 1\n"; //3 //imprimir
+    public String _str_pr = "@.str_pr = private unnamed_addr constant [5 x i8] c\"%lf\\0A\\00\", align 1\n";//4  //imprimir
     
     //Operaciones
     public String _ent_a_real = "define double @_ent_a_real(i32 %a) nounwind readnone optsize {\n" +
@@ -219,42 +220,43 @@ public class IRCabecera {
         switch(pos)
         {
             case 0: return _imprimir_cab; //0
-            case 1: return _str_ie ; //1
-            case 2: return _str_ir; //2
-            case 3: return _str_pe; //3
-            case 4: return _str_pr; //4
-            case 5: return _ent_a_real; //5
-            case 6: return _real_a_ent; //6
-            case 7: return _esuma; //7
-            case 8: return _eresta; //8
-            case 9: return _edivision; //9
-            case 10: return _eproducto; //10
-            case 11: return _emodulo; //11
-            case 12: return _emayor; //12
-            case 13: return _emenor; //13
-            case 14: return _emayor_igual; //14
-            case 15: return _emenor_igual; //15
-            case 16: return _econjuncion; //16
-            case 17: return _edisyuncion; //17
-            case 18: return _eidentico; //18
-            case 19: return _ediferente; //19
-            case 20: return _enegacion; //20
-            case 21: return _enegatividad; //21
-            case 22: return _rsuma; //22
-            case 23: return _rresta; //23
-            case 24: return _rdivision; //24
-            case 25: return _rproducto; //25
-            case 26: return _rmodulo; //26
-            case 27: return _rmayor; //27
-            case 28: return _rmenor; //28
-            case 29: return _rmayor_igual; //29
-            case 30: return _rmenor_igual; //30
-            case 31: return _rconjuncion; //31
-            case 32: return _rdisyuncion; //32
-            case 33: return _ridentico; //33
-            case 34: return _rdiferente; //34
-            case 35: return _rnegacion; //35
-            case 36: return _rnegatividad; //36
+            case 1: return _leer_cab; //0
+            case 2: return _str_ie ; //1
+            case 3: return _str_ir; //2
+            case 4: return _str_pe; //3
+            case 5: return _str_pr; //4
+            case 6: return _ent_a_real; //5
+            case 7: return _real_a_ent; //6
+            case 8: return _esuma; //7
+            case 9: return _eresta; //8
+            case 10: return _edivision; //9
+            case 11: return _eproducto; //10
+            case 12: return _emodulo; //11
+            case 13: return _emayor; //12
+            case 14: return _emenor; //13
+            case 15: return _emayor_igual; //14
+            case 16: return _emenor_igual; //15
+            case 17: return _econjuncion; //16
+            case 18: return _edisyuncion; //17
+            case 19: return _eidentico; //18
+            case 20: return _ediferente; //19
+            case 21: return _enegacion; //20
+            case 22: return _enegatividad; //21
+            case 23: return _rsuma; //22
+            case 24: return _rresta; //23
+            case 25: return _rdivision; //24
+            case 26: return _rproducto; //25
+            case 27: return _rmodulo; //26
+            case 28: return _rmayor; //27
+            case 29: return _rmenor; //28
+            case 30: return _rmayor_igual; //29
+            case 31: return _rmenor_igual; //30
+            case 32: return _rconjuncion; //31
+            case 33: return _rdisyuncion; //32
+            case 34: return _ridentico; //33
+            case 35: return _rdiferente; //34
+            case 36: return _rnegacion; //35
+            case 37: return _rnegatividad; //36
         }
         return tmp;
     }
