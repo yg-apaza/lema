@@ -5071,7 +5071,7 @@ class CUP$parser$actions {
     hijos.add(i);
     hijos.add(e);
 
-    RESULT = new Nodo(accion.declaracionSim, accion.acciones[accion.declaracionSim], eleft, eright, hijos, false);
+    RESULT = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], eleft, eright, hijos, false);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("INI",25, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

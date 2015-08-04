@@ -1,16 +1,6 @@
-entero a[2] = {1,2};
-entero b[3] = {4,5,6};
-entero c = 4;
-const entero d = 0x52.5; 
-real fun(real, entero[4][5], entero);
 principal()
 {
-	para(entero u = 0; a < b; i++)
-	{	mostrar(6);
-	saltar;}
-}
-
-real fun(real x, entero y[4][5], entero z)
-{
-			retornar y;
+	entero i;
+	entero c = (4)?(2):(-(-2));
+	
 }

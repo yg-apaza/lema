@@ -1760,7 +1760,7 @@ INI ::= pr_entero:t id:i igual EXPGEN:e
     hijos.add(i);
     hijos.add(e);
 
-    RESULT = new Nodo(accion.declaracionSim, accion.acciones[accion.declaracionSim], eleft, eright, hijos, false);
+    RESULT = new Nodo(accion.declaracionSimIni, accion.acciones[accion.declaracionSimIni], eleft, eright, hijos, false);
 :};
 
 LECTURA ::= pr_leer:b par_ab id:i par_ce punto_coma:f 

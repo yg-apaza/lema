@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java_cup.runtime.Symbol;
-import lema.generadorCodigo.Archivo;
 import lema.generadorCodigo.Compilador;
-import lema.generadorCodigo.GeneradorIR;
 
 public class Main
 {
@@ -26,9 +24,7 @@ public class Main
         else
         {
             if(args.length == 1)
-            {
                 Compilar(args[0]);
-            }
             else
             {
                 System.out.println("Archivo: " + args[0] + "\n");
@@ -42,6 +38,9 @@ public class Main
                         break;
                     case 2:
                         ASemantico(args[0]);
+                        break;
+                    case 3:
+                        Compilar(args[0]);
                         break;
                 }
             }
@@ -425,6 +424,77 @@ public class Main
    
     public static void Compilar(String file)
     {
-        System.out.println("Compilar archivo: " + file);
+        errores = new Mistake();
+        System.out.println("ANALIZADOR SEMANTICO");
+        System.out.flush();
+        System.out.println("------------------------------------------------------------");
+        System.out.flush();
+        
+        try
+        {
+            parser p = new parser(new Lexico(new FileReader(file), errores), errores);
+            Object result = p.parse();
+            ArrayList<String> eLexico = errores.getError(0);
+            ArrayList<String> eSintactico = errores.getError(1);
+            if(eLexico.isEmpty())
+            {
+                if(eSintactico.isEmpty())
+                {
+                    Nodo raiz = p.getRaiz();
+                    AST ast = new AST(raiz, errores);
+                    
+                    ast.verificar();
+                    System.out.println("PRE ARBOL");
+                    System.out.println(ast);
+                    ArrayList<String> eSemantico = errores.getError(2);
+                    ArrayList<String> wSemantico = errores.getError(3);
+                    if(eSemantico.isEmpty())
+                    {
+                        Compilador comp = new Compilador(ast);
+                        System.out.println("POST ARBOL");
+                        System.out.println(ast);
+                    }
+                    else
+                    {
+                        for (String eSemantico1 : eSemantico)
+                        {
+                            System.out.println(eSemantico1);
+                            System.out.flush();
+                        }
+                        System.out.println("Finalizado: Se encontraron " + eSemantico.size() + " error(es) semánticos");
+                    }
+                }
+                else
+                {
+                    for (String eSintactico1 : eSintactico)
+                    {
+                        System.out.println(eSintactico1);
+                        System.out.flush();
+                    }
+                    System.out.println("Finalizado: Se encontraron " + eSintactico.size() + " error(es) sintácticos");
+                }
+            }
+            else
+            {
+                for (String eLexico1 : eLexico)
+                {
+                    System.out.println(eLexico1);
+                    System.out.flush();
+                }
+                System.out.println("Finalizado: Se encontraron " + eLexico.size() + " error(es) léxicos");
+            }
+        }
+        catch (FileNotFoundException ex)
+        {
+            System.out.println("Error: Archivo incorrecto");
+            ex.printStackTrace();
+            System.out.println("Finalizado");
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error:");
+            ex.printStackTrace();
+            System.out.println("Finalizado");
+        }
     }
 }

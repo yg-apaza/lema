@@ -1034,6 +1034,11 @@ public class AST
         return tablaSimbolos;
     }
     
+    public Nodo getRaiz()
+    {
+        return raiz;
+    }
+    
     public String toString()
     {
         return "" + raiz;
