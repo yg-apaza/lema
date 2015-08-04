@@ -396,7 +396,6 @@ public class Main
                         System.out.println("Finalizado: Se encontraron " + eSemantico.size() + " error(es)");
                     
                     System.out.println(ast);
-                    System.out.println(ast.getTabla());
                 }
                 else
                 {

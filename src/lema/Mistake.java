@@ -50,6 +50,7 @@ public class Mistake
     public static final int TIPO_NO_FUNCION = 26;
     public static final int NO_RETORNO_FUNCION = 27;
     public static final int RETORNO_NO_COMPATIBLE = 28;
+    public static final int SALTAR_FUERA = 29;
     
     /* Warnings */
     public static final int NUM_ELEMENTOS_INCORRECTOS = 0;
@@ -96,7 +97,8 @@ public class Mistake
         "Error Semántico: Variable '$' no es compatible con la función '$'. Lin: $ Col: $",
         "Error Semántico: Tipo de dato no es compatible con la función '$'. Lin: $ Col: $ ",
         "Error Semántico: Función '$' no tiene una sentencia de retorno correcta. Lin: $ Col: $",
-        "Error Semántico: Tipo de dato de retorno no compatible. Lin: $ Col: $"
+        "Error Semántico: Tipo de dato de retorno no compatible. Lin: $ Col: $",
+        "Error Semántico: Sentencia 'saltar' fuera de 'while' o 'for'. Lin: $ Col: $"
     };
     
     private final String[] listaWarnings =

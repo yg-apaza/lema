@@ -114,6 +114,7 @@ public class AST
     {
         fix(raiz);
         verificar(raiz);
+        verificarSaltar(raiz, false);
         ArrayList<AtributoFuncion> funciones = tablaSimbolos.getFunciones();
         for (AtributoFuncion fun : funciones)
             if (!fun.esDefinido())
@@ -972,6 +973,36 @@ public class AST
         }
         return false;
     }
+    
+    public void verificarSaltar(Nodo nodo, boolean s)
+    {
+        if(!nodo.esTerminal())
+        {
+            switch(nodo.getCodigo())
+            {
+                case accion.saltar:
+                    if(!s)
+                        errores.insertarError(Mistake.SEMANTICO, Mistake.SALTAR_FUERA, (new String[] {String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
+                break;
+                    
+                case accion.mientras:
+                    s = true;
+                break;
+                
+                case accion.hacerMientras:
+                    s = true;
+                break;
+                    
+                case accion.para:
+                    s = true;
+                break;
+            }
+            
+            for(int i = 0; i < nodo.getHijos().size(); i++)
+                verificarSaltar(nodo.getHijos().get(i), s);
+        }
+    }
+            
     
     private int getTipo(String tipo, boolean matriz)
     {
