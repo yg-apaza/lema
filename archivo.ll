@@ -2,17 +2,17 @@ target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3
 target triple = "i386-pc-linux-gnu"
 @c = constant i32 zeroinitializer
 define i32 @main() nounwind readnone optsize {
-%_var4 = tail call double @_ent_a_real(i32 7)
-%_var5 = tail call double @_ent_a_real(i32 4)
-%_var1 = tail call double @_rsuma(double %_var4, double %_var5)
+%_var4 =  call double @_ent_a_real(i32 7)
+%_var5 =  call double @_ent_a_real(i32 4)
+%_var1 =  call double @_rsuma(double %_var4, double %_var5)
 %_var6 = load i32* @c, align 4
-%_var7 = tail call double @_ent_a_real(i32 %_var6)
-%_var2 = tail call double @_rsuma(double %_var1, double %_var7)
-%b = tail call double @asig_r(double %_var2)
-%_var8 = tail call double @_ent_a_real(i32 4)
-%_var3 = tail call double @_rsuma(double %b, double %_var8)
-%_var9 = tail call i32 @_real_a_ent(double %_var3)
-%a = tail call i32 @asig_e(i32 %_var9)
+%_var7 =  call double @_ent_a_real(i32 %_var6)
+%_var2 =  call double @_rsuma(double %_var1, double %_var7)
+%b =  call double @asig_r(double %_var2)
+%_var8 =  call double @_ent_a_real(i32 4)
+%_var3 =  call double @_rsuma(double %b, double %_var8)
+%_var9 =  call i32 @_real_a_ent(double %_var3)
+%a = call i32 @asig_e(i32 %_var9)
 ret i32 0
 }
 define void @c.act_e(i32 %nuevo) nounwind optsize {

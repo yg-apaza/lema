@@ -975,7 +975,7 @@ public class IRCabecera {
             "  %.0 = phi i32 [ 0, %7 ], [ 1, %1 ]\n" +
             "  ret i32 %.0\n" +
             "}\n";
-    public String _mat_rnegacion = "define i32 @_mat_rnegacion(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col) nounwind readonly optsize {\n" +
+    public String _mat_rnegacion = "define i32 @_mat_rnegacion(double** nocapture %A,  i32 %fil, i32 %col) nounwind readonly optsize {\n" +
             "  br label %1\n" +
             "\n" +
             "; <label>:1                                       ; preds = %13, %0\n" +

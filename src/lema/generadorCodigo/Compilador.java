@@ -133,6 +133,10 @@ public class Compilador
                         archivo += generador.asignar(nodo.getHijos().get(1).getValor(), datoAsig, getTipo(v.getTipo(), false), etiqueta(nodo.getHijos().get(2)));
                     }
                 break;
+                
+                case accion.asignacion:
+                    
+                break;
                     
                 case Codigo.asignacionC:
                     String op1 = "";
@@ -254,6 +258,7 @@ public class Compilador
                     }
                     
                 break;
+                
             }
             for(int i = 0; i < nodo.getHijos().size(); i++)
                 compilar(nodo, nodo.getHijos().get(i));
