@@ -145,6 +145,35 @@ public class Entorno
         }
         return globales;
     }
+    
+    public AtributoVariable getAll(String name)
+    {
+        return getAll(raiz, name);
+    }
+    
+    private AtributoVariable getAll(EntornoNodo e, String name)
+    {
+        ArrayList<AtributoVariable> vars = new ArrayList<>();
+        AtributoVariable found = null;
+
+        try
+        {
+            found = (AtributoVariable)(e.tabla.get(name));
+        }
+        catch(ClassCastException ex)
+        {
+            found = null;
+        }
+        
+        if(found == null)
+        {
+            for (EntornoNodo bloque : e.bloques)
+                if ((found = getAll(bloque, name)) != null)
+                    return found;
+        }
+        
+        return found;
+    }
 
     public void insertarBloque()
     {

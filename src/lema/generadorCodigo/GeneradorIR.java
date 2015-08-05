@@ -192,7 +192,7 @@ public class GeneradorIR {
     public String _rnegatividad = "%$ = tail call double @_rnegatividad(double $)\n";
     
     public String asig_e = "%$ = tail call i32 @asig_e(i32 $)\n";
-    public String asig_r = "%$ = tail call i32 @asig_e(i32 $)\n";
+    public String asig_r = "%$ = tail call double @asig_r(double $)\n";
     
     public String mainllini = "define i32 @main() nounwind  readnone optsize{";
     public String mainllter = "ret i32 0\n"+
@@ -692,6 +692,7 @@ public class GeneradorIR {
     }
     public String asignar (String nuevo, String valor, int tipo, int val)
     {
+        cabecera.marcar(_MAT_DEFAULT_POS);
         String tmp = "";
         if(val == 1)
             valor = "%"+valor;

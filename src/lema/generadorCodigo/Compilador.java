@@ -25,7 +25,7 @@ public class Compilador
     private String archivo;
     private String ruta;
     private GeneradorIR generador;
-        
+    
     public Compilador(AST arbol, String ruta)
     {
         this.arbol = arbol;
@@ -115,11 +115,24 @@ public class Compilador
     {
         if(!nodo.esTerminal())
         {
+            AtributoVariable v;
             switch(nodo.getCodigo())
             {
                 case accion.declaracionSimIni:
                     if(padre.getCodigo() != accion.cabecera)
-                        archivo += generador.asignar(nodo.getHijos().get(1).getValor(), nodo.getHijos().get(2).getValor(), getTipo(nodo.getHijos().get(0).getValor(), false), etiqueta(nodo.getHijos().get(2)));
+                    {
+                        
+                        v = arbol.getTabla().getAll(nodo.getHijos().get(1).getValor());
+                        String datoAsig = nodo.getHijos().get(2).getValor();
+                        
+                        if(v.getTipo().equals("entero") && !v.esMatriz())
+                        {
+                            expCounter++;
+                            datoAsig = "_var" + expCounter;
+                            archivo += generador.castear(datoAsig, nodo.getHijos().get(2).getValor(), 1, etiqueta(nodo.getHijos().get(2)));
+                        }
+                        archivo += generador.asignar(nodo.getHijos().get(1).getValor(), datoAsig, getTipo(v.getTipo(), false), etiqueta(nodo.getHijos().get(2)));
+                    }
                 break;
                     
                 case Codigo.asignacionC:
@@ -305,5 +318,4 @@ public class Compilador
         else
             return 0;
     }
-    
 }
