@@ -137,9 +137,10 @@ public class Compilador
                     
                 case Codigo.asignacionC:
                     String op1 = nodo.getHijos().get(1).getHijos().get(0).getValor();
-                    String op2 = nodo.getHijos().get(1).getHijos().get(0).getValor();
+                    String op2 = nodo.getHijos().get(1).getHijos().get(1).getValor();
                     int val1 = etiqueta(nodo.getHijos().get(1).getHijos().get(0));
                     int val2 = etiqueta(nodo.getHijos().get(1).getHijos().get(1));
+                    System.out.println("ANTES " + op2);
                     if(nodo.getHijos().get(1).getHijos().get(0).getCodigo() == sym.numero)
                     {
                         expCounter++;
@@ -155,8 +156,58 @@ public class Compilador
                         val2 = 1;
                         archivo += generador.castear(op2, nodo.getHijos().get(1).getHijos().get(1).getValor(), 0, etiqueta(nodo.getHijos().get(1).getHijos().get(1)));
                     }
+                    System.out.println(op2);
+                    switch(nodo.getHijos().get(1).getCodigo())
+                    {
+                        case accion.suma:
+                            archivo += generador.llamar_suma(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.resta:
+                            archivo += generador.llamar_resta(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.producto:
+                            archivo += generador.llamar_producto(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.division:
+                            archivo += generador.llamar_division(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.modulo:
+                            archivo += generador.llamar_modulo(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.mayor:
+                            archivo += generador.llamar_mayor(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.mayor_igual:
+                            archivo += generador.llamar_mayor_igual(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.menor:
+                            archivo += generador.llamar_menor(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.menor_igual:
+                            archivo += generador.llamar_menor_igual(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.disyuncion:
+                            archivo += generador.llamar_disyuncion(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.conjuncion:
+                            archivo += generador.llamar_conjuncion(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                            
+                        case accion.identico:
+                            archivo += generador.llamar_identico(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                        break;
+                    }
                     
-                    archivo += generador.llamar_suma(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
                 break;
             }
             for(int i = 0; i < nodo.getHijos().size(); i++)
