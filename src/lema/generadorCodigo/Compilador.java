@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lema.analizadorLexico.sym;
 import lema.analizadorSemantico.AST;
 import lema.analizadorSemantico.AtributoVariable;
@@ -40,41 +42,50 @@ public class Compilador
         declararVars();
         compilar(arbol.getRaiz());
         
-        /** Generación de Código*/
+        /** Generación de Código */
+        File bash = new File("bash.sh");
         File fll = new File(ruta + ".ll");
         File fbc = new File(ruta + ".bc");
         File fs  = new File(ruta + ".s");
+        File fex = new File(ruta);
         PrintWriter out = null;
         try
         {
-            System.out.println("Generando archivo " + fll.getAbsolutePath() + " (Código Intermedio) ...");
+            System.out.println("Generando archivo " + fex.getAbsolutePath() + " (Ejecutable) ...");
+            
             out = new PrintWriter(fll);
             out.print(archivo);
+            out.close();
             
-            Runtime r = Runtime.getRuntime();
-            Process p;
+            String exe1 = "llvm-as \"" + fll.getAbsolutePath() + "\"";
+            String exe2 = "llc \"" + fbc.getAbsolutePath() + "\"";
+            String exe3 = "gcc -o \"" + fex.getAbsolutePath() + "\" \"" + fs.getAbsolutePath() + "\"";
+            
+            out = new PrintWriter(bash);
+            out.print(exe1 + "\n" + exe2 + "\n" + exe3);
+            out.close();
+            
+            boolean correcto = true;
+            
             BufferedReader br;
+            BufferedReader stdError;
             String linea;
-            
-            System.out.println("Generando archivo " + fbc.getAbsolutePath() + " (ByteCode) ...");
-            p = r.exec("llvm-as " + fll.getAbsolutePath());
-            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            Process p1 = Runtime.getRuntime().exec("./bash.sh");
+            br = new BufferedReader(new InputStreamReader(p1.getInputStream()));
+            stdError = new BufferedReader(new InputStreamReader(p1.getErrorStream())); 
             while ((linea = br.readLine()) != null)
                 System.out.println(linea);
-            
-            System.out.println("Generando archivo " + fs.getAbsolutePath() + " (Código Assembler) ...");
-            p = r.exec("llc " + fbc.getAbsolutePath());
-            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((linea = br.readLine()) != null)
+            while ((linea = stdError.readLine()) != null)
+            {
                 System.out.println(linea);
+                correcto = false;
+            }
+            p1.waitFor();
             
-            System.out.println("Generando archivo " + ruta + " (Ejecutable) ...");
-            p = r.exec("gcc -o " + ruta + " " + fs.getAbsolutePath());
-            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((linea = br.readLine()) != null)
-                System.out.println(linea);
-            
-            System.out.println("Finalizado: Ejecutable generado. Compilación exitosa");
+            if(correcto)
+                System.out.println("Finalizado: Ejecutable generado. Compilación exitosa");
+            else
+                System.out.println("Finalizado: Ocurrieron errores durante la compilación");
             
         }
         catch (FileNotFoundException ex)
@@ -84,6 +95,9 @@ public class Compilador
         catch (IOException ex)
         {
             System.out.println("Error de compilación");
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
         {
@@ -135,7 +149,6 @@ public class Compilador
                 case accion.asignacion:
                     n.getHijos().set(1, extender(n.getHijos().get(1)));
                     pos = p.getHijos().indexOf(n);
-                    System.out.println("MAS ANTES " + asignaciones);
                     ordenar(asignaciones);
                     p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
                     
@@ -237,5 +250,4 @@ public class Compilador
             return ind1 < ind2 ? -1 : ind1 == ind2 ? 0 : 1;
         }
     }
-    
 }
