@@ -144,8 +144,8 @@ public class Compilador
                         ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
                         Nodo cero = new Nodo(sym.real, "0.0", -1, -1, null, true);
                         hijosSum.add(extender(n.getHijos().get(2)));
-                        System.out.println("HIJO 1 - SUMA");
-                        System.out.println(n.getHijos().size());
+                        //System.out.println("HIJO 1 - SUMA");
+                        //System.out.println(n.getHijos().size());
                         hijosSum.add(cero);
                         Nodo suma = new Nodo(accion.suma, accion.acciones[accion.suma], -1, -1, hijosSum, false);
                         n.getHijos().set(2, suma);
@@ -170,6 +170,8 @@ public class Compilador
                     asignaciones.clear();
                 break;
             }
+            System.out.println("NODO ACTUAL" + n);
+            System.out.println("HIJO 0 " + n.getHijos().get(0));
             for(int i = 0; i < n.getHijos().size(); i++)
                 recorrer(n, n.getHijos().get(i));
         }
