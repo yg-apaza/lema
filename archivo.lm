@@ -1,7 +1,7 @@
-entero a;
+entero a = 5+4;
 real b;
 entero c;
 principal()
 {
-	b = 3 +4*3*a;
+	b = (a + 3)*(3+4);
 }

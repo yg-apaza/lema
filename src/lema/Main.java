@@ -451,9 +451,9 @@ public class Main
                         /* COMPILADOR */
                         String nombre = (file.substring(0, (file.indexOf(".") > -1)?file.indexOf("."):file.length()));                        
                         Compilador comp = new Compilador(ast, nombre);
-                        comp.compilar();
-                        //System.out.println("POST ARBOL");
-                        //System.out.println(ast);
+                        //comp.compilar();
+                        System.out.println("POST ARBOL");
+                        System.out.println(ast);
                     }
                     else
                     {

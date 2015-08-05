@@ -24,8 +24,7 @@ public class Compilador
     private String archivo;
     private String ruta;
     private GeneradorIR generador;
-    
-    
+        
     public Compilador(AST arbol, String ruta)
     {
         this.arbol = arbol;
@@ -39,8 +38,11 @@ public class Compilador
     public void compilar()
     {
         archivo += generador.arquitectura();
-        declararVars();
+        declararGlobalVars();
+        archivo += generador.llamar_principal();
         compilar(arbol.getRaiz());
+        archivo += generador.terminar_principal();
+        
         
         /** Generación de Código */
         File bash = new File("bash.sh");
@@ -120,14 +122,12 @@ public class Compilador
         }
     }
     
-    private void declararVars()
+    private void declararGlobalVars()
     {
         // Declarar todas las variables
-        ArrayList <AtributoVariable> vars = arbol.getTabla().getVariables();
+        ArrayList <AtributoVariable> vars = arbol.getTabla().getVariablesGlobales();
         for(AtributoVariable v: vars)
             archivo += (generador.declararVariable(v.getId(), "", getTipo(v.getTipo(), v.esMatriz()), v.esConstante()));
-        archivo += generador.llamar_principal();
-        archivo += generador.terminar_principal();
     }
     
     private void recorrer(Nodo p, Nodo n)
@@ -138,12 +138,18 @@ public class Compilador
             switch(n.getCodigo())
             {
                 case accion.declaracionSimIni:
-                    n.getHijos().set(2, extender(n.getHijos().get(2)));
-                    pos = p.getHijos().indexOf(n);
-                    ordenar(asignaciones);
-                    p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
-                    
-                    asignaciones.clear();
+                    if(p.getCodigo() == accion.cabecera)
+                    {
+                        n.getHijos().set(2, extender(n.getHijos().get(2)));
+                        pos = p.getHijos().indexOf(n);
+                        ordenar(asignaciones);
+                        p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
+                        asignaciones.clear();
+                    }
+                    else
+                    {
+                        
+                    }
                 break;
                     
                 case accion.asignacion:

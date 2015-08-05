@@ -123,32 +123,22 @@ public class Entorno
         return funciones;
     }
     
-    public ArrayList<AtributoVariable> getVariables()
+    public ArrayList<AtributoVariable> getVariablesGlobales()
     {
-        return getVariables(raiz);
-    }
-    
-    private ArrayList<AtributoVariable> getVariables(EntornoNodo e)
-    {
-        ArrayList<AtributoVariable> variables = new ArrayList<>();
-        
-        for(int i = 0; i < e.bloques.size(); i++)
-            variables.addAll(getVariables(e.bloques.get(i)));
-        
-        Set <String> keys = e.tabla.keySet();
+        ArrayList<AtributoVariable> globales = new ArrayList<>();
+        Set <String> keys = raiz.tabla.keySet();
         AtributoVariable found = null;
         for(String key : keys)
         {
             try
             {
-                found = (AtributoVariable)(e.tabla.get(key));
+                found = (AtributoVariable)(raiz.tabla.get(key));
             }
             catch(ClassCastException ex){}
             if (found != null)
-                variables.add(0, found);
+                globales.add(found);
         }
-        
-        return variables;
+        return globales;
     }
 
     public void insertarBloque()
