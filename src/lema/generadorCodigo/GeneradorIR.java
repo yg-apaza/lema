@@ -61,6 +61,10 @@ public class GeneradorIR {
     public static final int  STR_ERROR=54;
     public static final int  _MAT_COMPROBAR=55;
     
+    public static final int _STR_ERROR2 = 56;
+    public static final int _MAT_COMPROBAR_TAM = 57;
+    
+    
     //Principal
     public IRCabecera cabecera;
     public String _iniPrincipal = "define i32 @main() nounwind readnone optsize {\n";
@@ -79,6 +83,32 @@ public class GeneradorIR {
     //Declaracion de matrices variables
     public String _emvdeclarar = "@$ = global <$ x i32> $\n";
     public String _rmvdeclarar = "@$ = global <$ x double> $\n";
+    
+    public String dec_def_e =  "define void @$.act_e(i32 %nuevo) nounwind optsize {\n" + //nom
+                                "  store i32 %nuevo, i32* @$, align 4, !tbaa !0\n" +   //nom
+                                "  ret void\n" +
+                                "}\n" +
+                                "define void @$.act_r(double %nuevo) nounwind optsize {\n" + //nom
+                                "  %1 = fptosi double %nuevo to i32\n" +    //nom
+                                "  store i32 %1, i32* @$, align 4, !tbaa !0\n" +
+                                "  ret void\n" +
+                                "}\n";
+    
+    public String dec_def_r =  "define void @$.act_d(double %nuevo) nounwind optsize {\n" + //nom
+                                "  store double %nuevo, double* @$, align 8, !tbaa !3\n" +
+                                "  ret void\n" +
+                                "}\n" +
+                                "\n" +
+                                "define void @$.act_e(i32 %nuevo) nounwind optsize {\n" + //nom
+                                "  %1 = sitofp i32 %nuevo to double\n" +
+                                "  store double %1, double* @$, align 8, !tbaa !3\n" +
+                                "  ret void\n" +
+                                "}\n";
+    public String act_rea_e_e= "call void @$.act_e(i32 %$)\n";
+    public String act_rea_r_r= "call void @$.act_r(double %$)\n";
+    public String act_rea_e_r= "call void @$.act_e(double %$)\n";
+    public String act_rea_r_e= "call void @$.act_d(i32 %$)\n";
+    
     
     public String _ecargar = "%$ = load i32* @$, align 4\n";
     public String _rcargar = "%$ = load double* @$, align 4\n";
@@ -159,21 +189,6 @@ public class GeneradorIR {
     public String _rnegacion = "%$ = tail call double @_rnegacion(double $)\n";
     public String _rnegatividad = "%$ = tail call double @_rnegatividad(double $)\n";
     
-    //Operaciones con matrices
-    public String _msuma = "%$ = tail call <$ x i32>  @_emsuma(<$ x i32>$, <$ x i32>$)";
-    public String _mresta = "%$ = tail call <$ x i32>  @_mresta(<$ x i32>$, <$ x i32>$)";
-    public String _mmayor = "%$ = tail call <$ x i32>  @_mmayor(<$ x i32>$, <$ x i32>$)";
-    public String _mmenor = "%$ = tail call <$ x i32>  @_mmenor(<$ x i32>$, <$ x i32>$)";                
-    public String _mmayorpublic_igual = "%$ = tail call <$ x i32>  @_mmayorpublic_igual(<$ x i32>$, <$ x i32>$)";
-    public String _mmenorpublic_igual = "%$ = tail call <$ x i32>  @_mmenorpublic_igual(<$ x i32>$, <$ x i32>$)";               
-    public String _mconjuncion = "%$ = tail call <$ x i32>  @_mconjuncion(<$ x i32>$, <$ x i32>$)";
-    public String _mdisyuncion = "%$ = tail call <$ x i32>  @_mdisyuncion(<$ x i32>$, <$ x i32>$)";
-    public String _midentico = "%$ = tail call <$ x i32>  @_midentico(<$ x i32>$, <$ x i32>$)";
-    public String _mdiferente = "%$ = tail call <$ x i32>  @_mdiferente(<$ x i32>$, <$ x i32>$)";
-    public String _mnegacion = "%$ = tail call <$ x i32>  @_mnegacion(<$ x i32>$, <$ x i32>$)";
-    public String _minversa = "%$ = tail call <$ x i32>  @_minversa(<$ x i32>$, <$ x i32>$)";
-    public String _mtranspuesta = "%$ = tail call <$ x i32>  @_mtranspuesta(<$ x i32>$, <$ x i32>$)";
-    public String _mnegatividad = "%$ = tail call <$ x i32>  @_mnegatividad(<$ x i32>$, <$ x i32>$)";
     
    
     public String mainllini = "define i32 @main() nounwind  readnone optsize{";
@@ -183,8 +198,8 @@ public class GeneradorIR {
     
     
     //Matriz
-    public String _dec_matriz_tam = "@$.fila = constant i32 3, align 4\n" +
-                                        "@$.columna = constant i32 3, align 4\n" +
+    public String _dec_matriz_tam = "@$.fila = constant i32 $, align 4\n" +  
+                                        "@$.columna = constant i32 $, align 4\n" +
                                         "define i32 @$.getFila() nounwind readnone optsize {\n" +
                                         "  %1 = load i32*  @$.fila, align 4\n" +
                                         "  ret i32 %1\n" +
@@ -192,7 +207,7 @@ public class GeneradorIR {
                                         "define i32 @$.getColumna() nounwind readnone optsize {\n" +
                                         "  %1 = load i32*  @$.columna, align 4\n" +
                                         "  ret i32 %1\n" +
-                                        "}\n"; //Nom Nom - Nom Nom - Nom Nom 
+                                        "}\n"; ////Nom val - Nom Val - Nom Nom - Nom Nom 
     public String _mat_iniciar_e = "  %$.f = tail call i32 @$.getFila()\n" +
                                 "  %$.c = tail call i32 @$.getColumna()\n" +
                                 "  %$ = tail call i32** @_mat_ereservar(i32** undef, i32 %$.f, i32 %$.c) optsize\n"; //Nom Nom - Nom Nom - Nom Nom Nom
@@ -206,7 +221,42 @@ public class GeneradorIR {
                                     "%$ = tail call i32 @$.getColumna()\n" + //laea nom
                                     "%$ = tail call i32 @_mat_comprobar(i32 $, i32 $, i32 $, i32 $)\n"; //R f1 c1 f2 c2
 
-            
+    public String _mat_comprobar_tam = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                    "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                    "%$ = tail call i32 @_mat_comprobar_tam(i32 $, i32 $, i32 $, i32 $)\n"; //R f1 c1 v1 v2
+    
+    public String _mat_eponer = "call i32** @_mat_eponer(i32** $, i32 $, i32 $, i32 $)\n"; //rpta mat fil col val
+    public String _mat_rponer = "call double** @_mat_rponer(double** $, i32 $, i32 $, double $)"; //rpta mat fil col val
+    
+    public String _mat_eimprimir =  "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                    "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                    "call void @_mat_eimprimir(i32** %$, i32 %$, i32 %$) optsize\n"; // mat fil col
+    public String _mat_rimprimir =  "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                    "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                    "call void @_mat_rimprimir(double** %$, i32 %$, i32 %$) optsize\n"; // mat fil col
+    
+    public String _mat_ent_a_real  = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                    "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                    "%$ = tail call double** @_mat_ent_a_real(i32** %$, i32 %$, i32 %$)\n"; //rpta mat fil col
+    
+    public String _mat_real_a_ent  = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                    "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                    "%z = tail call int** @_mat_real_a_ent(double** %4, i32 5, i32 4)\n"; //rpta mat fil col
+     
+    public String _mat_esuma = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32** @_mat_esuma(double** %$, double** %$, i32 %$, i32 %$) optsize\n";
+    public String _mat_rsuma = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_rsuma(double** %$, double** %$, i32 %$, i32 %$) optsize\n";
+    
+    
+    
+    
     public int contador = 1;
     public GeneradorIR(){
         cabecera = new IRCabecera();
@@ -260,18 +310,21 @@ public class GeneradorIR {
         
         switch(tipo){
             case 0:
+                _posterior += unir(dec_def_e, new String[]{nom, nom, nom, nom});
                 if(var_con)
                     dec = unir(_evdeclarar, new String[]{nom, val});
                 else
                     dec = unir(_ecdeclarar, new String[]{nom, val});
                 break;
             case 1:
+                _posterior += unir(dec_def_r, new String[]{nom, nom, nom, nom});
                 if(var_con)
                     dec = unir(_rvdeclarar, new String[]{nom, val});
                 else
                     dec = unir(_rcdeclarar, new String[]{nom, val});
                 break;
         }
+        
         return dec;
     }
     public String cargarVariable(String resultado, String referencia, int tipo){ //0 entero 1 real 2 entero matriz 3 real matriz 4
@@ -306,7 +359,7 @@ public class GeneradorIR {
                 break;
             case 4:
                 String tam = "" + (cadena.length()+1);
-                _posterior = imprimir_cadena_cabecera(id, cadena, tam);
+                _posterior += imprimir_cadena_cabecera(id, cadena, tam);
                 r = unir(_cimprimir,new String[]{tam,id});
                 break;
         }
@@ -636,6 +689,24 @@ public class GeneradorIR {
         }
         return error;
     }
+    public String actualizar(String nom, String nuevo, int tipo, int tipoEnt){
+        cabecera.marcar(_MAT_DEFAULT_POS);
+        String tmp = "";
+        switch(tipo){
+           case 0:
+               if(tipoEnt == 0)
+                   return unir(act_rea_e_e, new String[]{nom, nuevo});
+               else 
+                   return unir(act_rea_e_r, new String[]{nom, nuevo});
+           case 1:
+               if(tipoEnt == 0)
+                    return unir(act_rea_r_e, new String[]{nom, nuevo});
+               else 
+                   return unir(act_rea_r_r, new String[]{nom, nuevo});
+       }   
+       return tmp;
+    }
+    
     //MATRICES
     
     public String declarar_matriz(String nom, String fil, String col, int tipo){ //0 entero //0 real
@@ -652,7 +723,7 @@ public class GeneradorIR {
                 cabecera.marcar(_MAT_RRESERVAR);
                 break;
         }
-        _posterior +=  unir(_dec_matriz_tam, new String[]{nom, nom, nom, nom, nom, nom});
+        _posterior +=  unir(_dec_matriz_tam, new String[]{nom, fil, nom, col, nom, nom, nom, nom}); // Nom val - Nom Val - Nom Nom - Nom Nom 
         return tmp;
     }
     public String mat_comprobar(String A, String B){
@@ -667,19 +738,87 @@ public class GeneradorIR {
         //f1 nom c1 nom //R f1 c1 f2 c2
         return unir(_mat_comprobar, new String[]{at1, A, at2, A, bt1, B, bt2, B, rpta, "%"+at1, "%"+at2, "%"+bt1, "%"+bt2});
     }
-    public String mat_ingresar_valor(String A, String val, int tipo){
-        String tmp="";
-        switch(tipo)
-        {
+    public String _mat_comprobar_tam(String A, String ind1, String ind2, int var1, int var2){ //op 0 entero 1 real 2 entero matriz 3 real matriz 4 cadena -1 otros //val 0 valor 1 variable
+        cabecera.marcar(_STR_ERROR2);
+        cabecera.marcar(_MAT_COMPROBAR_TAM);
+        if(var1==1)
+            ind1 = "%" + ind1;
+        if(var2==1)
+            ind2 = "%" + ind2;
+        String at1 = generar_enumeracion();
+        String at2 = generar_enumeracion();
+        String bt1 = generar_enumeracion();
+        String bt2 = generar_enumeracion();
+        String rpta = generar_enumeracion();
+        //alea nom //alea nom //R f1 c1 v1 v2
+        return unir(_mat_comprobar_tam, new String[]{at1, A, at2, A, rpta, "%"+at1, "%"+at2, ind1, ind2});
+    }
+    public String mat_ingresar_valor(String A, String ind1, String ind2, String val, int tipo, int var1, int var2){
+        String tmp= _mat_comprobar_tam(A, ind1, ind2, var1, var2);
+        if(var1==1)
+            ind1 = "%" + ind1;
+        if(var2==1)
+            ind2 = "%" + ind2;
+        switch(tipo){
             case 0:
                 cabecera.marcar(_MAT_EPONER);
-                
+                tmp = tmp + unir(_mat_eponer, new String[]{ "%"+A, ind1, ind2, val}); //rpta mat fil col val
                 break;
             case 1:
                 cabecera.marcar(_MAT_RPONER);
+                tmp = tmp + unir(_mat_eponer, new String[]{ "%"+A, ind1, ind2, val}); //rpta mat fil col val
                 break;
         }
+        return tmp;
+    }
+    public String mat_imprimir(String A, int tipo){
+        String tmp = "";
+        String at1 = generar_enumeracion();
+        String at2 = generar_enumeracion();
+        cabecera.marcar(_IMPRIMIR_CAB); 
+        switch(tipo){
+            case 0:
+                cabecera.marcar(_MAT_EIMPRIMIR);
+                cabecera.marcar(_MAT_IMPRIMIR_CABECERA_E);
+                return unir(_mat_eimprimir , new String[]{at1, A, at2, A, A, at1, at2}); //alea nom //laea nom // mat fil col
+            case 1:
+                cabecera.marcar(_MAT_RIMPRIMIR);
+                cabecera.marcar(_MAT_IMPRIMIR_CABECERA_R);
+                return unir(_mat_rimprimir , new String[]{at1, A, at2, A, A, at1, at2}); //alea nom //laea nom // mat fil col
+        }
+        return tmp;
+    }
+    public String mat_castear(String rpta, String A, int tipo){
+        String tmp = "";
+        String at1 = generar_enumeracion();
+        String at2 = generar_enumeracion();
+        cabecera.marcar(_IMPRIMIR_CAB); 
         
+        switch(tipo){
+            case 0:
+                return unir(_mat_real_a_ent , new String[]{at1, A, at2, A, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
+            case 1:
+                return unir(_mat_ent_a_real , new String[]{at1, A, at2, A, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
+        }
+        return tmp;
+    }
+    public String mat_sumar(String rpta, String A, String B, int tipo ){
+        String tmp= mat_comprobar(A,B);
+        String fil1 = generar_enumeracion();
+        String col1 = generar_enumeracion();
+        String fil2 = generar_enumeracion();
+        String col2 = generar_enumeracion();
+        
+        switch(tipo){
+            case 0:
+                cabecera.marcar(_MAT_ESUMA);
+                tmp += unir(_mat_esuma , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
+                break;
+            case 1:
+                cabecera.marcar(_MAT_RSUMA);
+                tmp += unir(_mat_esuma , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
+                break;
+        }
         return tmp;
     }
     public String finalizar(){
@@ -688,6 +827,9 @@ public class GeneradorIR {
     public String generar_enumeracion(){
         return "enu."+(contador++);
     }
+    
+    
+    
     public String arquitectura(){
         return cabecera.getArquitectura();
     }

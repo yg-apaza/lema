@@ -60,11 +60,12 @@ public class Compilador
             out.close();
             
             String exe1 = "llvm-as \"" + fll.getAbsolutePath() + "\"";
-            String exe2 = "llc \"" + fbc.getAbsolutePath() + "\"";
-            String exe3 = "gcc -o \"" + fex.getAbsolutePath() + "\" \"" + fs.getAbsolutePath() + "\"";
+            String exe2 = "opt -S \"" + fll.getAbsolutePath() + "\"";
+            String exe3 = "llc \"" + fbc.getAbsolutePath() + "\"";
+            String exe4 = "gcc -o \"" + fex.getAbsolutePath() + "\" \"" + fs.getAbsolutePath() + "\"";
             
             out = new PrintWriter(bash);
-            out.print(exe1 + "\n" + exe2 + "\n" + exe3);
+            out.print(exe1 + "\n" + exe2 + "\n" + exe3 + "\n" + exe4);
             out.close();
             
             boolean correcto = true;
@@ -138,13 +139,21 @@ public class Compilador
             switch(n.getCodigo())
             {
                 case accion.declaracionSimIni:
-                    if(p.getCodigo() == accion.cabecera)
+                    if(p.getCodigo() != accion.cabecera)
                     {
-                        n.getHijos().set(2, extender(n.getHijos().get(2)));
+                        ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
+                        Nodo cero = new Nodo(sym.real, "0.0", -1, -1, null, true);
+                        hijosSum.add(extender(n.getHijos().get(2)));
+                        System.out.println("HIJO 1 - SUMA");
+                        System.out.println(n.getHijos().size());
+                        hijosSum.add(cero);
+                        Nodo suma = new Nodo(accion.suma, accion.acciones[accion.suma], -1, -1, hijosSum, false);
+                        n.getHijos().set(2, suma);
                         pos = p.getHijos().indexOf(n);
                         ordenar(asignaciones);
                         p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
                         asignaciones.clear();
+                        
                     }
                     else
                     {
