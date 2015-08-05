@@ -1,5 +1,8 @@
 entero c;
 principal()
+
 {
-	real b = 4+5*6-7;
+	real b = 7 + 4 + c;
+	entero a = b + 4;
+
 }

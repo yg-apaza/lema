@@ -66,6 +66,18 @@ public class GeneradorIR {
     public static final int ASIG_E = 58;
     public static final int ASIG_R = 59;
     
+    public static final int _MAT_RMAYOR = 60;
+    public static final int _MAT_RMENOR = 61;
+    public static final int _MAT_RMAYOR_IGUAL = 62;
+    public static final int _MAT_RMENOR_IGUAL = 63;
+    public static final int _MAT_RCONJUNCION = 64;
+    public static final int _MAT_RDISYUNCION = 65;
+    public static final int _MAT_RIDENTICO = 66;
+    public static final int _MAT_RDIFERENTE = 67;
+    public static final int _MAT_RNEGACION = 68;
+    public static final int _MAT_RNEGATIVIDAD = 69;
+    public static final int _MAT_ENEGATIVIDAD = 70;
+
     
     //Principal
     public IRCabecera cabecera;
@@ -212,6 +224,14 @@ public class GeneradorIR {
                                         "  %1 = load i32*  @$.columna, align 4\n" +
                                         "  ret i32 %1\n" +
                                         "}\n"; ////Nom val - Nom Val - Nom Nom - Nom Nom 
+    public String _dec_matriz_ref =     "define i32 @$.getFila() nounwind readnone optsize {\n" +
+                                        "  %1 = call i32 @$.getFila()\n" +
+                                        "  ret i32 %1\n" +
+                                        "}\n" +
+                                        "define i32 @$.getColumna() nounwind readnone optsize {\n" +
+                                        "  %1 = call i32 @$.getColumna()\n" +
+                                        "  ret i32 %1\n" +
+                                        "}\n"; //// mat ref - mat ref 
     public String _mat_iniciar_e = "  %$.f = tail call i32 @$.getFila()\n" +
                                 "  %$.c = tail call i32 @$.getColumna()\n" +
                                 "  %$ = tail call i32** @_mat_ereservar(i32** undef, i32 %$.f, i32 %$.c) optsize\n"; //Nom Nom - Nom Nom - Nom Nom Nom
@@ -257,6 +277,54 @@ public class GeneradorIR {
                                 "%$ = tail call i32 @$.getFila()\n" + //alea nom
                                 "%$ = tail call i32 @$.getColumna()\n" + //laea nom
                                 "%$ = tail call double** @_mat_rsuma(double** %$, double** %$, i32 %$, i32 %$) optsize\n";
+    
+    public String _mat_eresta = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32** @_mat_eresta(double** %$, double** %$, i32 %$, i32 %$) optsize\n";
+    public String _mat_rresta = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_rresta(double** %$, double** %$, i32 %$, i32 %$) optsize\n";
+    
+    public String _mat_rmayor = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_rmayor(double** %$, double** %$, i32 %$, i32 %$) optsize\n"; //rpta nom fil col
+    public String _mat_rmenor = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rmenor(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rmayor_igual = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rmayor_igual(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rmenor_igual = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rmenor_igual(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rconjuncion = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rconjuncion(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rdisyuncion = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rdisyuncion(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_ridentico = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_ridentico(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rdiferente = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rdiferente(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rnegacion = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @_mat_rnegacion(double** nocapture %A, double** nocapture %B, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_rnegatividad = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_rnegatividad(double** nocapture %A, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    public String _mat_enegatividad = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32** @_mat_enegatividad(double** nocapture %A, i32 %fil, i32 %col)\n"; //rpta nom fil col
+    
+    
+    
     
     public int contador = 1;
     public GeneradorIR(){
@@ -606,7 +674,7 @@ public class GeneradorIR {
         }
         return temp;
     }
-    public String llamar_negacion(String operando1, String operando2, String resultado, int op, int val1, int val2){
+    public String llamar_negacion(String operando1, String resultado, int op, int val1){
         String temp = "";
         switch(op){
             case 0:
@@ -620,7 +688,7 @@ public class GeneradorIR {
         }
         return temp;
     }
-    public String llamar_negatividad(String operando1, String operando2, String resultado, int op, int val1, int val2){
+    public String llamar_negatividad(String operando1, String resultado, int op, int val1){
         String temp = "";
         switch(op){
             case 0:
@@ -814,6 +882,7 @@ public class GeneradorIR {
         cabecera.marcar(_IMPRIMIR_CAB); 
         cabecera.marcar(_MAT_REAL_A_ENT);
         cabecera.marcar(_MAT_ENT_A_REAL);
+        _posterior += mat_ref(rpta, A);
         switch(tipo){
             case 0:
                 return unir(_mat_real_a_ent , new String[]{at1, A, at2, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
@@ -839,8 +908,47 @@ public class GeneradorIR {
                 tmp += unir(_mat_rsuma , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
                 break;
         }
-        //_posterior += declarar_matriz(rpta, String fil, String col, int tipo);
+        _posterior += mat_ref(rpta, A);
         return tmp;
+    }
+    public String mat_restar(String rpta, String A, String B, int tipo ){
+        String tmp= mat_comprobar(A,B);
+        String fil1 = generar_enumeracion();
+        String col1 = generar_enumeracion();
+        String fil2 = generar_enumeracion();
+        String col2 = generar_enumeracion();
+        cabecera.marcar(_MAT_RRESERVAR);
+        switch(tipo){
+            case 0:
+                cabecera.marcar(_MAT_ERESTA);
+                tmp += unir(_mat_eresta , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
+                break;
+            case 1:
+                cabecera.marcar(_MAT_RRESTA);
+                tmp += unir(_mat_rresta , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
+                break;
+        }
+        _posterior += mat_ref(rpta, A);
+        return tmp;
+    }
+    public String mat_mayor(String rpta, String A, String B){
+        String tmp= mat_comprobar(A,B);
+        String fil1 = generar_enumeracion();
+        String col1 = generar_enumeracion();
+        String fil2 = generar_enumeracion();
+        String col2 = generar_enumeracion();
+        cabecera.marcar(_MAT_RRESERVAR);
+
+
+        cabecera.marcar(_MAT_ERESTA);
+                tmp += unir(_mat_eresta , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
+
+        
+        _posterior += mat_ref(rpta, A);
+        return tmp;
+    }
+    public String mat_ref(String nuevo, String ref){
+        return unir(_dec_matriz_ref , new String[]{nuevo, ref, nuevo, ref});
     }
     public String finalizar(){
         return _posterior + cabecera.todaCabecera();
