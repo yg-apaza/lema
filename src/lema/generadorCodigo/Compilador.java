@@ -21,6 +21,7 @@ public class Compilador
     private AST arbol;
     private int expCounter = 0;
     private ArrayList<Nodo> asignaciones;
+    private ArrayList<Nodo> asignacionesConst;
     private String archivo;
     private String ruta;
     private GeneradorIR generador;
@@ -31,6 +32,7 @@ public class Compilador
         archivo = "";
         this.ruta = ruta;
         asignaciones = new ArrayList<>();
+        asignacionesConst = new ArrayList<> ();
         generador = new GeneradorIR();
         recorrer(null, arbol.getRaiz());
     }
@@ -40,8 +42,9 @@ public class Compilador
         archivo += generador.arquitectura();
         declararGlobalVars();
         archivo += generador.llamar_principal();
-        compilar(arbol.getRaiz());
+        compilar(null ,arbol.getRaiz());
         archivo += generador.terminar_principal();
+        archivo += generador.finalizar();
         
         
         /** Generación de Código */
@@ -108,18 +111,43 @@ public class Compilador
         }
     }
     
-    private void compilar(Nodo nodo)
+    private void compilar(Nodo padre, Nodo nodo)
     {
         if(!nodo.esTerminal())
         {
             switch(nodo.getCodigo())
             {
                 case accion.declaracionSimIni:
+                    if(padre.getCodigo() != accion.cabecera)
+                        archivo += generador.asignar(nodo.getHijos().get(1).getValor(), nodo.getHijos().get(2).getValor(), getTipo(nodo.getHijos().get(0).getValor(), false), etiqueta(nodo.getHijos().get(2)));
+                break;
                     
+                case Codigo.asignacionC:
+                    String op1 = nodo.getHijos().get(1).getHijos().get(0).getValor();
+                    String op2 = nodo.getHijos().get(1).getHijos().get(0).getValor();
+                    int val1 = etiqueta(nodo.getHijos().get(1).getHijos().get(0));
+                    int val2 = etiqueta(nodo.getHijos().get(1).getHijos().get(1));
+                    if(nodo.getHijos().get(1).getHijos().get(0).getCodigo() == sym.numero)
+                    {
+                        expCounter++;
+                        op1 = "_var" + expCounter;
+                        val1 = 1;
+                        archivo += generador.castear(op1, nodo.getHijos().get(1).getHijos().get(0).getValor(), 0, etiqueta(nodo.getHijos().get(1).getHijos().get(0)));
+                    }
+                    
+                    if(nodo.getHijos().get(1).getHijos().get(1).getCodigo() == sym.numero)
+                    {
+                        expCounter++;
+                        op2 = "_var" + expCounter;
+                        val2 = 1;
+                        archivo += generador.castear(op2, nodo.getHijos().get(1).getHijos().get(1).getValor(), 0, etiqueta(nodo.getHijos().get(1).getHijos().get(1)));
+                    }
+                    
+                    archivo += generador.llamar_suma(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
                 break;
             }
             for(int i = 0; i < nodo.getHijos().size(); i++)
-                compilar(nodo.getHijos().get(i));
+                compilar(nodo, nodo.getHijos().get(i));
         }
     }
     
@@ -141,14 +169,7 @@ public class Compilador
                 case accion.declaracionSimIni:
                     if(p.getCodigo() != accion.cabecera)
                     {
-                        ArrayList<Nodo> hijosSum = new ArrayList<Nodo>();
-                        Nodo cero = new Nodo(sym.real, "0.0", -1, -1, null, true);
-                        hijosSum.add(extender(n.getHijos().get(2)));
-                        //System.out.println("HIJO 1 - SUMA");
-                        //System.out.println(n.getHijos().size());
-                        hijosSum.add(cero);
-                        Nodo suma = new Nodo(accion.suma, accion.acciones[accion.suma], -1, -1, hijosSum, false);
-                        n.getHijos().set(2, suma);
+                        n.getHijos().set(2, extender(n.getHijos().get(2)));
                         pos = p.getHijos().indexOf(n);
                         ordenar(asignaciones);
                         p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
@@ -157,7 +178,14 @@ public class Compilador
                     }
                     else
                     {
-                        
+                        ArrayList<Nodo> hijosAsig = new ArrayList<>();
+                        Nodo nuevo = extender(n.getHijos().get(2));
+                        hijosAsig.add(n.getHijos().get(1));
+                        hijosAsig.add(nuevo);
+                        asignaciones.add(new Nodo(Codigo.asignacionGlobalC, Codigo.getNombre(Codigo.asignacionGlobalC), -1, -1, hijosAsig, false));
+                        asignacionesConst.addAll(asignaciones);
+                        n.getHijos().remove(2);
+                        asignaciones.clear();
                     }
                 break;
                     
@@ -169,9 +197,11 @@ public class Compilador
                     
                     asignaciones.clear();
                 break;
+                
+                case accion.programaPrincipal:
+                    n.getHijos().addAll(0, asignacionesConst);
+                break;
             }
-            System.out.println("NODO ACTUAL" + n);
-            System.out.println("HIJO 0 " + n.getHijos().get(0));
             for(int i = 0; i < n.getHijos().size(); i++)
                 recorrer(n, n.getHijos().get(i));
         }
@@ -267,4 +297,13 @@ public class Compilador
             return ind1 < ind2 ? -1 : ind1 == ind2 ? 0 : 1;
         }
     }
+    
+    public int etiqueta(Nodo n)
+    {
+        if(n.getCodigo() == sym.id)
+            return 1;
+        else
+            return 0;
+    }
+    
 }

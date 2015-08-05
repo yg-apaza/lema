@@ -640,12 +640,19 @@ public class IRCabecera {
                                     "  ret i32 1\n" +
                                     "}\n";
     
+    public String  asig_e = "define i32 @asig_e(i32 %nuevo) nounwind readnone optsize {\n" +
+                        "  ret i32 %nuevo\n" +
+                        "}\n";
+    public String asig_r = "define double @asig_r(double %nuevo) nounwind readnone optsize {\n" +
+                        "  ret double %nuevo\n" +
+                        "}\n";
+    
     public static boolean[] cabecera = {false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
-                                        false,false,false,false, false, false,false,false};
+                                        false,false,false,false,false,false,false,false,false,false};
 
     public void marcar(int pos){
         cabecera[pos] = true;
@@ -721,6 +728,8 @@ public class IRCabecera {
             case 55: return _mat_comprobar;
             case 56: return _str_error2;
             case 57: return _mat_comprobar_tam;
+            case 58: return asig_e;
+            case 59: return asig_r;
         }
         return tmp;
     }

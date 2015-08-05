@@ -63,6 +63,8 @@ public class GeneradorIR {
     
     public static final int _STR_ERROR2 = 56;
     public static final int _MAT_COMPROBAR_TAM = 57;
+    public static final int ASIG_E = 58;
+    public static final int ASIG_R = 59;
     
     
     //Principal
@@ -189,13 +191,15 @@ public class GeneradorIR {
     public String _rnegacion = "%$ = tail call double @_rnegacion(double $)\n";
     public String _rnegatividad = "%$ = tail call double @_rnegatividad(double $)\n";
     
+    public String asig_e = "%$ = tail call i32 @asig_e(i32 $)\n";
+    public String asig_r = "%$ = tail call i32 @asig_e(i32 $)\n";
     
-   
     public String mainllini = "define i32 @main() nounwind  readnone optsize{";
     public String mainllter = "ret i32 0\n"+
                               "}";
     public String _posterior = "";
     
+        
     
     //Matriz
     public String _dec_matriz_tam = "@$.fila = constant i32 $, align 4\n" +  
@@ -253,9 +257,6 @@ public class GeneradorIR {
                                 "%$ = tail call i32 @$.getFila()\n" + //alea nom
                                 "%$ = tail call i32 @$.getColumna()\n" + //laea nom
                                 "%$ = tail call double** @_mat_rsuma(double** %$, double** %$, i32 %$, i32 %$) optsize\n";
-    
-    
-    
     
     public int contador = 1;
     public GeneradorIR(){
@@ -689,6 +690,23 @@ public class GeneradorIR {
         }
         return error;
     }
+    public String asignar (String nuevo, String valor, int tipo, int val)
+    {
+        String tmp = "";
+        if(val == 1)
+            valor = "%"+valor;
+        switch(tipo){
+            case 0:
+                cabecera.marcar(ASIG_E);
+                return unir(asig_e, new String[]{nuevo, valor});
+            case 1:
+                cabecera.marcar(ASIG_R);
+                return unir(asig_r, new String[]{nuevo, valor});
+        }
+        return tmp;
+    }
+    
+    
     public String actualizar(String nom, String nuevo, int tipo, int tipoEnt){
         cabecera.marcar(_MAT_DEFAULT_POS);
         String tmp = "";
@@ -793,12 +811,13 @@ public class GeneradorIR {
         String at1 = generar_enumeracion();
         String at2 = generar_enumeracion();
         cabecera.marcar(_IMPRIMIR_CAB); 
-        
+        cabecera.marcar(_MAT_REAL_A_ENT);
+        cabecera.marcar(_MAT_ENT_A_REAL);
         switch(tipo){
             case 0:
-                return unir(_mat_real_a_ent , new String[]{at1, A, at2, A, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
+                return unir(_mat_real_a_ent , new String[]{at1, A, at2, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
             case 1:
-                return unir(_mat_ent_a_real , new String[]{at1, A, at2, A, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
+                return unir(_mat_ent_a_real , new String[]{at1, A, at2, A, rpta, A, at1, at2}); //alea nom //alea nom //rpta mat fil col
         }
         return tmp;
     }
@@ -808,7 +827,7 @@ public class GeneradorIR {
         String col1 = generar_enumeracion();
         String fil2 = generar_enumeracion();
         String col2 = generar_enumeracion();
-        
+        cabecera.marcar(_MAT_RRESERVAR);
         switch(tipo){
             case 0:
                 cabecera.marcar(_MAT_ESUMA);
@@ -816,9 +835,10 @@ public class GeneradorIR {
                 break;
             case 1:
                 cabecera.marcar(_MAT_RSUMA);
-                tmp += unir(_mat_esuma , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
+                tmp += unir(_mat_rsuma , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1
                 break;
         }
+        //_posterior += declarar_matriz(rpta, String fil, String col, int tipo);
         return tmp;
     }
     public String finalizar(){

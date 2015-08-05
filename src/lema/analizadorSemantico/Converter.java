@@ -8,7 +8,7 @@ public class Converter
     }
        
     private static double change(String number, int base)
-    {        
+    {
         double value = 0.0;
         int point = (number.contains("."))?number.indexOf("."):number.length();
         

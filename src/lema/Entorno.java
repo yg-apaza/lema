@@ -88,6 +88,11 @@ public class Entorno
         return null;   
     }
     
+    public boolean esGlobal(String name)
+    {
+        return raiz.tabla.containsKey(name);
+    }
+    
     public AtributoFuncion buscarFuncion(String name)
     {
         AtributoFuncion found;
