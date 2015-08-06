@@ -1,8 +1,6 @@
-entero c;
 principal()
-
 {
-	real b = 7 + 4 + c;
-	entero a = b + 4;
-
+	real b = 0;
+	entero a[4][5];// = 3.0 +4 *b - 4;
+	leer(a);
 }

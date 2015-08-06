@@ -307,7 +307,7 @@ public class AST
                         {
                             if(!TypeCheck.compatibilidad1[e][r][4])
                                 errores.insertarError(Mistake.SEMANTICO, Mistake.TIPO_NO_COMPATIBLE, (new String[] {v.getId(),String.valueOf(nodo.getHijos().get(4).getLinea()+1),String.valueOf(nodo.getHijos().get(4).getColumna())}));
-                            else
+                            else if(nodo.getHijos().get(4).getCodigo() == accion.elemMat)
                             {
                                 if(indice1 && v.getDimension1() != nodo.getHijos().get(4).getHijos().size())
                                     errores.insertarWarning(Mistake.FILAS_NO_COINCIDE, (new String[] {v.getId(),String.valueOf(nodo.getLinea()+1),String.valueOf(nodo.getColumna())}));
@@ -576,7 +576,7 @@ public class AST
                         {
                             if(!t.esConstante())
                             {
-                                e = getTipo(t.getTipo(), t.esMatriz());
+                                e = getTipo(t.getTipo(), false);
                                 r = verificarExp(nodo.getHijos().get(1), t.esConstante());
                                 try
                                 {

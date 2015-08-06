@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import lema.analizadorLexico.sym;
 import lema.analizadorSemantico.AST;
 import lema.analizadorSemantico.AtributoVariable;
@@ -24,6 +25,7 @@ public class Compilador
     private ArrayList<Nodo> asignacionesConst;
     private String archivo;
     private String ruta;
+    private ArrayList< Pair<String, String> > cadenas;
     private GeneradorIR generador;
     
     public Compilador(AST arbol, String ruta)
@@ -33,12 +35,18 @@ public class Compilador
         this.ruta = ruta;
         asignaciones = new ArrayList<>();
         asignacionesConst = new ArrayList<> ();
+        cadenas = new ArrayList<>();
         generador = new GeneradorIR();
         recorrer(null, arbol.getRaiz());
+        System.out.println("POST ARBOL");
+        System.out.println(arbol);
     }
     
     public void compilar()
     {
+        /** False = 64 bits, True = 32 bits */
+        generador.setArquitectura(false);
+        
         archivo += generador.arquitectura();
         declararGlobalVars();
         archivo += generador.llamar_principal();
@@ -116,146 +124,293 @@ public class Compilador
         if(!nodo.esTerminal())
         {
             AtributoVariable v;
+            int val1 = -1;
+            int val2 = -1;
             switch(nodo.getCodigo())
             {
                 case accion.declaracionSimIni:
                     if(padre.getCodigo() != accion.cabecera)
                     {
                         v = arbol.getTabla().getAll(nodo.getHijos().get(1).getValor());
-                        String datoAsig = nodo.getHijos().get(2).getValor();
-                        
-                        if(v.getTipo().equals("entero") && !v.esMatriz())
+                        Nodo asignacion = nodo.getHijos().get(2);
+                        switch(v.getTipo())
                         {
-                            expCounter++;
-                            datoAsig = "_var" + expCounter;
-                            archivo += generador.castear(datoAsig, nodo.getHijos().get(2).getValor(), 1, etiqueta(nodo.getHijos().get(2)));
+                            case "entero":
+                                
+                                switch(asignacion.getCodigo())
+                                {
+                                    case Codigo.idC:
+                                        archivo += generador.asignacion(v.getId(), 0, asignacion.getValor(), 1, 1);
+                                    break;
+                                        
+                                    case sym.id:
+                                        if(arbol.getTabla().esGlobal(asignacion.getValor()))
+                                        {
+                                            expCounter++;
+                                            String var = "_var" + expCounter;
+                                            AtributoVariable glob = arbol.getTabla().getAll(asignacion.getValor());
+                                            archivo += generador.cargarVariable(var, asignacion.getValor(), getTipo(glob.getTipo(), false));
+                                            archivo += generador.asignacion(v.getId(), 0, var, getTipo(glob.getTipo(), false), 1);
+                                        }
+                                        else
+                                        {
+                                            AtributoVariable var = arbol.getTabla().getAll(asignacion.getValor());
+                                            archivo += generador.asignacion(v.getId(), 0, var.getId(), getTipo(var.getTipo(), false), 1);
+                                        }
+                                    break;
+                                        
+                                    case sym.numero:
+                                        archivo += generador.asignacion(v.getId(), 0, asignacion.getValor(), 0, 0);
+                                    break;
+                                        
+                                    case sym.real:
+                                        archivo += generador.asignacion(v.getId(), 0, asignacion.getValor(), 1, 0);
+                                    break;
+                                }
+                                
+                            break;
+                                
+                            case "real":
+                                
+                                switch(asignacion.getCodigo())
+                                {
+                                    case Codigo.idC:
+                                        archivo += generador.asignacion(v.getId(), 1, asignacion.getValor(), 1, 1);
+                                    break;
+                                        
+                                    case sym.id:
+                                        
+                                        if(arbol.getTabla().esGlobal(asignacion.getValor()))
+                                        {
+                                            expCounter++;
+                                            String var = "_var" + expCounter;
+                                            AtributoVariable glob = arbol.getTabla().getAll(asignacion.getValor());
+                                            archivo += generador.cargarVariable(var, asignacion.getValor(), getTipo(glob.getTipo(), false));
+                                            archivo += generador.asignacion(v.getId(), 1, var, getTipo(glob.getTipo(), false), 1);
+                                        }
+                                        else
+                                        {
+                                            AtributoVariable var = arbol.getTabla().getAll(asignacion.getValor());
+                                            archivo += generador.asignacion(v.getId(), 1, var.getId(), getTipo(var.getTipo(), false), 1);
+                                        }                                        
+                                    break;
+                                        
+                                    case sym.numero:
+                                        archivo += generador.asignacion(v.getId(), 1, asignacion.getValor(), 0, 0);
+                                    break;
+                                        
+                                    case sym.real:
+                                        archivo += generador.asignacion(v.getId(), 1, asignacion.getValor(), 1, 0);
+                                    break;
+                                }
+                                
+                            break;
+                                
+                            case "cadena":
+                                /* ... */
+                            break;
                         }
-                        archivo += generador.asignar(nodo.getHijos().get(1).getValor(), datoAsig, getTipo(v.getTipo(), false), etiqueta(nodo.getHijos().get(2)));
                     }
                 break;
-                
-                case accion.asignacion:
                     
+                case accion.asignacion:
+                    /*
+                    int tipo = 1;
+                    String op = "";
+                    op = nodo.getHijos().get(1).getValor();
+                    val1 = -1;
+                    val1 = etiqueta(nodo.getHijos().get(1));
+                    AtributoVariable v1 = arbol.getTabla().getAll(nodo.getHijos().get(0).getValor());
+                    if(!v1.getTipo().equals("cadena"))
+                    {
+                        if(nodo.getHijos().get(1).getCodigo() == sym.numero)
+                        {
+                            expCounter++;
+                            op = "_var" + expCounter;
+                            val1 = 1;
+                            archivo += generador.castear(op, nodo.getHijos().get(1).getValor(), getTipo(v1.getTipo(), false), etiqueta(nodo.getHijos().get(1)));
+                        }
+                        else if((nodo.getHijos().get(1).getCodigo() == sym.id) && arbol.getTabla().esGlobal(nodo.getHijos().get(1).getValor()))
+                        {
+                            AtributoVariable v2 = arbol.getTabla().getAll(nodo.getHijos().get(1).getValor());
+                            expCounter++;
+                            op = "_var" + expCounter;
+                            val1 = 1;
+                            tipo = getTipo(v2.getTipo(), false);
+                            archivo += generador.cargarVariable(op, v2.getId(), tipo);
+                        }
+                        else if(nodo.getHijos().get(1).getCodigo() == sym.id)
+                        {
+                            AtributoVariable v3 = arbol.getTabla().getAll(nodo.getHijos().get(1).getValor());
+                            tipo = getTipo(v3.getTipo(), false);
+                        }
+                            
+                        if(!arbol.getTabla().esGlobal(v1.getId()))
+                            archivo += generador.asignar(v1.getId(), op, 1, val1);
+                        else
+                        {
+                            if((getTipo(v1.getTipo(), false) == 0 && tipo == 0) || (getTipo(v1.getTipo(), false) == 1 && tipo == 1))
+                                archivo += generador.actualizar(v1.getId(), op, getTipo(v1.getTipo(), false), getTipo(v1.getTipo(), false));
+                            else if(getTipo(v1.getTipo(), false) == 0 && tipo == 1)
+                            {
+                                expCounter++;
+                                String aux = "_var" + expCounter;
+                                archivo += generador.castear(aux, op, 1, 1);
+                                archivo += generador.actualizar(v1.getId(), aux, getTipo(v1.getTipo(), false), getTipo(v1.getTipo(), false));
+                            }
+                            else if(getTipo(v1.getTipo(), false) == 1 && tipo == 0)
+                            {
+                                expCounter++;
+                                String aux = "_var" + expCounter;
+                                archivo += generador.castear(aux, op, 0, 1);
+                                archivo += generador.actualizar(v1.getId(), aux, getTipo(v1.getTipo(), false), getTipo(v1.getTipo(), false));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Pair <String, String> cad = new Pair(v1.getId(), nodo.getHijos().get(1).getValor());
+                        cadenas.add(cad);
+                    }*/
                 break;
                     
                 case Codigo.asignacionC:
-                    String op1 = "";
-                    op1 = nodo.getHijos().get(1).getHijos().get(0).getValor();
-                    int val1 = -1;
+                    String op1 = nodo.getHijos().get(1).getHijos().get(0).getValor();
                     val1 = etiqueta(nodo.getHijos().get(1).getHijos().get(0));
-                    if(nodo.getHijos().get(1).getHijos().get(0).getCodigo() == sym.numero)
+                    
+                    switch(nodo.getHijos().get(1).getHijos().get(0).getCodigo())
                     {
-                        expCounter++;
-                        op1 = "_var" + expCounter;
-                        val1 = 1;
-                        archivo += generador.castear(op1, nodo.getHijos().get(1).getHijos().get(0).getValor(), 0, etiqueta(nodo.getHijos().get(1).getHijos().get(0)));
-                    }
-                    else if((nodo.getHijos().get(1).getHijos().get(0).getCodigo() == sym.id) && arbol.getTabla().esGlobal(nodo.getHijos().get(1).getHijos().get(0).getValor()))
-                    {
-                        AtributoVariable a = arbol.getTabla().getAll(nodo.getHijos().get(1).getHijos().get(0).getValor());
-                        expCounter++;
-                        op1 = "_var" + expCounter;
-                        val1 = 1;
-                        archivo += generador.cargarVariable(op1, a.getId(), getTipo(a.getTipo(), a.esMatriz()));
-                        String opx1 = "";
-                        if(a.getTipo().equals("entero"))
-                        {
+                        case sym.id:
+                            AtributoVariable v1 = arbol.getTabla().getAll(op1);
+                            if(arbol.getTabla().esGlobal(op1))
+                            {
+                                expCounter++;
+                                archivo += generador.cargarVariable("_var" + expCounter, v1.getId(), getTipo(v1.getTipo(), false));
+                                op1 = "_var" + expCounter;
+                                val1 = 1;
+                            }
+                            if(getTipo(v1.getTipo(), false) == 0)
+                            {
+                                expCounter++;
+                                archivo += generador.castear("_var" + expCounter, op1, 0, 1);
+                                op1 = "_var" + expCounter;
+                                val1 = 1;
+                            }
+                        break;
+                            
+                        case sym.numero:
                             expCounter++;
-                             opx1 = "_var" + expCounter;
-                            archivo += generador.castear(opx1, op1, 0, 1);
-                        }
-                        op1 = opx1;
+                            archivo += generador.castear("_var" + expCounter, op1, 0, 0);
+                            op1 = "_var" + expCounter;
+                            val1 = 1;
+                        break;
                     }
+                    
                     String op2 = "";
-                    int val2 = -1; 
                     try
                     {
                         op2 = nodo.getHijos().get(1).getHijos().get(1).getValor();
                         val2 = etiqueta(nodo.getHijos().get(1).getHijos().get(1));
-                        if(nodo.getHijos().get(1).getHijos().get(1).getCodigo() == sym.numero)
+
+                        switch(nodo.getHijos().get(1).getHijos().get(1).getCodigo())
                         {
-                            expCounter++;
-                            op2 = "_var" + expCounter;
-                            val2 = 1;
-                            archivo += generador.castear(op2, nodo.getHijos().get(1).getHijos().get(1).getValor(), 0, etiqueta(nodo.getHijos().get(1).getHijos().get(1)));
-                        }
-                        else if((nodo.getHijos().get(1).getHijos().get(1).getCodigo() == sym.id) && arbol.getTabla().esGlobal(nodo.getHijos().get(1).getHijos().get(1).getValor()))
-                        {
-                            AtributoVariable a = arbol.getTabla().getAll(nodo.getHijos().get(1).getHijos().get(1).getValor());
-                            expCounter++;
-                            op2 = "_var" + expCounter;
-                            val2 = 1;
-                            archivo += generador.cargarVariable(op2, a.getId(), getTipo(a.getTipo(), a.esMatriz()));
-                            String opx2 = "";
-                            if(a.getTipo().equals("entero"))
-                            {
+                            case sym.id:
+                                AtributoVariable v2 = arbol.getTabla().getAll(op2);
+                                if(arbol.getTabla().esGlobal(op2))
+                                {
+                                    expCounter++;
+                                    archivo += generador.cargarVariable("_var" + expCounter, v2.getId(), getTipo(v2.getTipo(), false));
+                                    op2 = "_var" + expCounter;
+                                    val2 = 1;
+                                }
+                                if(getTipo(v2.getTipo(), false) == 0)
+                                {
+                                    expCounter++;
+                                    archivo += generador.castear("_var" + expCounter, op2, 0, 1);
+                                    op2 = "_var" + expCounter;
+                                    val2 = 1;
+                                }
+                            break;
+
+                            case sym.numero:
                                 expCounter++;
-                                 opx2 = "_var" + expCounter;
-                                archivo += generador.castear(opx2, op2, 0, 1);
-                            }
-                            op2 = opx2;
+                                archivo += generador.castear("_var" + expCounter, op2, 0, 0);
+                                op2 = "_var" + expCounter;
+                                val2 = 1;
+                            break;
                         }
                     }
                     catch(IndexOutOfBoundsException ex){}
                     
-                    switch(nodo.getHijos().get(1).getCodigo())
+                    if(nodo.getHijos().get(0).esTerminal())
                     {
-                        case accion.suma:
-                            archivo += generador.llamar_suma(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.resta:
-                            archivo += generador.llamar_resta(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.producto:
-                            archivo += generador.llamar_producto(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.division:
-                            archivo += generador.llamar_division(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.modulo:
-                            archivo += generador.llamar_modulo(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.mayor:
-                            archivo += generador.llamar_mayor(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.mayor_igual:
-                            archivo += generador.llamar_mayor_igual(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.menor:
-                            archivo += generador.llamar_menor(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.menor_igual:
-                            archivo += generador.llamar_menor_igual(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.disyuncion:
-                            archivo += generador.llamar_disyuncion(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.conjuncion:
-                            archivo += generador.llamar_conjuncion(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.identico:
-                            archivo += generador.llamar_identico(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
-                        break;
-                            
-                        case accion.negacion:
-                            archivo += generador.llamar_negacion(op1, nodo.getHijos().get(0).getValor(), 1, val1);
-                        break;
-                            
-                        case accion.negatividad:
-                            archivo += generador.llamar_negatividad(op1, nodo.getHijos().get(0).getValor(), 1, val1);
-                        break;
+                        switch(nodo.getHijos().get(1).getCodigo())
+                        {
+                            case accion.suma:
+                                archivo += generador.llamar_suma(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.resta:
+                                archivo += generador.llamar_resta(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.producto:
+                                archivo += generador.llamar_producto(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.division:
+                                archivo += generador.llamar_division(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.modulo:
+                                archivo += generador.llamar_modulo(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.mayor:
+                                archivo += generador.llamar_mayor(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.mayor_igual:
+                                archivo += generador.llamar_mayor_igual(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.menor:
+                                archivo += generador.llamar_menor(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.menor_igual:
+                                archivo += generador.llamar_menor_igual(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.disyuncion:
+                                archivo += generador.llamar_disyuncion(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.conjuncion:
+                                archivo += generador.llamar_conjuncion(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.identico:
+                                archivo += generador.llamar_identico(op1, op2, nodo.getHijos().get(0).getValor(), 1, val1, val2);
+                            break;
+
+                            case accion.negacion:
+                                archivo += generador.llamar_negacion(op1, nodo.getHijos().get(0).getValor(), 1, val1);
+                            break;
+
+                            case accion.negatividad:
+                                archivo += generador.llamar_negatividad(op1, nodo.getHijos().get(0).getValor(), 1, val1);
+                            break;
+                        }
                     }
+                    else
+                    {
+                        /* ACCESO A MATRIZ*/
+                    }
+                    
+                break;
+                    
+                case accion.escritura:
                     
                 break;
                 
@@ -268,6 +423,7 @@ public class Compilador
     private void declararGlobalVars()
     {
         // Declarar todas las variables
+        /* Revisar MATRICES GLOBALES */
         ArrayList <AtributoVariable> vars = arbol.getTabla().getVariablesGlobales();
         for(AtributoVariable v: vars)
             archivo += (generador.declararVariable(v.getId(), "", getTipo(v.getTipo(), v.esMatriz()), v.esConstante()));
@@ -281,34 +437,51 @@ public class Compilador
             switch(n.getCodigo())
             {
                 case accion.declaracionSimIni:
-                    if(p.getCodigo() != accion.cabecera)
-                    {
-                        n.getHijos().set(2, extender(n.getHijos().get(2)));
-                        pos = p.getHijos().indexOf(n);
-                        ordenar(asignaciones);
-                        p.getHijos().addAll(pos, asignaciones);
-                        asignaciones.clear();
-                        
+                    if(!n.getHijos().get(0).getValor().equals("cadena"))
+                    { 
+                        if(p.getCodigo() != accion.cabecera)
+                        {
+                            n.getHijos().set(2, extender(n.getHijos().get(2), false));
+                            pos = p.getHijos().indexOf(n);
+                            ordenar(asignaciones);
+                            p.getHijos().addAll(pos, asignaciones);
+                            asignaciones.clear();
+                        }
+                        else
+                        {
+                            ArrayList<Nodo> hijosAsig = new ArrayList<>();
+                            Nodo nuevo = extender(n.getHijos().get(2), false);
+                            hijosAsig.add(n.getHijos().get(1));
+                            hijosAsig.add(nuevo);
+                            asignaciones.add(new Nodo(Codigo.asignacionGlobalC, Codigo.getNombre(Codigo.asignacionGlobalC), -1, -1, hijosAsig, false));
+                            asignacionesConst.addAll(asignaciones);
+                            n.getHijos().remove(2);
+                            asignaciones.clear();
+                        }
                     }
                     else
                     {
-                        ArrayList<Nodo> hijosAsig = new ArrayList<>();
-                        Nodo nuevo = extender(n.getHijos().get(2));
-                        hijosAsig.add(n.getHijos().get(1));
-                        hijosAsig.add(nuevo);
-                        asignaciones.add(new Nodo(Codigo.asignacionGlobalC, Codigo.getNombre(Codigo.asignacionGlobalC), -1, -1, hijosAsig, false));
-                        asignacionesConst.addAll(asignaciones);
-                        n.getHijos().remove(2);
-                        asignaciones.clear();
+                        Pair<String,String> cad = new Pair(n.getHijos().get(1).getValor(),n.getHijos().get(2).getValor());
+                        cadenas.add(cad);
                     }
                 break;
                     
                 case accion.asignacion:
-                    n.getHijos().set(1, extender(n.getHijos().get(1)));
+                    System.out.println("sadfasdf");
+                    if(n.getHijos().get(0).esTerminal())
+                    {
+                        AtributoVariable v = arbol.getTabla().getAll(n.getHijos().get(0).getValor());
+                        if(!v.esMatriz())
+                            n.getHijos().set(1, extender(n.getHijos().get(1), false));
+                        else
+                            n.getHijos().set(1, extender(n.getHijos().get(1), true));
+                    }
+                    else
+                        n.getHijos().set(1, extender(n.getHijos().get(1), false));
+
                     pos = p.getHijos().indexOf(n);
                     ordenar(asignaciones);
-                    p.getHijos().addAll((pos == 0)?0:(pos-1), asignaciones);
-                    
+                    p.getHijos().addAll(pos, asignaciones);
                     asignaciones.clear();
                 break;
                 
@@ -321,13 +494,13 @@ public class Compilador
         }
     }
     
-    public Nodo extender(Nodo n)
+    public Nodo extender(Nodo n, boolean matriz)
     {
         if(!n.esTerminal())
         {
             ArrayList<Nodo> operandos = new ArrayList<Nodo>();
             for(int i = 0; i < n.getHijos().size(); i++)
-                operandos.add(extender(n.getHijos().get(i)));
+                operandos.add(extender(n.getHijos().get(i), matriz));
             ArrayList<Nodo> hijosAsig = new ArrayList<Nodo>();
             Nodo nuevo = n;
             switch(n.getCodigo())
@@ -348,12 +521,29 @@ public class Compilador
                 case accion.negacion:
                 case accion.negatividad:
                 case accion.operacionCond:
-                    expCounter++;
-                    hijosAsig.add(new Nodo(sym.id, "_var" + expCounter, -1, -1, null, true));
-                    nuevo.setHijos(operandos);
-                    hijosAsig.add(nuevo);
-                    asignaciones.add(new Nodo(Codigo.asignacionC, Codigo.getNombre(Codigo.asignacionC), -1, -1, hijosAsig, false));
-                    return (new Nodo(sym.id, "_var" + expCounter, -1, -1, null, true)); 
+                case accion.accesoMat:
+                    if(!matriz)
+                    {
+                        expCounter++;
+                        hijosAsig.add(new Nodo(Codigo.idC, "_var" + expCounter, -1, -1, null, true));
+                        nuevo.setHijos(operandos);
+                        hijosAsig.add(nuevo);
+                        asignaciones.add(new Nodo(Codigo.asignacionC, Codigo.getNombre(Codigo.asignacionC), -1, -1, hijosAsig, false));
+                        return (new Nodo(Codigo.idC, "_var" + expCounter, -1, -1, null, true)); 
+                    }
+                    else
+                    {
+                        expCounter++;
+                        hijosAsig.add(new Nodo(Codigo.idMC, "_var" + expCounter, -1, -1, null, true));
+                        nuevo.setHijos(operandos);
+                        hijosAsig.add(nuevo);
+                        asignaciones.add(new Nodo(Codigo.asignacionMC, Codigo.getNombre(Codigo.asignacionMC), -1, -1, hijosAsig, false));
+                        return (new Nodo(Codigo.idMC, "_var" + expCounter, -1, -1, null, true)); 
+                    }
+                case accion.elemMat:
+                case accion.llamadaFuncion:
+                    return n;
+                    
             }
         }
         else
@@ -363,6 +553,8 @@ public class Compilador
                 case sym.numero:
                 case sym.real:
                 case sym.id:
+                case Codigo.idC:
+                case Codigo.idMC:
                     return n;
             }
         }
@@ -414,9 +606,11 @@ public class Compilador
     
     public int etiqueta(Nodo n)
     {
-        if(n.getCodigo() == sym.id)
+        /* idM e.e */
+        if(n.getCodigo() == sym.id || n.getCodigo() == Codigo.idC)
             return 1;
         else
             return 0;
     }
+    
 }

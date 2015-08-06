@@ -1091,6 +1091,527 @@ public class IRCabecera {
             "  ret i32** %1\n" +
             "}\n";
     
+    public String _mat_transpuesta = "define noalias double** @_mat_transpuesta(double** nocapture %matriz, i32 %tam) nounwind optsize {\n" +
+            "  %1 = tail call double** @_mat_rreservar(double** undef, i32 %tam, i32 %tam) optsize\n" +
+            "  %2 = icmp sgt i32 %tam, 0\n" +
+            "  br i1 %2, label %.lr.ph, label %._crit_edge3\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %._crit_edge, %0\n" +
+            "  %i.02 = phi i32 [ %12, %._crit_edge ], [ 0, %0 ]\n" +
+            "  %3 = getelementptr inbounds double** %1, i32 %i.02\n" +
+            "  %4 = load double** %3, align 4, !tbaa !0\n" +
+            "  br label %5\n" +
+            "\n" +
+            "; <label>:5                                       ; preds = %5, %.lr.ph\n" +
+            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %11, %5 ]\n" +
+            "  %6 = getelementptr inbounds double** %matriz, i32 %j.01\n" +
+            "  %7 = load double** %6, align 4, !tbaa !0\n" +
+            "  %8 = getelementptr inbounds double* %7, i32 %i.02\n" +
+            "  %9 = load double* %8, align 4, !tbaa !3\n" +
+            "  %10 = getelementptr inbounds double* %4, i32 %j.01\n" +
+            "  store double %9, double* %10, align 4, !tbaa !3\n" +
+            "  %11 = add nsw i32 %j.01, 1\n" +
+            "  %exitcond = icmp eq i32 %11, %tam\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %5\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %5\n" +
+            "  %12 = add nsw i32 %i.02, 1\n" +
+            "  %exitcond4 = icmp eq i32 %12, %tam\n" +
+            "  br i1 %exitcond4, label %._crit_edge3, label %.lr.ph\n" +
+            "\n" +
+            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+            "  ret double** %1\n" +
+            "}\n";
+    
+    public String _mat_inversa = "define i32 @potencia(i32 %a, i32 %b) nounwind readnone optsize {\n" +
+            "  %1 = icmp sgt i32 %b, 0\n" +
+            "  br i1 %1, label %.lr.ph, label %._crit_edge\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %0, %.lr.ph\n" +
+            "  %i.02 = phi i32 [ %3, %.lr.ph ], [ 0, %0 ]\n" +
+            "  %tmp.01 = phi i32 [ %2, %.lr.ph ], [ 1, %0 ]\n" +
+            "  %2 = mul nsw i32 %tmp.01, %a\n" +
+            "  %3 = add nsw i32 %i.02, 1\n" +
+            "  %exitcond = icmp eq i32 %3, %b\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %.lr.ph\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %.lr.ph, %0\n" +
+            "  %tmp.0.lcssa = phi i32 [ 1, %0 ], [ %2, %.lr.ph ]\n" +
+            "  ret i32 %tmp.0.lcssa\n" +
+            "}\n" +
+            "\n" +
+            "define i32 @determinante(double** nocapture %matriz, i32 %tam) nounwind optsize {\n" +
+            "  %1 = icmp eq i32 %tam, 2\n" +
+            "  br i1 %1, label %5, label %.preheader5\n" +
+            "\n" +
+            ".preheader5:                                      ; preds = %0\n" +
+            "  %2 = icmp sgt i32 %tam, 0\n" +
+            "  br i1 %2, label %.lr.ph8, label %.loopexit\n" +
+            "\n" +
+            ".lr.ph8:                                          ; preds = %.preheader5\n" +
+            "  %3 = add nsw i32 %tam, -1\n" +
+            "  %4 = icmp sgt i32 %tam, 1\n" +
+            "  br label %19\n" +
+            "\n" +
+            "; <label>:5                                       ; preds = %0\n" +
+            "  %6 = load double** %matriz, align 4, !tbaa !0\n" +
+            "  %7 = load double* %6, align 4, !tbaa !3\n" +
+            "  %8 = getelementptr inbounds double** %matriz, i32 1\n" +
+            "  %9 = load double** %8, align 4, !tbaa !0\n" +
+            "  %10 = getelementptr inbounds double* %9, i32 1\n" +
+            "  %11 = load double* %10, align 4, !tbaa !3\n" +
+            "  %12 = fmul double %7, %11\n" +
+            "  %13 = load double* %9, align 4, !tbaa !3\n" +
+            "  %14 = getelementptr inbounds double* %6, i32 1\n" +
+            "  %15 = load double* %14, align 4, !tbaa !3\n" +
+            "  %16 = fmul double %13, %15\n" +
+            "  %17 = fsub double %12, %16\n" +
+            "  %18 = fptosi double %17 to i32\n" +
+            "  br label %.loopexit\n" +
+            "\n" +
+            "; <label>:19                                      ; preds = %potencia.exit, %.lr.ph8\n" +
+            "  %rpta.07 = phi i32 [ 0, %.lr.ph8 ], [ %48, %potencia.exit ]\n" +
+            "  %j.06 = phi i32 [ 0, %.lr.ph8 ], [ %49, %potencia.exit ]\n" +
+            "  %20 = tail call double** @_mat_rreservar(double** undef, i32 %3, i32 %3) optsize\n" +
+            "  br i1 %4, label %.lr.ph, label %._crit_edge4\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %._crit_edge, %19\n" +
+            "  %k.03 = phi i32 [ %35, %._crit_edge ], [ 1, %19 ]\n" +
+            "  %21 = getelementptr inbounds double** %matriz, i32 %k.03\n" +
+            "  %22 = add nsw i32 %k.03, -1\n" +
+            "  %23 = getelementptr inbounds double** %20, i32 %22\n" +
+            "  br label %24\n" +
+            "\n" +
+            "; <label>:24                                      ; preds = %33, %.lr.ph\n" +
+            "  %l.02 = phi i32 [ 0, %.lr.ph ], [ %34, %33 ]\n" +
+            "  %c.01 = phi i32 [ 0, %.lr.ph ], [ %c.1, %33 ]\n" +
+            "  %25 = icmp eq i32 %l.02, %j.06\n" +
+            "  br i1 %25, label %33, label %26\n" +
+            "\n" +
+            "; <label>:26                                      ; preds = %24\n" +
+            "  %27 = load double** %21, align 4, !tbaa !0\n" +
+            "  %28 = getelementptr inbounds double* %27, i32 %l.02\n" +
+            "  %29 = load double* %28, align 4, !tbaa !3\n" +
+            "  %30 = load double** %23, align 4, !tbaa !0\n" +
+            "  %31 = getelementptr inbounds double* %30, i32 %c.01\n" +
+            "  store double %29, double* %31, align 4, !tbaa !3\n" +
+            "  %32 = add nsw i32 %c.01, 1\n" +
+            "  br label %33\n" +
+            "\n" +
+            "; <label>:33                                      ; preds = %24, %26\n" +
+            "  %c.1 = phi i32 [ %32, %26 ], [ %c.01, %24 ]\n" +
+            "  %34 = add nsw i32 %l.02, 1\n" +
+            "  %exitcond = icmp eq i32 %34, %tam\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %24\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %33\n" +
+            "  %35 = add nsw i32 %k.03, 1\n" +
+            "  %exitcond9 = icmp eq i32 %35, %tam\n" +
+            "  br i1 %exitcond9, label %._crit_edge4, label %.lr.ph\n" +
+            "\n" +
+            "._crit_edge4:                                     ; preds = %._crit_edge, %19\n" +
+            "  %36 = sitofp i32 %rpta.07 to double\n" +
+            "  %37 = icmp sgt i32 %j.06, 0\n" +
+            "  br i1 %37, label %.lr.ph.i, label %potencia.exit\n" +
+            "\n" +
+            ".lr.ph.i:                                         ; preds = %._crit_edge4, %.lr.ph.i\n" +
+            "  %i.02.i = phi i32 [ %39, %.lr.ph.i ], [ 0, %._crit_edge4 ]\n" +
+            "  %tmp.01.i = phi i32 [ %38, %.lr.ph.i ], [ 1, %._crit_edge4 ]\n" +
+            "  %38 = sub i32 0, %tmp.01.i\n" +
+            "  %39 = add nsw i32 %i.02.i, 1\n" +
+            "  %exitcond.i = icmp eq i32 %39, %j.06\n" +
+            "  br i1 %exitcond.i, label %potencia.exit.loopexit, label %.lr.ph.i\n" +
+            "\n" +
+            "potencia.exit.loopexit:                           ; preds = %.lr.ph.i\n" +
+            "  %phitmp = sitofp i32 %38 to double\n" +
+            "  br label %potencia.exit\n" +
+            "\n" +
+            "potencia.exit:                                    ; preds = %potencia.exit.loopexit, %._crit_edge4\n" +
+            "  %tmp.0.lcssa.i = phi double [ 1.000000e+00, %._crit_edge4 ], [ %phitmp, %potencia.exit.loopexit ]\n" +
+            "  %40 = load double** %matriz, align 4, !tbaa !0\n" +
+            "  %41 = getelementptr inbounds double* %40, i32 %j.06\n" +
+            "  %42 = load double* %41, align 4, !tbaa !3\n" +
+            "  %43 = fmul double %tmp.0.lcssa.i, %42\n" +
+            "  %44 = tail call i32 @determinante(double** %20, i32 %3) optsize\n" +
+            "  %45 = sitofp i32 %44 to double\n" +
+            "  %46 = fmul double %43, %45\n" +
+            "  %47 = fadd double %36, %46\n" +
+            "  %48 = fptosi double %47 to i32\n" +
+            "  %49 = add nsw i32 %j.06, 1\n" +
+            "  %exitcond11 = icmp eq i32 %49, %tam\n" +
+            "  br i1 %exitcond11, label %.loopexit, label %19\n" +
+            "\n" +
+            ".loopexit:                                        ; preds = %.preheader5, %potencia.exit, %5\n" +
+            "  %rpta.1 = phi i32 [ %18, %5 ], [ 0, %.preheader5 ], [ %48, %potencia.exit ]\n" +
+            "  ret i32 %rpta.1\n" +
+            "}\n" +
+            "\n" +
+            "define double** @identidad(double** %matriz, i32 %tam) nounwind optsize {\n" +
+            "  %1 = icmp sgt i32 %tam, 0\n" +
+            "  br i1 %1, label %.lr.ph, label %._crit_edge3\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %._crit_edge, %0\n" +
+            "  %i.02 = phi i32 [ %8, %._crit_edge ], [ 0, %0 ]\n" +
+            "  %2 = getelementptr inbounds double** %matriz, i32 %i.02\n" +
+            "  br label %3\n" +
+            "\n" +
+            "; <label>:3                                       ; preds = %3, %.lr.ph\n" +
+            "  %j.01 = phi i32 [ 0, %.lr.ph ], [ %7, %3 ]\n" +
+            "  %4 = icmp eq i32 %i.02, %j.01\n" +
+            "  %5 = load double** %2, align 4, !tbaa !0\n" +
+            "  %6 = getelementptr inbounds double* %5, i32 %j.01\n" +
+            "  %. = select i1 %4, double 1.000000e+00, double 0.000000e+00\n" +
+            "  store double %., double* %6, align 4\n" +
+            "  %7 = add nsw i32 %j.01, 1\n" +
+            "  %exitcond = icmp eq i32 %7, %tam\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %3\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %3\n" +
+            "  %8 = add nsw i32 %i.02, 1\n" +
+            "  %exitcond4 = icmp eq i32 %8, %tam\n" +
+            "  br i1 %exitcond4, label %._crit_edge3, label %.lr.ph\n" +
+            "\n" +
+            "._crit_edge3:                                     ; preds = %._crit_edge, %0\n" +
+            "  ret double** %matriz\n" +
+            "}\n" +
+            "\n" +
+            "define noalias double** @_mat_inversa(double** nocapture %matriz, i32 %tam) nounwind optsize {\n" +
+            "  %1 = tail call double** @_mat_rreservar(double** undef, i32 %tam, i32 %tam) optsize\n" +
+            "  %2 = tail call i32 @determinante(double** %matriz, i32 %tam) optsize\n" +
+            "  %3 = icmp eq i32 %2, 0\n" +
+            "  br i1 %3, label %.loopexit15, label %4\n" +
+            "\n" +
+            "; <label>:4                                       ; preds = %0\n" +
+            "  %5 = icmp sgt i32 %tam, 0\n" +
+            "  br i1 %5, label %.lr.ph.i, label %.loopexit15\n" +
+            "\n" +
+            ".lr.ph.i:                                         ; preds = %4, %._crit_edge.i\n" +
+            "  %i.02.i = phi i32 [ %12, %._crit_edge.i ], [ 0, %4 ]\n" +
+            "  %6 = getelementptr inbounds double** %1, i32 %i.02.i\n" +
+            "  %7 = load double** %6, align 4, !tbaa !0\n" +
+            "  br label %8\n" +
+            "\n" +
+            "; <label>:8                                       ; preds = %8, %.lr.ph.i\n" +
+            "  %j.01.i = phi i32 [ 0, %.lr.ph.i ], [ %11, %8 ]\n" +
+            "  %9 = icmp eq i32 %i.02.i, %j.01.i\n" +
+            "  %10 = getelementptr inbounds double* %7, i32 %j.01.i\n" +
+            "  %..i = select i1 %9, double 1.000000e+00, double 0.000000e+00\n" +
+            "  store double %..i, double* %10, align 4\n" +
+            "  %11 = add nsw i32 %j.01.i, 1\n" +
+            "  %exitcond.i = icmp eq i32 %11, %tam\n" +
+            "  br i1 %exitcond.i, label %._crit_edge.i, label %8\n" +
+            "\n" +
+            "._crit_edge.i:                                    ; preds = %8\n" +
+            "  %12 = add nsw i32 %i.02.i, 1\n" +
+            "  %exitcond4.i = icmp eq i32 %12, %tam\n" +
+            "  br i1 %exitcond4.i, label %identidad.exit.preheader, label %.lr.ph.i\n" +
+            "\n" +
+            "identidad.exit.preheader:                         ; preds = %._crit_edge.i\n" +
+            "  br i1 %5, label %.lr.ph22, label %.loopexit15\n" +
+            "\n" +
+            "identidad.exit.loopexit:                          ; preds = %._crit_edge27, %._crit_edge23\n" +
+            "  %exitcond37 = icmp eq i32 %27, %tam\n" +
+            "  br i1 %exitcond37, label %.preheader, label %.lr.ph22\n" +
+            "\n" +
+            ".preheader:                                       ; preds = %identidad.exit.loopexit\n" +
+            "  br i1 %5, label %.lr.ph, label %.loopexit15\n" +
+            "\n" +
+            ".lr.ph22:                                         ; preds = %identidad.exit.loopexit, %identidad.exit.preheader\n" +
+            "  %k.031 = phi i32 [ %27, %identidad.exit.loopexit ], [ 0, %identidad.exit.preheader ]\n" +
+            "  %13 = getelementptr inbounds double** %matriz, i32 %k.031\n" +
+            "  %14 = load double** %13, align 4, !tbaa !0\n" +
+            "  %15 = getelementptr inbounds double* %14, i32 %k.031\n" +
+            "  %16 = load double* %15, align 4, !tbaa !3\n" +
+            "  %17 = getelementptr inbounds double** %1, i32 %k.031\n" +
+            "  %18 = load double** %17, align 4, !tbaa !0\n" +
+            "  br label %19\n" +
+            "\n" +
+            "; <label>:19                                      ; preds = %19, %.lr.ph22\n" +
+            "  %z.020 = phi i32 [ 0, %.lr.ph22 ], [ %26, %19 ]\n" +
+            "  %20 = getelementptr inbounds double* %14, i32 %z.020\n" +
+            "  %21 = load double* %20, align 4, !tbaa !3\n" +
+            "  %22 = fdiv double %21, %16\n" +
+            "  store double %22, double* %20, align 4, !tbaa !3\n" +
+            "  %23 = getelementptr inbounds double* %18, i32 %z.020\n" +
+            "  %24 = load double* %23, align 4, !tbaa !3\n" +
+            "  %25 = fdiv double %24, %16\n" +
+            "  store double %25, double* %23, align 4, !tbaa !3\n" +
+            "  %26 = add nsw i32 %z.020, 1\n" +
+            "  %exitcond34 = icmp eq i32 %26, %tam\n" +
+            "  br i1 %exitcond34, label %._crit_edge23, label %19\n" +
+            "\n" +
+            "._crit_edge23:                                    ; preds = %19\n" +
+            "  %27 = add nsw i32 %k.031, 1\n" +
+            "  %28 = icmp slt i32 %27, %tam\n" +
+            "  br i1 %28, label %.lr.ph30, label %identidad.exit.loopexit\n" +
+            "\n" +
+            ".lr.ph30:                                         ; preds = %._crit_edge23\n" +
+            "  %29 = getelementptr inbounds double** %1, i32 %k.031\n" +
+            "  br label %.lr.ph26\n" +
+            "\n" +
+            ".lr.ph26:                                         ; preds = %._crit_edge27, %.lr.ph30\n" +
+            "  %i.028 = phi i32 [ %27, %.lr.ph30 ], [ %54, %._crit_edge27 ]\n" +
+            "  %30 = getelementptr inbounds double** %matriz, i32 %i.028\n" +
+            "  %31 = load double** %30, align 4, !tbaa !0\n" +
+            "  %32 = getelementptr inbounds double* %31, i32 %k.031\n" +
+            "  %33 = load double* %32, align 4, !tbaa !3\n" +
+            "  %34 = load double* %15, align 4, !tbaa !3\n" +
+            "  %35 = fdiv double %33, %34\n" +
+            "  %36 = fsub double -0.000000e+00, %35\n" +
+            "  %37 = getelementptr inbounds double** %1, i32 %i.028\n" +
+            "  %38 = load double** %37, align 4, !tbaa !0\n" +
+            "  %39 = load double** %29, align 4, !tbaa !0\n" +
+            "  br label %40\n" +
+            "\n" +
+            "; <label>:40                                      ; preds = %40, %.lr.ph26\n" +
+            "  %j.024 = phi i32 [ 0, %.lr.ph26 ], [ %53, %40 ]\n" +
+            "  %41 = getelementptr inbounds double* %31, i32 %j.024\n" +
+            "  %42 = load double* %41, align 4, !tbaa !3\n" +
+            "  %43 = getelementptr inbounds double* %14, i32 %j.024\n" +
+            "  %44 = load double* %43, align 4, !tbaa !3\n" +
+            "  %45 = fmul double %44, %36\n" +
+            "  %46 = fadd double %42, %45\n" +
+            "  store double %46, double* %41, align 4, !tbaa !3\n" +
+            "  %47 = getelementptr inbounds double* %38, i32 %j.024\n" +
+            "  %48 = load double* %47, align 4, !tbaa !3\n" +
+            "  %49 = getelementptr inbounds double* %39, i32 %j.024\n" +
+            "  %50 = load double* %49, align 4, !tbaa !3\n" +
+            "  %51 = fmul double %50, %36\n" +
+            "  %52 = fadd double %48, %51\n" +
+            "  store double %52, double* %47, align 4, !tbaa !3\n" +
+            "  %53 = add nsw i32 %j.024, 1\n" +
+            "  %exitcond35 = icmp eq i32 %53, %tam\n" +
+            "  br i1 %exitcond35, label %._crit_edge27, label %40\n" +
+            "\n" +
+            "._crit_edge27:                                    ; preds = %40\n" +
+            "  %54 = add nsw i32 %i.028, 1\n" +
+            "  %exitcond36 = icmp eq i32 %54, %tam\n" +
+            "  br i1 %exitcond36, label %identidad.exit.loopexit, label %.lr.ph26\n" +
+            "\n" +
+            ".loopexit:                                        ; preds = %._crit_edge11, %._crit_edge\n" +
+            "  %55 = icmp sgt i32 %k1.018, 0\n" +
+            "  br i1 %55, label %.lr.ph, label %.loopexit15\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %.loopexit, %.preheader\n" +
+            "  %k1.018.in = phi i32 [ %k1.018, %.loopexit ], [ %tam, %.preheader ]\n" +
+            "  %k1.018 = add nsw i32 %k1.018.in, -1\n" +
+            "  %56 = getelementptr inbounds double** %matriz, i32 %k1.018\n" +
+            "  %57 = load double** %56, align 4, !tbaa !0\n" +
+            "  %58 = getelementptr inbounds double* %57, i32 %k1.018\n" +
+            "  %59 = load double* %58, align 4, !tbaa !3\n" +
+            "  %60 = getelementptr inbounds double** %1, i32 %k1.018\n" +
+            "  %61 = load double** %60, align 4, !tbaa !0\n" +
+            "  br label %62\n" +
+            "\n" +
+            "; <label>:62                                      ; preds = %62, %.lr.ph\n" +
+            "  %z3.07 = phi i32 [ 0, %.lr.ph ], [ %69, %62 ]\n" +
+            "  %63 = getelementptr inbounds double* %57, i32 %z3.07\n" +
+            "  %64 = load double* %63, align 4, !tbaa !3\n" +
+            "  %65 = fdiv double %64, %59\n" +
+            "  store double %65, double* %63, align 4, !tbaa !3\n" +
+            "  %66 = getelementptr inbounds double* %61, i32 %z3.07\n" +
+            "  %67 = load double* %66, align 4, !tbaa !3\n" +
+            "  %68 = fdiv double %67, %59\n" +
+            "  store double %68, double* %66, align 4, !tbaa !3\n" +
+            "  %69 = add nsw i32 %z3.07, 1\n" +
+            "  %exitcond = icmp eq i32 %69, %tam\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %62\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %62\n" +
+            "  %70 = add nsw i32 %k1.018.in, -2\n" +
+            "  %71 = icmp sgt i32 %70, -1\n" +
+            "  br i1 %71, label %.lr.ph14, label %.loopexit\n" +
+            "\n" +
+            ".lr.ph14:                                         ; preds = %._crit_edge\n" +
+            "  %72 = getelementptr inbounds double** %1, i32 %k1.018\n" +
+            "  br label %.lr.ph10\n" +
+            "\n" +
+            ".lr.ph10:                                         ; preds = %.lr.ph14, %._crit_edge39\n" +
+            "  %i4.012 = phi i32 [ %70, %.lr.ph14 ], [ %98, %._crit_edge39 ]\n" +
+            "  %73 = getelementptr inbounds double** %matriz, i32 %i4.012\n" +
+            "  %74 = load double** %73, align 4, !tbaa !0\n" +
+            "  %75 = getelementptr inbounds double* %74, i32 %k1.018\n" +
+            "  %76 = load double* %75, align 4, !tbaa !3\n" +
+            "  %77 = load double* %58, align 4, !tbaa !3\n" +
+            "  %78 = fdiv double %76, %77\n" +
+            "  %79 = fsub double -0.000000e+00, %78\n" +
+            "  %80 = getelementptr inbounds double** %1, i32 %i4.012\n" +
+            "  %81 = load double** %80, align 4, !tbaa !0\n" +
+            "  %82 = load double** %72, align 4, !tbaa !0\n" +
+            "  br label %83\n" +
+            "\n" +
+            "; <label>:83                                      ; preds = %83, %.lr.ph10\n" +
+            "  %j6.08 = phi i32 [ 0, %.lr.ph10 ], [ %96, %83 ]\n" +
+            "  %84 = getelementptr inbounds double* %74, i32 %j6.08\n" +
+            "  %85 = load double* %84, align 4, !tbaa !3\n" +
+            "  %86 = getelementptr inbounds double* %57, i32 %j6.08\n" +
+            "  %87 = load double* %86, align 4, !tbaa !3\n" +
+            "  %88 = fmul double %87, %79\n" +
+            "  %89 = fadd double %85, %88\n" +
+            "  store double %89, double* %84, align 4, !tbaa !3\n" +
+            "  %90 = getelementptr inbounds double* %81, i32 %j6.08\n" +
+            "  %91 = load double* %90, align 4, !tbaa !3\n" +
+            "  %92 = getelementptr inbounds double* %82, i32 %j6.08\n" +
+            "  %93 = load double* %92, align 4, !tbaa !3\n" +
+            "  %94 = fmul double %93, %79\n" +
+            "  %95 = fadd double %91, %94\n" +
+            "  store double %95, double* %90, align 4, !tbaa !3\n" +
+            "  %96 = add nsw i32 %j6.08, 1\n" +
+            "  %exitcond33 = icmp eq i32 %96, %tam\n" +
+            "  br i1 %exitcond33, label %._crit_edge11, label %83\n" +
+            "\n" +
+            "._crit_edge11:                                    ; preds = %83\n" +
+            "  %97 = icmp sgt i32 %i4.012, 0\n" +
+            "  br i1 %97, label %._crit_edge39, label %.loopexit\n" +
+            "\n" +
+            "._crit_edge39:                                    ; preds = %._crit_edge11\n" +
+            "  %98 = add nsw i32 %i4.012, -1\n" +
+            "  br label %.lr.ph10\n" +
+            "\n" +
+            ".loopexit15:                                      ; preds = %4, %identidad.exit.preheader, %.preheader, %.loopexit, %0\n" +
+            "  ret double** %1\n" +
+            "}\n";
+    public String _mat_rproducto = "define noalias double** @_mat_rproducto(double** nocapture %A, double** nocapture %B, i32 %fil1, i32 %col1, i32 %fil2, i32 %col2) nounwind optsize {\n" +
+            "  %1 = tail call double** @_mat_rreservar(double** undef, i32 %fil1, i32 %col2) optsize\n" +
+            "  %2 = icmp eq i32 %col1, %fil2\n" +
+            "  %3 = icmp sgt i32 %fil1, 0\n" +
+            "  %or.cond = and i1 %2, %3\n" +
+            "  br i1 %or.cond, label %.preheader.lr.ph, label %.loopexit\n" +
+            "\n" +
+            ".preheader.lr.ph:                                 ; preds = %0\n" +
+            "  %4 = icmp sgt i32 %col2, 0\n" +
+            "  %5 = icmp sgt i32 %col1, 0\n" +
+            "  br label %.preheader\n" +
+            "\n" +
+            ".preheader:                                       ; preds = %._crit_edge4, %.preheader.lr.ph\n" +
+            "  %i.06 = phi i32 [ 0, %.preheader.lr.ph ], [ %24, %._crit_edge4 ]\n" +
+            "  br i1 %4, label %.lr.ph3, label %._crit_edge4\n" +
+            "\n" +
+            ".lr.ph3:                                          ; preds = %.preheader\n" +
+            "  %6 = getelementptr inbounds double** %1, i32 %i.06\n" +
+            "  %7 = load double** %6, align 4, !tbaa !0\n" +
+            "  %8 = getelementptr inbounds double** %A, i32 %i.06\n" +
+            "  br label %9\n" +
+            "\n" +
+            "; <label>:9                                       ; preds = %._crit_edge, %.lr.ph3\n" +
+            "  %j.02 = phi i32 [ 0, %.lr.ph3 ], [ %23, %._crit_edge ]\n" +
+            "  %10 = getelementptr inbounds double* %7, i32 %j.02\n" +
+            "  store double 0.000000e+00, double* %10, align 4, !tbaa !3\n" +
+            "  br i1 %5, label %.lr.ph, label %._crit_edge\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %9\n" +
+            "  %11 = load double** %8, align 4, !tbaa !0\n" +
+            "  br label %12\n" +
+            "\n" +
+            "; <label>:12                                      ; preds = %12, %.lr.ph\n" +
+            "  %13 = phi double [ 0.000000e+00, %.lr.ph ], [ %21, %12 ]\n" +
+            "  %k.01 = phi i32 [ 0, %.lr.ph ], [ %22, %12 ]\n" +
+            "  %14 = getelementptr inbounds double* %11, i32 %k.01\n" +
+            "  %15 = load double* %14, align 4, !tbaa !3\n" +
+            "  %16 = getelementptr inbounds double** %B, i32 %k.01\n" +
+            "  %17 = load double** %16, align 4, !tbaa !0\n" +
+            "  %18 = getelementptr inbounds double* %17, i32 %j.02\n" +
+            "  %19 = load double* %18, align 4, !tbaa !3\n" +
+            "  %20 = fmul double %15, %19\n" +
+            "  %21 = fadd double %13, %20\n" +
+            "  store double %21, double* %10, align 4, !tbaa !3\n" +
+            "  %22 = add nsw i32 %k.01, 1\n" +
+            "  %exitcond = icmp eq i32 %22, %col1\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %12\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %12, %9\n" +
+            "  %23 = add nsw i32 %j.02, 1\n" +
+            "  %exitcond7 = icmp eq i32 %23, %col2\n" +
+            "  br i1 %exitcond7, label %._crit_edge4, label %9\n" +
+            "\n" +
+            "._crit_edge4:                                     ; preds = %._crit_edge, %.preheader\n" +
+            "  %24 = add nsw i32 %i.06, 1\n" +
+            "  %exitcond8 = icmp eq i32 %24, %fil1\n" +
+            "  br i1 %exitcond8, label %.loopexit, label %.preheader\n" +
+            "\n" +
+            ".loopexit:                                        ; preds = %._crit_edge4, %0\n" +
+            "  ret double** %1\n" +
+            "}\n";
+    public String _mat_eproducto = "define noalias i32** @_mat_eproducto(double** nocapture %A, double** nocapture %B, i32 %fil1, i32 %col1, i32 %fil2, i32 %col2) nounwind optsize {\n" +
+            "  %1 = tail call i32** @_mat_ereservar(i32** undef, i32 %fil1, i32 %col2) optsize\n" +
+            "  %2 = icmp eq i32 %col1, %fil2\n" +
+            "  %3 = icmp sgt i32 %fil1, 0\n" +
+            "  %or.cond = and i1 %2, %3\n" +
+            "  br i1 %or.cond, label %.preheader.lr.ph, label %.loopexit\n" +
+            "\n" +
+            ".preheader.lr.ph:                                 ; preds = %0\n" +
+            "  %4 = icmp sgt i32 %col2, 0\n" +
+            "  %5 = icmp sgt i32 %col1, 0\n" +
+            "  br label %.preheader\n" +
+            "\n" +
+            ".preheader:                                       ; preds = %._crit_edge4, %.preheader.lr.ph\n" +
+            "  %i.06 = phi i32 [ 0, %.preheader.lr.ph ], [ %27, %._crit_edge4 ]\n" +
+            "  br i1 %4, label %.lr.ph3, label %._crit_edge4\n" +
+            "\n" +
+            ".lr.ph3:                                          ; preds = %.preheader\n" +
+            "  %6 = getelementptr inbounds i32** %1, i32 %i.06\n" +
+            "  %7 = load i32** %6, align 4, !tbaa !0\n" +
+            "  %8 = getelementptr inbounds double** %A, i32 %i.06\n" +
+            "  br label %9\n" +
+            "\n" +
+            "; <label>:9                                       ; preds = %25, %.lr.ph3\n" +
+            "  %j.02 = phi i32 [ 0, %.lr.ph3 ], [ %26, %25 ]\n" +
+            "  %10 = getelementptr inbounds i32* %7, i32 %j.02\n" +
+            "  store i32 0, i32* %10, align 4, !tbaa !4\n" +
+            "  br i1 %5, label %.lr.ph, label %25\n" +
+            "\n" +
+            ".lr.ph:                                           ; preds = %9\n" +
+            "  %11 = load double** %8, align 4, !tbaa !0\n" +
+            "  br label %12\n" +
+            "\n" +
+            "; <label>:12                                      ; preds = %12, %.lr.ph\n" +
+            "  %13 = phi i32 [ 0, %.lr.ph ], [ %23, %12 ]\n" +
+            "  %k.01 = phi i32 [ 0, %.lr.ph ], [ %24, %12 ]\n" +
+            "  %14 = sitofp i32 %13 to double\n" +
+            "  %15 = getelementptr inbounds double* %11, i32 %k.01\n" +
+            "  %16 = load double* %15, align 4, !tbaa !3\n" +
+            "  %17 = getelementptr inbounds double** %B, i32 %k.01\n" +
+            "  %18 = load double** %17, align 4, !tbaa !0\n" +
+            "  %19 = getelementptr inbounds double* %18, i32 %j.02\n" +
+            "  %20 = load double* %19, align 4, !tbaa !3\n" +
+            "  %21 = fmul double %16, %20\n" +
+            "  %22 = fadd double %14, %21\n" +
+            "  %23 = fptosi double %22 to i32\n" +
+            "  %24 = add nsw i32 %k.01, 1\n" +
+            "  %exitcond = icmp eq i32 %24, %col1\n" +
+            "  br i1 %exitcond, label %._crit_edge, label %12\n" +
+            "\n" +
+            "._crit_edge:                                      ; preds = %12\n" +
+            "  store i32 %23, i32* %10, align 4\n" +
+            "  br label %25\n" +
+            "\n" +
+            "; <label>:25                                      ; preds = %._crit_edge, %9\n" +
+            "  %26 = add nsw i32 %j.02, 1\n" +
+            "  %exitcond7 = icmp eq i32 %26, %col2\n" +
+            "  br i1 %exitcond7, label %._crit_edge4, label %9\n" +
+            "\n" +
+            "._crit_edge4:                                     ; preds = %25, %.preheader\n" +
+            "  %27 = add nsw i32 %i.06, 1\n" +
+            "  %exitcond8 = icmp eq i32 %27, %fil1\n" +
+            "  br i1 %exitcond8, label %.loopexit, label %.preheader\n" +
+            "\n" +
+            ".loopexit:                                        ; preds = %._crit_edge4, %0\n" +
+            "  ret i32** %1\n" +
+            "}\n";
+    public String _mat_itemr = "define double @_mat_itemr(double** nocapture %A, i32 %fil, i32 %col) nounwind readonly optsize {\n" +
+            "  %1 = getelementptr inbounds double** %A, i32 %fil\n" +
+            "  %2 = load double** %1, align 4, !tbaa !0\n" +
+            "  %3 = getelementptr inbounds double* %2, i32 %col\n" +
+            "  %4 = load double* %3, align 4, !tbaa !3\n" +
+            "  ret double %4\n" +
+            "}\n";
+    public String _mat_iteme = "define i32 @_mat_iteme(i32** nocapture %A, i32 %fil, i32 %col) nounwind readonly optsize {\n" +
+            "  %1 = getelementptr inbounds i32** %A, i32 %fil\n" +
+            "  %2 = load i32** %1, align 4, !tbaa !0\n" +
+            "  %3 = getelementptr inbounds i32* %2, i32 %col\n" +
+            "  %4 = load i32* %3, align 4, !tbaa !4\n" +
+            "  ret i32 %4\n" +
+            "}\n";
     public static boolean[] cabecera = {false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
@@ -1098,7 +1619,7 @@ public class IRCabecera {
                                         false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false,false,false,false,false,false,false,
                                         false,false,false,false, false, false,false,false,false,false,
-                                        false};
+                                        false,false,false,false,false};
 
     public void marcar(int pos){
         cabecera[pos] = true;
@@ -1187,12 +1708,20 @@ public class IRCabecera {
             case 68: return _mat_rnegacion;
             case 69: return _mat_rnegatividad;
             case 70: return _mat_enegatividad;
+            case 71: return _mat_transpuesta;
+            case 72: return _mat_inversa;
+            case 73: return _mat_rproducto;
+            case 74: return _mat_eproducto;
+            case 75: return _mat_itemr;
+            case 76: return _mat_iteme;
         }
         return tmp;
     }
+    
     public String _arquitectura_32 = "target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32-n8:16:32-S128\"\n" +
                                     "target triple = \"i386-pc-linux-gnu\"\n";
-    public String _arquitectura_64 = "\n";
+    public String _arquitectura_64 =    "target datalayout = \"e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64-S128\"\n" +
+                                        "target triple = \"x86_64-pc-linux-gnu\"\n";
     public boolean arquitectura = true;
     public void setArquitectura(boolean a){
         arquitectura = a;

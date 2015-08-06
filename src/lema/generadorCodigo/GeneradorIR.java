@@ -1,7 +1,6 @@
 package lema.generadorCodigo;
 
-public class GeneradorIR
-{
+public class GeneradorIR {
     public static final int _IMPRIMIR_CAB =0;
     public static final int _LEER_CAB =1;
     public static final int _STR_IE  =2;
@@ -78,7 +77,10 @@ public class GeneradorIR
     public static final int _MAT_RNEGACION = 68;
     public static final int _MAT_RNEGATIVIDAD = 69;
     public static final int _MAT_ENEGATIVIDAD = 70;
-
+    public static final int _MAT_TRANSPUESTA = 71;
+    public static final int _MAT_INVERSA = 72;
+    public static final int _MAT_RPRODUCTO = 73;
+    public static final int _MAT_EPRODUCTO = 74;
     
     //Principal
     public IRCabecera cabecera;
@@ -339,9 +341,23 @@ public class GeneradorIR
     public String _mat_enegatividad = "%$ = tail call i32 @$.getFila()\n" + //alea nom
                                 "%$ = tail call i32 @$.getColumna()\n" + //laea nom
                                 "%$ = tail call i32** @_mat_enegatividad(double** nocapture %$, i32 %$, i32 %$)\n"; //rpta nom fil col
+    public String _mat_transpuesta = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_transpuesta(double** nocapture %$, i32 %$)\n"; //rpta nom fil col
+    public String _mat_inversa = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_inversa(double** nocapture %$, i32 %$)\n"; //rpta nom fil col
     
-    
-    
+    public String  _mat_rproducto = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call double** @_mat_rproducto(double** nocapture %$, double** nocapture %$, i32 %$, i32 %$, i32 %$, i32 %$)\n"; //rpta A B fil1 col1 fil2 col2
+    public String  _mat_eproducto = "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32 @$.getFila()\n" + //alea nom
+                                "%$ = tail call i32 @$.getColumna()\n" + //laea nom
+                                "%$ = tail call i32** @_mat_eproducto(double** nocapture %A, double** nocapture %$, i32 %$, i32 %$, i32 %$, i32 %$)\n";
     
     public int contador = 1;
     public GeneradorIR(){
@@ -1033,8 +1049,7 @@ public class GeneradorIR
         
         return tmp += unir(_mat_ridentico , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom nom fil col
     }
-    public String mat_negacion(String rpta, String A, String B){
-        String tmp= mat_comprobar(A,B);
+    public String mat_negacion(String rpta, String A){
         String fil1 = generar_enumeracion();
         String col1 = generar_enumeracion();
 
@@ -1042,10 +1057,10 @@ public class GeneradorIR
         cabecera.marcar(_MAT_RNEGACION);
         _posterior += mat_ref(rpta, A);
         
-        return tmp += unir(_mat_rnegacion , new String[]{fil1, A, col1, A, rpta, A, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
+        return unir(_mat_rnegacion , new String[]{fil1, A, col1, A, rpta, A, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
     }
-    public String mat_negatividad(String rpta, String A, String B, int tipo){
-        String tmp= mat_comprobar(A,B);
+    public String mat_negatividad(String rpta, String A, int tipo){
+        String tmp="";
         String fil1 = generar_enumeracion();
         String col1 = generar_enumeracion();
 
@@ -1055,18 +1070,74 @@ public class GeneradorIR
         switch(tipo){
             case 0: 
                 cabecera.marcar(_MAT_ENEGATIVIDAD);
-                return tmp += unir(_mat_enegatividad , new String[]{fil1, A, col1, A, rpta, A, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
+                return unir(_mat_enegatividad , new String[]{fil1, A, col1, A, rpta, A, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
             case 1:
                 cabecera.marcar(_MAT_RNEGATIVIDAD);
-                return tmp += unir(_mat_rnegatividad , new String[]{fil1, A, col1, A, rpta, A, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
+                return unir(_mat_rnegatividad , new String[]{fil1, A, col1, A, rpta, A, fil1, col1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
         }
         return tmp;
-    }
+    }  
+    public String mat_transpuesta(String rpta, String A){
+        String fil1 = generar_enumeracion();
+        String col1 = generar_enumeracion();
+
+        cabecera.marcar(_MAT_RRESERVAR);
+        cabecera.marcar(_MAT_TRANSPUESTA);
+        _posterior += mat_ref(rpta, A);
         
+        return unir(_mat_transpuesta , new String[]{fil1, A, col1, A, rpta, A, fil1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
+    }
+    public String mat_inversa(String rpta, String A){
+        String fil1 = generar_enumeracion();
+        String col1 = generar_enumeracion();
+
+        cabecera.marcar(_MAT_RRESERVAR);
+        cabecera.marcar(_MAT_INVERSA);
+        _posterior += mat_ref(rpta, A);
+        
+        return unir(_mat_inversa , new String[]{fil1, A, col1, A, rpta, A, fil1}); //alea nom //alea nom //alea nom //alea nom //rpta nom fil col
+    }
+    public String mat_producto(String rpta, String A, String B, int tipo ){
+        String tmp= mat_comprobar(A,B);
+        String fil1 = generar_enumeracion();
+        String col1 = generar_enumeracion();
+        String fil2 = generar_enumeracion();
+        String col2 = generar_enumeracion();
+        cabecera.marcar(_MAT_RRESERVAR);
+        switch(tipo){
+            case 0:
+                cabecera.marcar(_MAT_EPRODUCTO);
+                tmp += unir(_mat_eproducto , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1, fil2, col2}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1 fil2 col2
+                break;
+            case 1:
+                cabecera.marcar(_MAT_RPRODUCTO);
+                tmp += unir(_mat_rproducto , new String[]{fil1, A, col1, A, fil2, B, col2, B, rpta, A, B, fil1, col1, fil2, col2}); //fil1 nom1 //col1 nom1 //fil2 nom2 //col2 nom2 //rpta nom1 nom2 fil1 col1 fil2 col2
+                break;
+        }
+        _posterior += mat_ref(rpta, A);
+        return tmp;
+    }
     
     public String mat_ref(String nuevo, String ref){
         return unir(_dec_matriz_ref , new String[]{nuevo, ref, nuevo, ref});
     }
+    
+    public String asignacion(String var1, int val1, String var2, int val2, int et_val){ //0 val // 1 va
+        if(val1 == val2){  // e-e r-r
+            if(val1 == 0)
+                return asignar (var1, var2, 0, et_val);  //asignar (String nuevo, String valor, int tipo, int val)
+            else 
+                return asignar (var1, var2,  1, et_val);
+        }else{  //e-r r-e
+            if(val1 == 0)  //castear(String resultado, String operando1,int op, int val1)
+            {
+                return castear( var1,  var2, 1,  et_val);  //_ENT_A_DOUBLE
+            }
+            else
+                return castear( var1,  var2, 0,  et_val);  //_DOUBLE_A_ENT
+        }
+    }
+    
     public String finalizar(){
         return _posterior + cabecera.todaCabecera();
     }
